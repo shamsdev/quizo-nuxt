@@ -2,6 +2,7 @@
 import {Gamepad2, List} from 'lucide-vue-next'
 
 const editProfileDialog = ref();
+const leaderboardDialog = ref();
 
 function onUserAvatarClicked() {
   console.log('onUserAvatarClicked');
@@ -14,6 +15,7 @@ function onStartGameButtonClicked() {
 
 function onShowLeaderboardButtonClicked() {
   console.log('onShowLeaderboardButtonClicked');
+  leaderboardDialog.value?.show();
 }
 
 </script>
@@ -50,6 +52,10 @@ function onShowLeaderboardButtonClicked() {
 
     <BaseDialog ref="editProfileDialog">
       <EditProfileDialog @close="editProfileDialog?.hide()"/>
+    </BaseDialog>
+
+    <BaseDialog ref="leaderboardDialog">
+      <LeaderboardDialog @close="leaderboardDialog?.hide()"/>
     </BaseDialog>
 
   </div>

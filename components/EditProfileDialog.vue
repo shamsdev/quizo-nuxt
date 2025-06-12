@@ -21,13 +21,13 @@
     <div class="avatar-scroll-section">
       <div class="avatar-list">
         <div
-            v-for="avatar in avatars"
-            :key="avatar"
+            v-for="avatarId in avatarsIds"
+            :key="avatarId"
             class="avatar-item"
-            :class="{ selected: avatar === selectedAvatar }"
-            @click="selectedAvatar = avatar"
+            :class="{ selected: avatarId === selectedAvatarId }"
+            @click="selectedAvatarId = avatarId"
         >
-          <img :src="`/images/avatars/${avatar}`" :alt="avatar"/>
+          <img :src="`/images/avatars/${avatarId}.png`" :alt="avatarId"/>
         </div>
       </div>
     </div>
@@ -48,16 +48,16 @@ import {ref} from 'vue'
 import FancyButton from './FancyButton.vue'
 
 const username = ref('PlayerOne')
-const selectedAvatar = ref('1.png')
+const selectedAvatarId = ref(1)
 
 const avatarCount = 77
-const avatars = ref(
-    Array.from({length: avatarCount}, (_, i) => `${i + 1}.png`)
+const avatarsIds = ref(
+    Array.from({length: avatarCount}, (_, i) => i + 1)
 )
 
 const applyChanges = () => {
   console.log('Username:', username.value)
-  console.log('Avatar:', selectedAvatar.value)
+  console.log('Avatar:', selectedAvatarId.value)
 }
 </script>
 
@@ -69,7 +69,6 @@ const applyChanges = () => {
   padding: 16px;
   box-sizing: border-box;
   overflow: hidden;
-  max-width: 400px;
 }
 
 /* Fixed Top and Bottom Sections */
