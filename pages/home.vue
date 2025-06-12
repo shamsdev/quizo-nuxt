@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import {Gamepad2, List} from 'lucide-vue-next'
 
+const editProfileDialog = ref();
+
 function onUserAvatarClicked() {
   console.log('onUserAvatarClicked');
+  editProfileDialog.value?.show();
 }
 
 function onStartGameButtonClicked() {
@@ -18,6 +21,7 @@ function onShowLeaderboardButtonClicked() {
 <template>
   <div class="home-items">
 
+    <!-- Base Components Start -->
     <UserAvatar class="cursor-pointer"
                 username="Mohammad"
                 avatarId="19"
@@ -41,6 +45,12 @@ function onShowLeaderboardButtonClicked() {
     />
 
     <HomeFooter/>
+
+    <!-- Base Components Finish -->
+
+    <BaseDialog ref="editProfileDialog">
+      <EditProfileDialog @close="editProfileDialog?.hide()"/>
+    </BaseDialog>
 
   </div>
 </template>
