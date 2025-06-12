@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     devServer: {
         port: 3001
     },
+    css: ['@/assets/styles/fonts.css'],
     build: {
         transpile: ['vuetify'],
     },
