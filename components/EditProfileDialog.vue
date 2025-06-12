@@ -46,18 +46,21 @@
 <script setup>
 import {ref} from 'vue'
 import FancyButton from './FancyButton.vue'
+import {TOTAL_AVATARS_COUNT} from "~/constants/settings.js";
+
+const emit = defineEmits(['close'])
 
 const username = ref('PlayerOne')
 const selectedAvatarId = ref(1)
 
-const avatarCount = 77
 const avatarsIds = ref(
-    Array.from({length: avatarCount}, (_, i) => i + 1)
+    Array.from({length: TOTAL_AVATARS_COUNT}, (_, i) => i + 1)
 )
 
 const applyChanges = () => {
   console.log('Username:', username.value)
   console.log('Avatar:', selectedAvatarId.value)
+  emit('close');
 }
 </script>
 

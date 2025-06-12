@@ -1,0 +1,1 @@
+export const TOTAL_AVATARS_COUNT = 77;

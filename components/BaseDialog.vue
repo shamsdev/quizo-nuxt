@@ -1,7 +1,11 @@
 <template>
   <Teleport to="body">
     <transition name="dialog-fade">
-      <div v-if="visible" class="dialog-overlay" @click.self="hide">
+      <div
+          v-if="visible"
+          class="dialog-overlay"
+          @click.self="onBackgroundClick"
+      >
         <transition name="dialog-zoom">
           <div class="dialog-box" v-if="visible">
             <slot/>
@@ -13,7 +17,14 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
+
+const props = defineProps({
+  closeOnBackground: {
+    type: Boolean,
+    default: true
+  }
+})
 
 const visible = ref(false)
 
@@ -26,7 +37,13 @@ const hide = () => {
   document.body.style.overflow = ''
 }
 
-defineExpose({show, hide})
+const onBackgroundClick = () => {
+  if (props.closeOnBackground) {
+    hide()
+  }
+}
+
+defineExpose({ show, hide })
 </script>
 
 <style scoped>

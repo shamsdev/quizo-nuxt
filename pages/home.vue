@@ -2,6 +2,7 @@
 import {Gamepad2, List} from 'lucide-vue-next'
 
 const editProfileDialog = ref();
+const findMatchDialog = ref();
 const leaderboardDialog = ref();
 
 function onUserAvatarClicked() {
@@ -11,6 +12,7 @@ function onUserAvatarClicked() {
 
 function onStartGameButtonClicked() {
   console.log('onStartGameButtonClicked');
+  findMatchDialog.value?.show();
 }
 
 function onShowLeaderboardButtonClicked() {
@@ -52,6 +54,10 @@ function onShowLeaderboardButtonClicked() {
 
     <BaseDialog ref="editProfileDialog">
       <EditProfileDialog @close="editProfileDialog?.hide()"/>
+    </BaseDialog>
+
+    <BaseDialog ref="findMatchDialog" :close-on-background="false">
+      <FindMatchDialog @close="findMatchDialog?.hide()"/>
     </BaseDialog>
 
     <BaseDialog ref="leaderboardDialog">

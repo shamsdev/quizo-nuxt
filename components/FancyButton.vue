@@ -94,6 +94,13 @@ const shadowColor = computed(() => darkenColor(props.color, 0.2))
   transform: translateY(2px);
 }
 
+.fancy-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
 .icon {
   display: flex;
   align-items: center;
