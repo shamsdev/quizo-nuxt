@@ -1,25 +1,32 @@
 <template>
   <div class="find-match-dialog">
-    <!-- Current User Avatar -->
-    <div class="avatar-section">
-      <UserAvatar :username="currentUser.name" :avatarId="currentUser.avatarId"/>
-    </div>
-
-    <!-- VS Label -->
-    <div class="vs-label">VS</div>
-
+    <div class="find-match-label">{{ titleLabel }}</div>
     <!-- Opponent Avatar -->
     <transition name="fade">
       <div class="avatar-section">
-        <UserAvatar :username="opponent.name" :avatarId="opponent.avatarId"/>
+        <UserAvatar
+            :username="opponent.name"
+            :avatarId="opponent.avatarId"
+            :color="'#ff793f'"
+        />
       </div>
     </transition>
 
+    <!-- VS Label -->
+    <div class="vs-label">━ VS ━</div>
+
+    <!-- Current User Avatar -->
+    <div class="avatar-section">
+      <UserAvatar
+          :username="currentUser.name"
+          :avatarId="currentUser.avatarId"/>
+    </div>
+
     <!-- Cancel Button -->
     <FancyButton
-        title="Cancel Find Match"
+        :title="cancelButtonAttribute.label"
         :onClick="cancelMatch"
-        :color="'#e74c3c'"
+        :color="cancelButtonAttribute.color"
         :disabled="!canCancel"
     />
   </div>
@@ -44,33 +51,65 @@ const opponent = ref({
   avatarId: getRandomAvatar(),
 })
 
-let intervalId = null;
+const cancelButtonAttributes = {
+  preStart: {
+    label: 'Waiting ...',
+    color: '#118194'
+  },
+  findingMatch: {
+    label: 'Cancel find match',
+    color: '#d3593e'
+  },
+  startingMatch: {
+    label: 'Match is starting ...',
+    color: '#118194'
+  },
+}
+
+let avatarShufflingInterval = null;
+let activeCancelButtonInterval = null;
+
+const titleLabel = ref('Finding Match ...');
+
 const canCancel = ref(false);
+const cancelButtonAttribute = ref(cancelButtonAttributes.preStart);
 
 function getRandomAvatar() {
   return Math.floor(Math.random() * TOTAL_AVATARS_COUNT) + 1;
 }
 
 function startAvatarShuffling() {
-  intervalId = setInterval(() => {
+  avatarShufflingInterval = setInterval(() => {
     opponent.value.avatarId = getRandomAvatar()
-  }, 500)
+  }, 300)
 }
 
 // Simulate finding a match after a few seconds
 function simulateMatchFound() {
   setTimeout(() => {
-    clearInterval(intervalId)
-    opponent.value = {
+    onMatchFound({
       name: 'Opponent',
       avatarId: getRandomAvatar(),
-    }
+    });
   }, 4000)
+}
 
-  // Activate cancel button after 5s
-  setTimeout(() => {
-    canCancel.value = true
-  }, 2000)
+function activeCancelButton() {
+  // Activate cancel button after 2s
+  activeCancelButtonInterval = setTimeout(() => {
+    cancelButtonAttribute.value = cancelButtonAttributes.findingMatch;
+    canCancel.value = true;
+  }, 2000);
+}
+
+function onMatchFound(foundOpponent) {
+  clearIntervals();
+
+  opponent.value = foundOpponent;
+
+  titleLabel.value = 'Opponent found'
+  cancelButtonAttribute.value = cancelButtonAttributes.startingMatch;
+  canCancel.value = false;
 }
 
 function cancelMatch() {
@@ -78,12 +117,19 @@ function cancelMatch() {
 }
 
 onMounted(() => {
-  startAvatarShuffling()
-  simulateMatchFound()
+  startAvatarShuffling();
+  activeCancelButton();
+
+  simulateMatchFound();
 })
 
+function clearIntervals() {
+  clearInterval(avatarShufflingInterval);
+  clearInterval(activeCancelButtonInterval);
+}
+
 onUnmounted(() => {
-  clearInterval(intervalId)
+  clearIntervals();
 })
 </script>
 
@@ -102,6 +148,12 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   width: 100%;
+}
+
+.find-match-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: #555;
 }
 
 .vs-label {

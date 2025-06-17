@@ -4,8 +4,13 @@
         :src="avatarUrl"
         :alt="username"
         class="avatar-img"
+        :style="{
+          borderColor: color
+        }"
     />
-    <div class="username">
+    <div class="username" :style="{
+      backgroundColor: color
+    }">
       <p>{{ username }}</p>
     </div>
   </div>
@@ -22,6 +27,10 @@ const props = defineProps({
   avatarId: {
     type: [String, Number],
     required: true,
+  },
+  color: {
+    type: String,
+    default: '#34ace0',
   },
 })
 
@@ -42,12 +51,11 @@ const avatarUrl = computed(() =>
   width: 105px;
   height: 105px;
   border-radius: 50%;
-  border: 4px solid #3498db;
+  border: 4px solid;
   object-fit: cover;
 }
 
 .username {
-  background-color: #3498db;
   border-radius: 20px;
   padding: 2px 8px;
   margin-top: -8px;

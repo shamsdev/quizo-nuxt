@@ -4,7 +4,7 @@
     <div class="top-bar">
       <div class="player-info left">
         <UserAvatar username="Mohammad"
-                    avatarId="19"
+                    avatarId="3"
                     class="user-avatar"
         />
         <div class="score-box">{{ my.score }}</div>

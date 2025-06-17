@@ -31,7 +31,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: '#3498db',
+    default: '#34ace0',
   },
   onClick: {
     type: Function,

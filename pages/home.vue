@@ -36,7 +36,7 @@ function onShowLeaderboardButtonClicked() {
         class="start-game-btn mt-15"
         title="Start Game"
         :icon="Gamepad2"
-        color="#e67e22"
+        color="#218c74"
         :onClick="onStartGameButtonClicked"
     />
 
@@ -44,7 +44,7 @@ function onShowLeaderboardButtonClicked() {
         class="leaderboard-btn mt-8"
         title="Leaderboard"
         :icon="List"
-        color="#e67e22"
+        color="#227093"
         :onClick="onShowLeaderboardButtonClicked"
     />
 
