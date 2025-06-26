@@ -10,6 +10,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import {useRouter} from 'vue-router'
+import {useMessageDialog} from "~/composables/useMessageDialog.js";
 
 const progress = ref(0)
 const loadingText = ref('Loading...')
@@ -18,8 +19,22 @@ const router = useRouter()
 const {$karizmaConnection} = useNuxtApp();
 
 onMounted(async () => {
-  await connectToServer();
-  await getLoginData();
+  try {
+    await connectToServer();
+    await getLoginData();
+  } catch (ex) {
+    useMessageDialog.show({
+      title: 'Connection Error',
+      message: 'Cannot connect to game servers. Please check your internet connection and try again.',
+      buttons: [
+        {
+          text: 'Retry',
+          color: '#e74c3c',
+          onClick: () => window.location.reload()
+        }
+      ]
+    });
+  }
 })
 
 async function connectToServer() {
