@@ -2,9 +2,33 @@
   <div class="app-background">
     <div class="app-wrapper">
       <NuxtPage/>
+      <BaseDialog ref="msgDialogRef">
+        <MessageDialog
+            title="Leave Game?"
+            message="Are you sure you want to leave? You will lose your current progress."
+            :buttons="
+            [
+              { text: 'Cancel', color: '#7f8c8d', onClick: () => console.log('cancel') },
+              { text: 'Leave', color: '#e74c3c', onClick: ()=>console.log('leave') }
+            ]"
+        />
+      </BaseDialog>
     </div>
   </div>
 </template>
+
+<script setup>
+
+const msgDialogRef = ref();
+
+onMounted(() => {
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'k')
+      msgDialogRef.value.show();
+  });
+})
+
+</script>
 
 <style scoped>
 html, body {
