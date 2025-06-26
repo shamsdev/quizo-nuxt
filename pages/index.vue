@@ -32,7 +32,10 @@ async function getLoginData() {
   updateProgress('Getting login data...');
   const loginData = await $karizmaConnection.connection.request('/test/get-test');
   console.warn(loginData);
-  updateProgress('Login data received', 60);
+  updateProgress('Login data received', 100);
+  setTimeout(() => {
+    router.replace('/home');
+  }, 500);
 }
 
 
