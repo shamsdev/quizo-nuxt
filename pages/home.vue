@@ -1,31 +1,6 @@
-<script setup lang="ts">
-import {Gamepad2, List} from 'lucide-vue-next'
-
-const editProfileDialog = ref();
-const findMatchDialog = ref();
-const leaderboardDialog = ref();
-
-function onUserAvatarClicked() {
-  console.log('onUserAvatarClicked');
-  editProfileDialog.value?.show();
-}
-
-function onStartGameButtonClicked() {
-  console.log('onStartGameButtonClicked');
-  findMatchDialog.value?.show();
-}
-
-function onShowLeaderboardButtonClicked() {
-  console.log('onShowLeaderboardButtonClicked');
-  leaderboardDialog.value?.show();
-}
-
-</script>
-
 <template>
   <div class="home-items">
 
-    <!-- Base Components Start -->
     <UserAvatar class="cursor-pointer"
                 username="Mohammad"
                 avatarId="19"
@@ -67,7 +42,40 @@ function onShowLeaderboardButtonClicked() {
   </div>
 </template>
 
+<script setup>
+import {Gamepad2, List} from 'lucide-vue-next'
+
+const editProfileDialog = ref();
+const findMatchDialog = ref();
+const leaderboardDialog = ref();
+
+const testLoader = ref(true);
+
+onMounted(() => {
+  setTimeout(() => {
+    testLoader.value = false;
+  }, 1000)
+})
+
+function onUserAvatarClicked() {
+  console.log('onUserAvatarClicked');
+  editProfileDialog.value?.show();
+}
+
+function onStartGameButtonClicked() {
+  console.log('onStartGameButtonClicked');
+  findMatchDialog.value?.show();
+}
+
+function onShowLeaderboardButtonClicked() {
+  console.log('onShowLeaderboardButtonClicked');
+  leaderboardDialog.value?.show();
+}
+
+</script>
+
 <style scoped>
+
 .home-items {
   padding-top: 80px;
   display: flex;
