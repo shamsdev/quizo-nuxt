@@ -1,5 +1,5 @@
 <template>
-  <div class="user-avatar">
+  <div v-if="!loading" class="user-avatar">
     <img
         :src="avatarUrl"
         :alt="username"
@@ -13,6 +13,10 @@
     }">
       <p>{{ username }}</p>
     </div>
+  </div>
+  <div v-else class="avatar-loader">
+    <VSkeletonLoader type="avatar" height="40"/>
+    <VSkeletonLoader type="text" width="80" height="0"/>
   </div>
 </template>
 
@@ -32,6 +36,10 @@ const props = defineProps({
     type: String,
     default: '#34ace0',
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const avatarUrl = computed(() =>
@@ -45,6 +53,13 @@ const avatarUrl = computed(() =>
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+.avatar-loader {
+  scale: 2.2;
+  height: 80px;
+  margin-top: 30px;
+  margin-bottom: 12px;
 }
 
 .avatar-img {
