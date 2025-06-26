@@ -15,21 +15,34 @@ const progress = ref(0)
 const loadingText = ref('Loading...')
 
 const router = useRouter()
+const {$karizmaConnection} = useNuxtApp();
 
-onMounted(() => {
-  const interval = setInterval(() => {
-    if (progress.value < 100) {
-      progress.value += 5
-      if (progress.value < 30) loadingText.value = 'Loading assets...'
-      else if (progress.value < 60) loadingText.value = 'Connecting to server...'
-      else if (progress.value < 90) loadingText.value = 'Preparing experience...'
-      else loadingText.value = 'Almost done...'
-    } else {
-      clearInterval(interval)
-      router.push('/home')
-    }
-  }, 100) // total time = 100 * 20 = 2 seconds
+onMounted(async () => {
+  await connectToServer();
+  await getLoginData();
 })
+
+async function connectToServer() {
+  updateProgress('Connecting to server...', 0);
+  await $karizmaConnection.connection.connect('http://localhost:4001/Hub');
+  updateProgress('Connection to server established...', 30);
+}
+
+async function getLoginData() {
+  updateProgress('Getting login data...');
+  const loginData = await $karizmaConnection.connection.request('/test/get-test');
+  console.warn(loginData);
+  updateProgress('Login data received', 60);
+}
+
+
+function updateProgress(status, progressValue) {
+  if (progressValue)
+    progress.value = progressValue;
+
+  loadingText.value = status;
+}
+
 </script>
 
 <style scoped>
