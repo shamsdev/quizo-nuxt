@@ -24,6 +24,11 @@ onMounted(async () => {
 
 async function connectToServer() {
   updateProgress('Connecting to server...', 0);
+  $karizmaConnection.unregisterCallbacks();
+  if ($karizmaConnection.connection.isConnected)
+    await $karizmaConnection.connection.disconnect();
+
+  $karizmaConnection.registerCallbacks();
   await $karizmaConnection.connection.connect('http://localhost:4001/Hub');
   updateProgress('Connection to server established...', 30);
 }

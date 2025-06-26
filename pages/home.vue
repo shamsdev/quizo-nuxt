@@ -49,14 +49,6 @@ const editProfileDialog = ref();
 const findMatchDialog = ref();
 const leaderboardDialog = ref();
 
-const testLoader = ref(true);
-
-onMounted(() => {
-  setTimeout(() => {
-    testLoader.value = false;
-  }, 1000)
-})
-
 function onUserAvatarClicked() {
   console.log('onUserAvatarClicked');
   editProfileDialog.value?.show();

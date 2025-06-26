@@ -1,46 +1,54 @@
 <template>
-  <div class="message-dialog">
-    <!-- Title -->
-    <div class="title">
-      {{ title }}
+  <BaseDialog ref="dialogRef" :close-on-background="false">
+    <div class="message-dialog">
+      <div class="title">{{ currentTitle }}</div>
+      <div class="message">{{ currentMessage }}</div>
+      <div class="buttons">
+        <FancyButton
+            v-for="(btn, index) in currentButtons"
+            :key="index"
+            :title="btn.text"
+            :color="btn.color || '#3498db'"
+            :onClick="() => handleButtonClick(btn)"
+        />
+      </div>
     </div>
-
-    <!-- Message -->
-    <div class="message">
-      {{ message }}
-    </div>
-
-    <!-- Buttons -->
-    <div class="buttons">
-      <FancyButton
-          v-for="(btn, index) in buttons"
-          :key="index"
-          :title="btn.text"
-          :color="btn.color || '#3498db'"
-          :onClick="btn.onClick"
-      />
-    </div>
-  </div>
+  </BaseDialog>
 </template>
 
 <script setup>
-import FancyButton from '@/components/FancyButton.vue'
+import BaseDialog from '@/components/BaseDialog.vue';
+import FancyButton from '@/components/FancyButton.vue';
 
-defineProps({
-  title: {
-    type: String,
-    required: true
-  },
-  message: {
-    type: String,
-    required: true
-  },
-  buttons: {
-    type: Array,
-    required: true
-    // Each button: { text: String, color: String, onClick: Function }
-  }
-})
+const dialogRef = ref();
+
+const currentTitle = ref('');
+const currentMessage = ref('');
+const currentButtons = ref([]);
+
+/**
+ * Show function that accepts title, message, and buttons.
+ * Each button: { text, color, onClick }
+ */
+const show = (title, message, buttons = []) => {
+  currentTitle.value = title
+  currentMessage.value = message
+  currentButtons.value = buttons
+  dialogRef.value?.show();
+}
+
+const hide = () => {
+  dialogRef.value?.hide();
+}
+
+const handleButtonClick = (btn) => {
+  if (btn.onClick)
+    btn.onClick();
+
+  hide();
+}
+
+defineExpose({show, hide})
 </script>
 
 <style scoped>
