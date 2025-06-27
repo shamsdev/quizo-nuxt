@@ -10,7 +10,8 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import {useRouter} from 'vue-router'
-import {useMessageDialog} from "~/composables/useMessageDialog.js";
+import {useMessageDialog} from "~/composables/useMessageDialog";
+import {userDataStore} from "~/stores/user-data.store";
 
 const progress = ref(0)
 const loadingText = ref('Loading...')
@@ -20,9 +21,15 @@ const {$karizmaConnection} = useNuxtApp();
 
 onMounted(async () => {
   try {
+
     await connectToServer();
-    await getLoginData();
+    const hasToken = StorageWrapper.has(StorageKeys.AccessToken);
+    if (!hasToken)
+      await requestSignUp();
+    await requestSignIn();
+
   } catch (ex) {
+    console.error(ex);
     useMessageDialog.show({
       title: 'Connection Error',
       message: 'Cannot connect to game servers. Please check your internet connection and try again.',
@@ -38,21 +45,61 @@ onMounted(async () => {
 })
 
 async function connectToServer() {
-  updateProgress('Connecting to server...', 0);
+  updateProgress('Connecting ...', 0);
+
   $karizmaConnection.unregisterCallbacks();
+
   if ($karizmaConnection.connection.isConnected)
     await $karizmaConnection.connection.disconnect();
 
   $karizmaConnection.registerCallbacks();
+
   await $karizmaConnection.connection.connect('http://localhost:4001/Hub');
-  updateProgress('Connection to server established...', 30);
+
+  if (!$karizmaConnection.connection.isConnected)
+    throw new Error('Connection error');
+
+  updateProgress('Connected', 30);
 }
 
-async function getLoginData() {
-  updateProgress('Getting login data...');
-  const loginData = await $karizmaConnection.connection.request('/test/get-test');
-  console.warn(loginData);
+async function requestSignUp() {
+  updateProgress('Signing Up ...');
+
+  const signUpResult = await $karizmaConnection.connection.request('user/sign-up');
+
+  if (signUpResult.HasError)
+    throw new Error('Error signing up: ' + signUpResult.Error);
+
+  if (!signUpResult.Result.AccessToken)
+    throw new Error('access token is null: ' + JSON.stringify(signUpResult.Result));
+
+  StorageWrapper.set(StorageKeys.AccessToken, signUpResult.Result.AccessToken);
+
+  updateProgress('Sign Up Success', 60);
+}
+
+
+async function requestSignIn() {
+  updateProgress('Signing In ...');
+
+  const accessToken = StorageWrapper.get(StorageKeys.AccessToken, null);
+
+  if (!accessToken)
+    throw new Error('null access token in sign-in phase');
+
+  const signInResult = await $karizmaConnection.connection.request('user/sign-in',
+      {AccessToken: accessToken});
+
+  if (signInResult.HasError)
+    throw new Error('Error signing in: ' + JSON.stringify(signInResult.Error));
+
+  if (!signInResult.Result)
+    throw new Error('signInResult is null');
+
+  const userData = userDataStore();
+  userData.setData(signInResult.Result.UserData);
   updateProgress('Login data received', 100);
+
   setTimeout(() => {
     router.replace('/home');
   }, 500);

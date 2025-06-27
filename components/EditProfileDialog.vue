@@ -2,13 +2,15 @@
   <div class="edit-profile-dialog">
     <!-- Top Section: Username -->
     <div class="form-section">
-      <label for="username" class="input-label">Username</label>
+      <label for="username" class="input-label">Display Name</label>
       <input
           id="username"
-          v-model="username"
+          v-model="displayName"
           class="text-input"
           type="text"
+          :disabled="isSubmitting"
           placeholder="Enter your username"
+          maxlength="20"
       />
     </div>
 
@@ -21,13 +23,13 @@
     <div class="avatar-scroll-section">
       <div class="avatar-list">
         <div
-            v-for="avatarId in avatarsIds"
-            :key="avatarId"
+            v-for="id in avatarsIds"
+            :key="id"
             class="avatar-item"
-            :class="{ selected: avatarId === selectedAvatarId }"
-            @click="selectedAvatarId = avatarId"
+            :class="{ selected: id === avatarId }"
+            @click="avatarId = isSubmitting ? avatarId : id"
         >
-          <img :src="`/images/avatars/${avatarId}.png`" :alt="avatarId"/>
+          <img :src="`/images/avatars/${id}.png`" :alt="id"/>
         </div>
       </div>
     </div>
@@ -36,7 +38,8 @@
     <div class="form-section button-wrapper">
       <FancyButton
           title="Apply"
-          :onClick="applyChanges"
+          :onClick="requestUpdateProfile"
+          :disabled="isSubmitting"
           color="#27ae60"
       />
     </div>
@@ -44,24 +47,43 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import FancyButton from './FancyButton.vue'
+import {ref} from 'vue';
+import FancyButton from './FancyButton.vue';
 import {TOTAL_AVATARS_COUNT} from "~/constants/settings.js";
+import {userDataStore} from "~/stores/user-data.store";
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close']);
+const {$karizmaConnection} = useNuxtApp();
+const userData = userDataStore();
 
-const username = ref('PlayerOne')
-const selectedAvatarId = ref(1)
+const displayName = ref(null);
+const avatarId = ref(1);
 
 const avatarsIds = ref(
     Array.from({length: TOTAL_AVATARS_COUNT}, (_, i) => i + 1)
 )
 
-const applyChanges = () => {
-  console.log('Username:', username.value)
-  console.log('Avatar:', selectedAvatarId.value)
+const isSubmitting = ref(false);
+
+const requestUpdateProfile = async () => {
+  isSubmitting.value = true;
+
+  const requestData = {
+    Avatar: avatarId.value.toString(),
+    DisplayName: displayName.value
+  };
+
+  const updateProfileResult = await $karizmaConnection.connection
+      .request('user/update-profile', requestData);
+
+  userData.setProfile(updateProfileResult.Result);
   emit('close');
 }
+
+onMounted(() => {
+  displayName.value = userData.displayName;
+  avatarId.value = userData.avatarId;
+})
 </script>
 
 <style scoped>

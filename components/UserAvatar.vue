@@ -11,7 +11,7 @@
     <div class="username" :style="{
       backgroundColor: color
     }">
-      <p>{{ username }}</p>
+      <p>{{ username ?? 'Guest'}}</p>
     </div>
   </div>
   <div v-else class="avatar-loader">
@@ -26,10 +26,11 @@ import {computed} from 'vue'
 const props = defineProps({
   username: {
     type: String,
-    required: true,
+    required: false,
+    default: 'Guest'
   },
   avatarId: {
-    type: [String, Number],
+    type: Number,
     required: true,
   },
   color: {

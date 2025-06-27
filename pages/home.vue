@@ -2,8 +2,8 @@
   <div class="home-items">
 
     <UserAvatar class="cursor-pointer"
-                username="Mohammad"
-                avatarId="19"
+                :username="userDisplayName"
+                :avatarId="userAvatarId"
                 @click="onUserAvatarClicked"
     />
 
@@ -28,7 +28,7 @@
     <!-- Base Components Finish -->
 
     <BaseDialog ref="editProfileDialog">
-      <EditProfileDialog @close="editProfileDialog?.hide()"/>
+      <EditProfileDialog @close="onEditProfileDialogClose"/>
     </BaseDialog>
 
     <BaseDialog ref="findMatchDialog" :close-on-background="false">
@@ -44,10 +44,14 @@
 
 <script setup>
 import {Gamepad2, List} from 'lucide-vue-next'
+import {userDataStore} from "~/stores/user-data.store";
 
 const editProfileDialog = ref();
 const findMatchDialog = ref();
 const leaderboardDialog = ref();
+
+const userDisplayName = ref(null);
+const userAvatarId = ref(1);
 
 function onUserAvatarClicked() {
   console.log('onUserAvatarClicked');
@@ -63,6 +67,21 @@ function onShowLeaderboardButtonClicked() {
   console.log('onShowLeaderboardButtonClicked');
   leaderboardDialog.value?.show();
 }
+
+function updateUserProfileData() {
+  const userData = userDataStore();
+  userDisplayName.value = userData.displayName;
+  userAvatarId.value = userData.avatarId;
+}
+
+function onEditProfileDialogClose(){
+  updateUserProfileData();
+  editProfileDialog.value?.hide();
+}
+
+onMounted(() => {
+  updateUserProfileData();
+})
 
 </script>
 

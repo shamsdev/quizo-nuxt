@@ -19,10 +19,10 @@ export default defineNuxtPlugin(() => {
     const handleDisconnection = () => {
         useMessageDialog.show({
             title: 'Disconnected',
-            message: 'Connection lost. Please return to the home screen.',
+            message: 'Connection lost. Please check your internet connection and retry.',
             buttons: [
                 {
-                    text: 'Go to Home',
+                    text: 'Reconnect',
                     color: '#e74c3c',
                     onClick: () => router.replace('/')
                 }
