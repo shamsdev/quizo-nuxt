@@ -5,7 +5,7 @@
     <transition name="fade">
       <div class="avatar-section">
         <UserAvatar
-            :username="opponent.name"
+            :username="opponent.displayName"
             :avatarId="opponent.avatarId"
             :color="'#ff793f'"
         />
@@ -18,7 +18,7 @@
     <!-- Current User Avatar -->
     <div class="avatar-section">
       <UserAvatar
-          :username="currentUser.name"
+          :username="currentUser.displayName"
           :avatarId="currentUser.avatarId"/>
     </div>
 
@@ -37,17 +37,18 @@ import {ref, onMounted, onUnmounted} from 'vue'
 import UserAvatar from './UserAvatar.vue'
 import FancyButton from './FancyButton.vue'
 import {TOTAL_AVATARS_COUNT} from "~/constants/settings.js";
+import {userDataStore} from "~/stores/user-data.store.js";
 
 const emit = defineEmits(['close'])
 
-const currentUser = {
-  name: 'You',
+const currentUser = ref({
+  displayName: 'You',
   avatarId: 1,
-}
+})
 
 // Opponent simulation
 const opponent = ref({
-  name: 'Finding...',
+  displayName: 'Finding...',
   avatarId: getRandomAvatar(),
 })
 
@@ -119,9 +120,15 @@ function cancelMatch() {
 onMounted(() => {
   startAvatarShuffling();
   activeCancelButton();
-
+  updateUserAvatar();
   simulateMatchFound();
 })
+
+function updateUserAvatar() {
+  const userData = userDataStore();
+  currentUser.value.displayName = userData.displayName;
+  currentUser.value.avatarId = userData.avatarId;
+}
 
 function clearIntervals() {
   clearInterval(avatarShufflingInterval);
