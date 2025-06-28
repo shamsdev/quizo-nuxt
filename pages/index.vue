@@ -10,7 +10,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import {useRouter} from 'vue-router'
-import {userDataStore} from "~/stores/user-data.store";
+import {userStore} from "~/stores/user.store";
 
 const progress = ref(0)
 const loadingText = ref('Loading...')
@@ -95,7 +95,7 @@ async function requestSignIn() {
   if (!signInResult.Result)
     throw new Error('signInResult is null');
 
-  const userData = userDataStore();
+  const userData = userStore();
   userData.setData(signInResult.Result.UserData);
   updateProgress('Login data received', 100);
 

@@ -50,11 +50,11 @@
 import {ref} from 'vue';
 import FancyButton from './FancyButton.vue';
 import {TOTAL_AVATARS_COUNT} from "~/constants/settings.js";
-import {userDataStore} from "~/stores/user-data.store";
+import {userStore} from "~/stores/user.store";
 
 const emit = defineEmits(['close']);
 const {$karizmaConnection} = useNuxtApp();
-const userData = userDataStore();
+const userData = userStore();
 
 const displayName = ref(null);
 const avatarId = ref(1);

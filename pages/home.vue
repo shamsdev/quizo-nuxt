@@ -44,7 +44,7 @@
 
 <script setup>
 import {Gamepad2, List} from 'lucide-vue-next'
-import {userDataStore} from "~/stores/user-data.store";
+import {userStore} from "~/stores/user.store";
 
 const editProfileDialog = ref();
 const findMatchDialog = ref();
@@ -69,7 +69,7 @@ function onShowLeaderboardButtonClicked() {
 }
 
 function updateUserProfileData() {
-  const userData = userDataStore();
+  const userData = userStore();
   userDisplayName.value = userData.displayName;
   userAvatarId.value = userData.avatarId;
 }

@@ -37,7 +37,8 @@ import {ref, onMounted, onUnmounted} from 'vue'
 import UserAvatar from './UserAvatar.vue'
 import FancyButton from './FancyButton.vue'
 import {TOTAL_AVATARS_COUNT} from "~/constants/settings.js";
-import {userDataStore} from "~/stores/user-data.store.js";
+import {userStore} from "~/stores/user.store";
+import {gameStore} from "~/stores/game.store";
 
 const emit = defineEmits(['close'])
 const {$karizmaConnection} = useNuxtApp();
@@ -110,6 +111,9 @@ function activeCancelButton() {
 function onMatchFound(event) {
   clearIntervals();
 
+  const gameDate = gameStore();
+  gameDate.setData(event);
+
   opponent.value = {
     avatarId: parseInt(event.Opponent.Avatar),
     displayName: event.Opponent.DisplayName
@@ -132,7 +136,7 @@ function subscribeServerEvents(active) {
 }
 
 function updateUserAvatar() {
-  const userData = userDataStore();
+  const userData = userStore();
   currentUser.value.displayName = userData.displayName;
   currentUser.value.avatarId = userData.avatarId;
 }

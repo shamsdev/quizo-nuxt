@@ -3,17 +3,17 @@
     <!-- Top Bar: Players Info -->
     <div class="top-bar">
       <div class="player-info left">
-        <UserAvatar username="Mohammad"
-                    avatarId="3"
+        <UserAvatar :username="currentUser.displayName"
+                    :avatarId="currentUser.avatarId"
                     class="user-avatar"
         />
-        <div class="score-box">{{ my.score }}</div>
+        <div class="score-box">{{ currentUser.score }}</div>
       </div>
 
       <div class="player-info right">
-        <div class="score-box">{{ opponent.score }}</div>
-        <UserAvatar username="Sara"
-                    avatarId="1"
+        <div class="score-box">{{ opponentUser.score }}</div>
+        <UserAvatar :username="opponentUser.displayName"
+                    :avatarId="opponentUser.avatarId"
                     class="user-avatar"
         />
       </div>
@@ -28,51 +28,61 @@
 
     <!-- Question Box -->
     <div class="question-box mt-2">
-      <h2>{{ currentQuestion.question }}</h2>
+      <h2>{{ isInReadyState ? 'Ready' : currentQuestion.question }}</h2>
     </div>
 
     <!-- Timer Progress Bar -->
-    <div class="timer-bar-wrapper mt-4">
-      <div class="timer-bar" :style="{ width: timerProgress + '%' }"></div>
-    </div>
+    <div v-if="!isInReadyState">
 
-    <!-- Answers Grid -->
-    <div class="answers-grid mt-4">
-      <div
-          v-for="(answer, index) in currentQuestion.answers"
-          :key="index"
-          class="answer-box"
-          @click="selectAnswer(index)"
-      >
-        {{ answer }}
+      <div class="timer-bar-wrapper mt-4">
+        <div class="timer-bar" :style="{ width: timerProgress + '%' }"></div>
       </div>
+
+      <!-- Answers Grid -->
+      <div class="answers-grid mt-4">
+        <div
+            v-for="(answer, index) in currentQuestion.answers"
+            :key="index"
+            class="answer-box"
+            @click="selectAnswer(index)"
+        >
+          {{ answer }}
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, onUnmounted} from 'vue';
+import {userStore} from "~/stores/user.store";
+import {gameStore} from "~/stores/game.store";
 
-const my = ref({
-  name: 'You',
-  avatar: '/images/avatars/1.png',
-  score: 0,
-})
+const {$karizmaConnection} = useNuxtApp();
 
-const opponent = ref({
-  name: 'Opponent',
-  avatar: '/images/avatars/2.png',
+const currentUser = ref({
+  displayName: 'You',
+  avatarId: 1,
   score: 0,
-})
+});
+
+const opponentUser = ref({
+  displayName: 'Opponent',
+  avatarId: 2,
+  score: 0,
+});
 
 const currentQuestion = ref({
   question: 'What is the capital of France?',
   answers: ['Berlin', 'Madrid', 'Paris', 'Rome'],
-})
+});
 
-const timerProgress = ref(100)
+const isInReadyState = ref(true);
 
-let timerInterval
+const timerProgress = ref(100);
+
+let timerInterval;
 
 const startTimer = () => {
   timerProgress.value = 100
@@ -92,9 +102,45 @@ const selectAnswer = (index) => {
   // TODO: Emit to server, validate, update score
 }
 
+function subscribeServerEvents(active) {
+  // if (active)
+  //   $karizmaConnection.connection.on('match/start-round', onMatchFound);
+  // else
+  //   $karizmaConnection.connection.off('match/start-round');
+}
+
+function clearIntervals() {
+  clearInterval(timerInterval);
+}
+
+
+function updateUserAvatars() {
+  const userData = userStore();
+  currentUser.value.displayName = userData.displayName;
+  currentUser.value.avatarId = userData.avatarId;
+
+  const gameData = gameStore();
+  opponentUser.value.avatarId = gameData.opponent.avatarId;
+  opponentUser.value.displayName = gameData.opponent.displayName;
+}
+
+async function requestReadyMatch() {
+  await $karizmaConnection.connection
+      .send('game/set-ready');
+}
+
 onMounted(() => {
-  startTimer()
+  updateUserAvatars();
+  subscribeServerEvents(true);
+  requestReadyMatch();
 })
+
+onUnmounted(() => {
+  subscribeServerEvents(false);
+  clearIntervals();
+})
+
+
 </script>
 
 <style scoped>
