@@ -41,6 +41,7 @@ import {userDataStore} from "~/stores/user-data.store.js";
 
 const emit = defineEmits(['close'])
 const {$karizmaConnection} = useNuxtApp();
+const router = useRouter();
 
 const currentUser = ref({
   displayName: 'You',
@@ -106,14 +107,28 @@ function activeCancelButton() {
   canCancel.value = true;
 }
 
-function onMatchFound(foundOpponent) {
+function onMatchFound(event) {
   clearIntervals();
 
-  opponent.value = foundOpponent;
+  opponent.value = {
+    avatarId: parseInt(event.Opponent.Avatar),
+    displayName: event.Opponent.DisplayName
+  }
 
   titleLabel.value = 'Opponent found'
   cancelButtonAttribute.value = cancelButtonAttributes.startingMatch;
   canCancel.value = false;
+
+  setTimeout(() => {
+    router.replace('/gameplay');
+  }, 2000);
+}
+
+function subscribeServerEvents(active) {
+  if (active)
+    $karizmaConnection.connection.on('match/start', onMatchFound);
+  else
+    $karizmaConnection.connection.off('match/start');
 }
 
 function updateUserAvatar() {
@@ -129,10 +144,15 @@ function clearIntervals() {
 onMounted(() => {
   updateUserAvatar();
   startAvatarShuffling();
-  requestJoinMatchMake();
+  subscribeServerEvents(true);
+
+  setTimeout(() => {
+    requestJoinMatchMake();
+  }, 1000);
 })
 
 onUnmounted(() => {
+  subscribeServerEvents(false);
   clearIntervals();
 })
 
