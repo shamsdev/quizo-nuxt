@@ -8,8 +8,6 @@
 </template>
 
 <script setup>
-import {useMessageDialog} from '@/composables/useMessageDialog';
-
 const msgDialogRef = ref();
 
 onMounted(() => {

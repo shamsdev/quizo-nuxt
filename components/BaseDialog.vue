@@ -43,6 +43,15 @@ const onBackgroundClick = () => {
   }
 }
 
+
+onMounted(() => {
+  useDialogManager.onCloseAll(hide);
+});
+
+onBeforeUnmount(() => {
+  useDialogManager.offCloseAll(hide);
+});
+
 defineExpose({ show, hide })
 </script>
 

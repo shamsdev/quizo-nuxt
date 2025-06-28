@@ -1,6 +1,5 @@
 import { defineNuxtPlugin, useRouter } from '#app';
 import { Connection } from '@karizma-studio/karizma-connection-js';
-import { useMessageDialog } from '@/composables/useMessageDialog';
 
 export default defineNuxtPlugin(() => {
     const router = useRouter();
@@ -17,6 +16,7 @@ export default defineNuxtPlugin(() => {
     });
 
     const handleDisconnection = () => {
+        useDialogManager.closeAll();
         useMessageDialog.show({
             title: 'Disconnected',
             message: 'Connection lost. Please check your internet connection and retry.',

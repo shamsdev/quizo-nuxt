@@ -10,7 +10,6 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import {useRouter} from 'vue-router'
-import {useMessageDialog} from "~/composables/useMessageDialog";
 import {userDataStore} from "~/stores/user-data.store";
 
 const progress = ref(0)
