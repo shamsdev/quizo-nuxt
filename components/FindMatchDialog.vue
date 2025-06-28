@@ -25,7 +25,7 @@
     <!-- Cancel Button -->
     <FancyButton
         :title="cancelButtonAttribute.label"
-        :onClick="cancelMatch"
+        :onClick="requestLeaveMatchMake"
         :color="cancelButtonAttribute.color"
         :disabled="!canCancel"
     />
@@ -40,6 +40,7 @@ import {TOTAL_AVATARS_COUNT} from "~/constants/settings.js";
 import {userDataStore} from "~/stores/user-data.store.js";
 
 const emit = defineEmits(['close'])
+const {$karizmaConnection} = useNuxtApp();
 
 const currentUser = ref({
   displayName: 'You',
@@ -68,7 +69,6 @@ const cancelButtonAttributes = {
 }
 
 let avatarShufflingInterval = null;
-let activeCancelButtonInterval = null;
 
 const titleLabel = ref('Finding Match ...');
 
@@ -85,22 +85,25 @@ function startAvatarShuffling() {
   }, 300)
 }
 
-// Simulate finding a match after a few seconds
-function simulateMatchFound() {
-  setTimeout(() => {
-    onMatchFound({
-      name: 'Opponent',
-      avatarId: getRandomAvatar(),
-    });
-  }, 4000)
+async function requestJoinMatchMake() {
+  await $karizmaConnection.connection
+      .send('match-make/join');
+
+  activeCancelButton();
+}
+
+async function requestLeaveMatchMake() {
+  canCancel.value = false;
+
+  await $karizmaConnection.connection
+      .send('match-make/leave');
+
+  emit('close');
 }
 
 function activeCancelButton() {
-  // Activate cancel button after 2s
-  activeCancelButtonInterval = setTimeout(() => {
-    cancelButtonAttribute.value = cancelButtonAttributes.findingMatch;
-    canCancel.value = true;
-  }, 2000);
+  cancelButtonAttribute.value = cancelButtonAttributes.findingMatch;
+  canCancel.value = true;
 }
 
 function onMatchFound(foundOpponent) {
@@ -113,17 +116,6 @@ function onMatchFound(foundOpponent) {
   canCancel.value = false;
 }
 
-function cancelMatch() {
-  emit('close');
-}
-
-onMounted(() => {
-  startAvatarShuffling();
-  activeCancelButton();
-  updateUserAvatar();
-  simulateMatchFound();
-})
-
 function updateUserAvatar() {
   const userData = userDataStore();
   currentUser.value.displayName = userData.displayName;
@@ -132,12 +124,18 @@ function updateUserAvatar() {
 
 function clearIntervals() {
   clearInterval(avatarShufflingInterval);
-  clearInterval(activeCancelButtonInterval);
 }
+
+onMounted(() => {
+  updateUserAvatar();
+  startAvatarShuffling();
+  requestJoinMatchMake();
+})
 
 onUnmounted(() => {
   clearIntervals();
 })
+
 </script>
 
 <style scoped>
