@@ -20,11 +20,12 @@
     </div>
 
     <!-- Scrollable Avatar List -->
-    <div class="avatar-scroll-section">
+    <div class="avatar-scroll-section" ref="avatarScrollSection">
       <div class="avatar-list">
         <div
             v-for="id in avatarsIds"
             :key="id"
+            :ref="el => { if (el) avatarRefs[id] = el }"
             class="avatar-item"
             :class="{ selected: id === avatarId }"
             @click="avatarId = isSubmitting ? avatarId : id"
@@ -58,6 +59,8 @@ const userData = userStore();
 
 const displayName = ref(null);
 const avatarId = ref(1);
+const avatarScrollSection = ref(null);
+const avatarRefs = ref({});
 
 const avatarsIds = ref(
     Array.from({length: TOTAL_AVATARS_COUNT}, (_, i) => i + 1)
@@ -80,10 +83,37 @@ const requestUpdateProfile = async () => {
   emit('close');
 }
 
+const scrollToSelectedAvatar = () => {
+  nextTick(() => {
+    const selectedAvatarElement = avatarRefs.value[avatarId.value];
+    const scrollContainer = avatarScrollSection.value;
+
+    if (selectedAvatarElement && scrollContainer) {
+      const selectedRect = selectedAvatarElement.getBoundingClientRect();
+      const containerRect = scrollContainer.getBoundingClientRect();
+
+      // Calculate the position of the selected avatar relative to the scroll container's top edge
+      const relativeOffsetTop = selectedRect.top - containerRect.top;
+
+      // Calculate the desired scroll position to center the selected avatar
+      // Current scroll position + (relative offset of selected avatar + half its height) - (half container height)
+      const targetScrollTop = scrollContainer.scrollTop + relativeOffsetTop + (selectedRect.height / 2) - (containerRect.height / 2);
+
+      scrollContainer.scrollTo({
+        top: targetScrollTop,
+        behavior: 'smooth'
+      });
+    }
+  });
+};
+
 onMounted(() => {
   displayName.value = userData.displayName;
   avatarId.value = userData.avatarId;
+  scrollToSelectedAvatar();
 })
+
+defineExpose({ scrollToSelectedAvatar });
 </script>
 
 <style scoped>
