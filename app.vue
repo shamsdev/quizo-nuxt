@@ -12,7 +12,7 @@ const msgDialogRef = ref();
 
 onMounted(() => {
   useMessageDialog.register((payload) => {
-    msgDialogRef.value?.show(payload.title, payload.message, payload.buttons);
+    msgDialogRef.value?.show(payload.title, payload.message, payload.buttons, payload.closeOnBackground);
   });
 });
 

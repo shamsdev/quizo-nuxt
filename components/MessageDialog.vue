@@ -1,5 +1,5 @@
 <template>
-  <BaseDialog ref="dialogRef" :close-on-background="false">
+  <BaseDialog ref="dialogRef" :close-on-background="closeOnBackground">
     <div class="message-dialog">
       <div class="title">{{ currentTitle }}</div>
       <div class="message">{{ currentMessage }}</div>
@@ -25,15 +25,17 @@ const dialogRef = ref();
 const currentTitle = ref('');
 const currentMessage = ref('');
 const currentButtons = ref([]);
+const closeOnBackground = ref(false);
 
 /**
  * Show function that accepts title, message, and buttons.
  * Each button: { text, color, onClick }
  */
-const show = (title, message, buttons = []) => {
+const show = (title, message, buttons = [], closeOnClick) => {
   currentTitle.value = title
   currentMessage.value = message
   currentButtons.value = buttons
+  closeOnBackground.value = closeOnClick
   dialogRef.value?.show();
 }
 

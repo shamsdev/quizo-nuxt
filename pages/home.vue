@@ -23,6 +23,14 @@
         :onClick="onShowLeaderboardButtonClicked"
     />
 
+    <FancyButton
+        class="contact-us-btn mt-8"
+        title="Contact Us"
+        :icon="Mail"
+        color="#3498db"
+        :onClick="onContactUsButtonClicked"
+    />
+
     <HomeFooter/>
 
     <!-- Base Components Finish -->
@@ -39,16 +47,22 @@
       <LeaderboardDialog @close="leaderboardDialog?.hide()"/>
     </BaseDialog>
 
+    <BaseDialog ref="contactUsDialog">
+      <ContactUsDialog @close="contactUsDialog?.hide()"/>
+    </BaseDialog>
+
   </div>
 </template>
 
 <script setup>
-import {Gamepad2, List} from 'lucide-vue-next'
+import {Gamepad2, List, Mail} from 'lucide-vue-next'
 import {userStore} from "~/stores/user.store";
+import ContactUsDialog from "~/components/ContactUsDialog.vue";
 
 const editProfileDialog = ref();
 const findMatchDialog = ref();
 const leaderboardDialog = ref();
+const contactUsDialog = ref();
 
 const userDisplayName = ref(null);
 const userAvatarId = ref(1);
@@ -66,6 +80,11 @@ function onStartGameButtonClicked() {
 function onShowLeaderboardButtonClicked() {
   console.log('onShowLeaderboardButtonClicked');
   leaderboardDialog.value?.show();
+}
+
+function onContactUsButtonClicked() {
+  console.log('onContactUsButtonClicked');
+  contactUsDialog.value?.show();
 }
 
 function updateUserProfileData() {
@@ -101,6 +120,11 @@ onMounted(() => {
 }
 
 .leaderboard-btn {
+  width: 220px;
+  height: 60px;
+}
+
+.contact-us-btn {
   width: 220px;
   height: 60px;
 }
