@@ -10,12 +10,6 @@
 </script>
 
 <style scoped>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
 .app-wrapper {
   padding: 16px;
   max-width: 480px;

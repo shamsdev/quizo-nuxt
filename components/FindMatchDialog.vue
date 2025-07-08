@@ -108,15 +108,15 @@ function activeCancelButton() {
   canCancel.value = true;
 }
 
-function onMatchFound(event) {
+function onMatchStart(data) {
   clearIntervals();
 
   const gameDate = gameStore();
-  gameDate.setData(event);
+  gameDate.setData(data);
 
   opponent.value = {
-    avatarId: parseInt(event.Opponent.Avatar),
-    displayName: event.Opponent.DisplayName
+    avatarId: parseInt(data.Opponent.Avatar),
+    displayName: data.Opponent.DisplayName
   }
 
   titleLabel.value = 'Opponent found'
@@ -130,7 +130,7 @@ function onMatchFound(event) {
 
 function subscribeServerEvents(active) {
   if (active)
-    $karizmaConnection.connection.on('match/start', onMatchFound);
+    $karizmaConnection.connection.on('match/start', onMatchStart);
   else
     $karizmaConnection.connection.off('match/start');
 }

@@ -20,3 +20,17 @@ onBeforeUnmount(() => {
   useMessageDialog.unregister();
 });
 </script>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+</style>

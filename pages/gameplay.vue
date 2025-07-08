@@ -39,15 +39,15 @@
       </div>
 
       <!-- Answers Grid -->
-      <div class="answers-grid mt-4">
-        <div
+      <div class="answers-grid mt-8">
+        <GameAnswerButton
             v-for="(answer, index) in currentQuestion.answers"
             :key="index"
             class="answer-box"
             @click="selectAnswer(index)"
-        >
-          {{ answer }}
-        </div>
+            :title="answer"
+            :answered-users="[{avatarId:1},{avatarId:3}]"
+        />
       </div>
 
     </div>
@@ -58,8 +58,13 @@
 import {ref, onMounted, onUnmounted} from 'vue';
 import {userStore} from "~/stores/user.store";
 import {gameStore} from "~/stores/game.store";
+import GameAnswerButton from "~/components/GameAnswerButton.vue";
 
 const {$karizmaConnection} = useNuxtApp();
+
+const GetReadyCommand = "match/get-ready";
+const StartRoundCommand = "match/start-round";
+const RoundResultCommand = "match/round-result";
 
 const currentUser = ref({
   displayName: 'You',
@@ -78,18 +83,22 @@ const currentQuestion = ref({
   answers: ['Berlin', 'Madrid', 'Paris', 'Rome'],
 });
 
-const isInReadyState = ref(true);
+const isInReadyState = ref(false);
 
 const timerProgress = ref(100);
 
 let timerInterval;
 
 const startTimer = () => {
-  timerProgress.value = 100
-  clearInterval(timerInterval)
+  const gameData = gameStore();
+  timerProgress.value = 100;
+
+  clearInterval(timerInterval);
+
+  console.warn(gameData.questionTime.value)
   timerInterval = setInterval(() => {
     if (timerProgress.value > 0) {
-      timerProgress.value -= 1
+      timerProgress.value -= gameData.questionTime.value;
     } else {
       clearInterval(timerInterval)
       // Handle timeout
@@ -103,10 +112,47 @@ const selectAnswer = (index) => {
 }
 
 function subscribeServerEvents(active) {
-  // if (active)
-  //   $karizmaConnection.connection.on('match/start-round', onMatchFound);
-  // else
-  //   $karizmaConnection.connection.off('match/start-round');
+  if (active) {
+    $karizmaConnection.connection.on(GetReadyCommand, onGetReadyCommand);
+    $karizmaConnection.connection.on(StartRoundCommand, onStartRoundCommand);
+    $karizmaConnection.connection.on(RoundResultCommand, onRoundResultCommand);
+  } else {
+    $karizmaConnection.connection.off(GetReadyCommand);
+    $karizmaConnection.connection.off(StartRoundCommand);
+    $karizmaConnection.connection.off(RoundResultCommand);
+
+  }
+}
+
+function onMatchStart(data) {
+
+}
+
+function onGetReadyCommand(data) {
+  isInReadyState.value = true;
+
+  const gameData = gameStore();
+  gameData.roundNumber.value = data.RoundNumber;
+  sendReady();
+}
+
+function sendReady() {
+  $karizmaConnection.connection.send('game/ready');
+}
+
+function onStartRoundCommand(data) {
+  isInReadyState.value = false;
+  currentQuestion.value.question = data.Question.Title;
+  //TODO handle category
+  currentQuestion.value.answers = data.Question.Answers.map((q) => q.Title);
+
+  const gameData = gameStore();
+  gameData.roundNumber.value = data.RoundNumber;
+  startTimer();
+}
+
+function onRoundResultCommand(data) {
+
 }
 
 function clearIntervals() {
@@ -124,15 +170,10 @@ function updateUserAvatars() {
   opponentUser.value.displayName = gameData.opponent.displayName;
 }
 
-async function requestReadyMatch() {
-  await $karizmaConnection.connection
-      .send('game/set-ready');
-}
-
 onMounted(() => {
   updateUserAvatars();
   subscribeServerEvents(true);
-  requestReadyMatch();
+  sendReady();
 })
 
 onUnmounted(() => {
@@ -239,24 +280,6 @@ onUnmounted(() => {
 .answers-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.answer-box {
-  background: #444;
-  padding: 18px;
-  border-radius: 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 16px;
-}
-
-.answer-box:hover {
-  background: #666;
+  gap: 20px;
 }
 </style>

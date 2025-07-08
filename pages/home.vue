@@ -3,6 +3,7 @@
 
     <UserAvatar class="cursor-pointer"
                 :username="userDisplayName"
+                :user-id="userId"
                 :avatarId="userAvatarId"
                 @click="onUserAvatarClicked"
     />
@@ -52,6 +53,7 @@ const leaderboardDialog = ref();
 
 const userDisplayName = ref(null);
 const userAvatarId = ref(1);
+const userId = ref(1);
 
 function onUserAvatarClicked() {
   console.log('onUserAvatarClicked');
@@ -72,6 +74,7 @@ function updateUserProfileData() {
   const userData = userStore();
   userDisplayName.value = userData.displayName;
   userAvatarId.value = userData.avatarId;
+  userId.value = userData.userId;
 }
 
 function onEditProfileDialogClose(){
@@ -79,7 +82,7 @@ function onEditProfileDialogClose(){
   editProfileDialog.value?.hide();
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   updateUserProfileData();
 })
 

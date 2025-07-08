@@ -5,13 +5,13 @@
         :alt="username"
         class="avatar-img"
         :style="{
-          borderColor: color
+          borderColor: computedColor
         }"
     />
-    <div class="username" :style="{
-      backgroundColor: color
+    <div v-if="showName" class="username" :style="{
+      backgroundColor: computedColor
     }">
-      <p>{{ username ?? 'Guest'}}</p>
+      <p>{{ username ?? 'Guest' }}</p>
     </div>
   </div>
   <div v-else class="avatar-loader">
@@ -22,8 +22,13 @@
 
 <script setup>
 import {computed} from 'vue'
+import {userStore} from "~/stores/user.store";
 
 const props = defineProps({
+  userId: {
+    type: Number,
+    required: false,
+  },
   username: {
     type: String,
     required: false,
@@ -41,11 +46,34 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  autoColor: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  showName: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
 })
+
+const computedColor = ref(props.color);
 
 const avatarUrl = computed(() =>
     `/images/avatars/${props.avatarId}.png` // Replace with your actual image URL pattern
 )
+
+onMounted(() => {
+  if (props.autoColor) {
+    const userData = userStore();
+    if (userData.userId === props.userId)
+      computedColor.value = '#34ace0';
+    else
+      computedColor.value = '#e08134';
+  }
+})
+
 </script>
 
 <style scoped>
