@@ -82,7 +82,7 @@ const currentSelectedAnswerId = ref<number | null>(null);
 const correctAnswerId = ref<number | null>(null);
 const timerProgress = ref(100);
 
-let timerInterval: NodeJS.Timer;
+let timerInterval: number;
 
 // Lifecycle
 onMounted(() => {
