@@ -1,6 +1,5 @@
 <script setup lang="ts">
-
-import type {PropType} from "vue";
+import type { PropType } from 'vue'
 
 const props = defineProps({
   title: {
@@ -8,25 +7,43 @@ const props = defineProps({
     required: true,
   },
   answeredUsers: {
-    type: Array as PropType<{ avatarId: number; }[]>,
+    type: Array as PropType<{ avatarId: number }[]>,
     required: false,
-  }
-});
-
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  selected: {
+    type: Boolean,
+    default: false,
+  },
+  red: {
+    type: Boolean,
+    default: false,
+  },
+  green: {
+    type: Boolean,
+    default: false,
+  },
+})
 </script>
 
 <template>
-  <div class="answer-box">
+  <div
+      class="answer-box"
+      :class="{ disabled: props.disabled, selected: props.selected, red: props.red, green: props.green }"
+  >
     <div>{{ title }}</div>
     <div class="avatars-holder">
       <UserAvatar
           v-for="avatar in answeredUsers"
           class="avatar"
+          :key="avatar.avatarId"
           :show-name="false"
           :avatar-id="avatar.avatarId"
       />
     </div>
-
   </div>
 </template>
 
@@ -49,6 +66,26 @@ const props = defineProps({
 .answer-box:hover {
   background: #666;
 }
+
+.answer-box.disabled {
+  pointer-events: none;
+  background: #333 !important;
+  cursor: not-allowed;
+}
+
+.answer-box.selected {
+  background: #c69328 !important;
+}
+
+.answer-box.red {
+  background: #c63a28 !important;
+}
+
+
+.answer-box.green {
+  background: #38c628 !important;
+}
+
 
 .avatars-holder {
   position: absolute;

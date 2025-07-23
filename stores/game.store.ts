@@ -6,13 +6,12 @@ const opponent = ref<any | null>({
 });
 const maxRounds = ref<number | null>(null);
 const questionTime = ref<number | null>(null);
-const roundNumber = ref<number | null>(null);
 
 const setData = (data: {
     QuestionTime: number,
     MaxRounds: number,
     GameGuid: string;
-    Opponent: { UserId: number, Avatar: string, DisplayName: string }
+    Opponent: { UserId: number; UserProfile: { Avatar: string, DisplayName: string } }
 }) => {
     gameGuid.value = data.GameGuid;
     questionTime.value = data.QuestionTime;
@@ -21,10 +20,10 @@ const setData = (data: {
     console.log(data)
 };
 
-const setOpponentProfile = (data: { UserId: number, Avatar: string, DisplayName: string }) => {
+const setOpponentProfile = (data: { UserId: number; UserProfile: { Avatar: string, DisplayName: string } }) => {
     opponent.value.userId = data.UserId;
-    opponent.value.avatarId = parseInt(data.Avatar);
-    opponent.value.displayName = data.DisplayName;
+    opponent.value.avatarId = parseInt(data.UserProfile.Avatar);
+    opponent.value.displayName = data.UserProfile.DisplayName;
 };
 
 
@@ -40,7 +39,6 @@ export const gameStore = () => ({
     gameGuid: gameGuid.value,
     maxRounds,
     questionTime,
-    roundNumber,
     opponent: opponent.value,
     setData,
     clear

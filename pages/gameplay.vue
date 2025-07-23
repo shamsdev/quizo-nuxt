@@ -22,13 +22,16 @@
     <!-- Questions Count Box -->
     <div class="question-count-box-bg mt-4">
       <div class="question-count-box">
-        <h2>Question 2/6</h2>
+        <h2>Question {{roundStatus.currentRound}}/{{roundStatus.maxRounds}}</h2>
       </div>
     </div>
 
     <!-- Question Box -->
     <div class="question-box mt-2">
-      <h2>{{ isInReadyState ? 'Ready' : currentQuestion.question }}</h2>
+      <h4 v-if="!isInReadyState">{{ currentQuestion.Category }}</h4>
+      <h2 class="flex-grow-1 align-center align-content-center">{{
+          isInReadyState ? 'Ready' : currentQuestion.Title
+        }}</h2>
     </div>
 
     <!-- Timer Progress Bar -->
@@ -41,12 +44,19 @@
       <!-- Answers Grid -->
       <div class="answers-grid mt-8">
         <GameAnswerButton
-            v-for="(answer, index) in currentQuestion.answers"
+            v-for="(answer, index) in currentQuestion.Answers"
             :key="index"
             class="answer-box"
+            :disabled="!canAnswer"
+            :selected="answer.Id === currentSelectedAnswerId"
+            :red="correctAnswerId != null && answer.Id === currentSelectedAnswerId && answer.Id !== correctAnswerId"
+            :green="answer.Id === correctAnswerId"
             @click="selectAnswer(index)"
-            :title="answer"
-            :answered-users="[{avatarId:1},{avatarId:3}]"
+            :title="answer.Title"
+            :answered-users="answer.selectUsers?.map(userId => {
+              return {
+                avatarId: userId === currentUser.userId ? currentUser.avatarId : opponentUser.avatarId
+              }})"
         />
       </div>
 
@@ -67,23 +77,39 @@ const StartRoundCommand = "match/start-round";
 const RoundResultCommand = "match/round-result";
 
 const currentUser = ref({
+  userId: 1,
   displayName: 'You',
   avatarId: 1,
   score: 0,
 });
 
 const opponentUser = ref({
+  userId: 2,
   displayName: 'Opponent',
   avatarId: 2,
   score: 0,
 });
 
-const currentQuestion = ref({
-  question: 'What is the capital of France?',
-  answers: ['Berlin', 'Madrid', 'Paris', 'Rome'],
+const roundStatus = ref({
+  currentRound: 1,
+  maxRounds: 2
 });
 
-const isInReadyState = ref(false);
+
+const currentQuestion = ref({
+  Category: 'Geography',
+  Title: 'What is the capital of France?',
+  Answers: [
+    {Id: 1, Title: 'Berlin', selectUsers: [1, 3]},
+    {Id: 2, Title: 'Madrid', selectUsers: [1, 3]},
+    {Id: 3, Title: 'Paris', selectUsers: [1, 3]},
+    {Id: 4, Title: 'Rome', selectUsers: [1, 3]}],
+});
+
+const isInReadyState = ref(true);
+const canAnswer = ref(true);
+const currentSelectedAnswerId = ref(null);
+const correctAnswerId = ref(null);
 
 const timerProgress = ref(100);
 
@@ -95,20 +121,25 @@ const startTimer = () => {
 
   clearInterval(timerInterval);
 
-  console.warn(gameData.questionTime.value)
+  const questionTime = gameData.questionTime.value - 500;
+  let timeLeft = questionTime;
   timerInterval = setInterval(() => {
     if (timerProgress.value > 0) {
-      timerProgress.value -= gameData.questionTime.value;
+      timerProgress.value = timeLeft / questionTime * 100.0;
+      timeLeft -= 100;
     } else {
       clearInterval(timerInterval)
       // Handle timeout
     }
-  }, 100) // 10s timer
+  }, 100)
 }
 
 const selectAnswer = (index) => {
-  console.log('Answer selected:', currentQuestion.value.answers[index])
-  // TODO: Emit to server, validate, update score
+  canAnswer.value = false;
+  const selectedAnswer = currentQuestion.value.Answers[index];
+  currentSelectedAnswerId.value = selectedAnswer.Id;
+  console.log('Answer selected:', selectedAnswer.Id)
+  sendAnswer(selectedAnswer.Id);
 }
 
 function subscribeServerEvents(active) {
@@ -120,19 +151,13 @@ function subscribeServerEvents(active) {
     $karizmaConnection.connection.off(GetReadyCommand);
     $karizmaConnection.connection.off(StartRoundCommand);
     $karizmaConnection.connection.off(RoundResultCommand);
-
   }
-}
-
-function onMatchStart(data) {
-
 }
 
 function onGetReadyCommand(data) {
   isInReadyState.value = true;
 
-  const gameData = gameStore();
-  gameData.roundNumber.value = data.RoundNumber;
+  roundStatus.value.currentRound = data.RoundNumber;
   sendReady();
 }
 
@@ -140,19 +165,44 @@ function sendReady() {
   $karizmaConnection.connection.send('game/ready');
 }
 
-function onStartRoundCommand(data) {
-  isInReadyState.value = false;
-  currentQuestion.value.question = data.Question.Title;
-  //TODO handle category
-  currentQuestion.value.answers = data.Question.Answers.map((q) => q.Title);
+function sendAnswer(answerId) {
+  $karizmaConnection.connection.send('game/answer', answerId);
+}
 
-  const gameData = gameStore();
-  gameData.roundNumber.value = data.RoundNumber;
+function onStartRoundCommand(data) {
+  canAnswer.value = true;
+  isInReadyState.value = false;
+  currentSelectedAnswerId.value = null;
+  correctAnswerId.value = null;
+
+  currentQuestion.value = data.Question;
   startTimer();
 }
 
 function onRoundResultCommand(data) {
+  clearInterval(timerInterval);
+  canAnswer.value = false;
 
+  correctAnswerId.value = data.CorrectAnswerId;
+
+
+  //Show user answers
+  for (const userData of data.UsersData) {
+    if (userData.UserId === currentUser.value.userId)
+      currentUser.value.score = userData.Score;
+    else
+      opponentUser.value.score = userData.Score;
+
+    for (const answer of currentQuestion.value.Answers) {
+
+      if (!answer.selectUsers)
+        answer.selectUsers = [];
+
+      if (answer.Id === userData.AnswerId)
+        answer.selectUsers.push(userData.UserId);
+
+    }
+  }
 }
 
 function clearIntervals() {
@@ -162,16 +212,24 @@ function clearIntervals() {
 
 function updateUserAvatars() {
   const userData = userStore();
+  currentUser.value.userId = userData.userId;
   currentUser.value.displayName = userData.displayName;
   currentUser.value.avatarId = userData.avatarId;
 
   const gameData = gameStore();
+  opponentUser.value.userId = gameData.userId;
   opponentUser.value.avatarId = gameData.opponent.avatarId;
   opponentUser.value.displayName = gameData.opponent.displayName;
 }
 
+function initRoundStatus() {
+  const gameData = gameStore();
+  roundStatus.value.maxRounds = gameData.maxRounds;
+}
+
 onMounted(() => {
   updateUserAvatars();
+  initRoundStatus();
   subscribeServerEvents(true);
   sendReady();
 })
@@ -259,6 +317,7 @@ onUnmounted(() => {
   border-radius: 16px;
   height: 200px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

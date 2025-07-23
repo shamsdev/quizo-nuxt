@@ -115,8 +115,8 @@ function onMatchStart(data) {
   gameDate.setData(data);
 
   opponent.value = {
-    avatarId: parseInt(data.Opponent.Avatar),
-    displayName: data.Opponent.DisplayName
+    avatarId: parseInt(data.Opponent.UserProfile.Avatar),
+    displayName: data.Opponent.UserProfile.DisplayName
   }
 
   titleLabel.value = 'Opponent found'
