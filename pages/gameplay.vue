@@ -3,252 +3,218 @@
     <!-- Top Bar: Players Info -->
     <div class="top-bar">
       <div class="player-info left">
-        <UserAvatar :username="currentUser.displayName"
-                    :avatarId="currentUser.avatarId"
-                    class="user-avatar"
+        <UserAvatar
+            :username="currentUser.displayName"
+            :avatar-id="currentUser.avatarId"
+            class="user-avatar"
         />
         <div class="score-box">{{ currentUser.score }}</div>
       </div>
-
       <div class="player-info right">
         <div class="score-box">{{ opponentUser.score }}</div>
-        <UserAvatar :username="opponentUser.displayName"
-                    :avatarId="opponentUser.avatarId"
-                    class="user-avatar"
+        <UserAvatar
+            :username="opponentUser.displayName"
+            :avatar-id="opponentUser.avatarId"
+            class="user-avatar"
         />
       </div>
     </div>
 
-    <!-- Questions Count Box -->
+    <!-- Round Info -->
     <div class="question-count-box-bg mt-4">
       <div class="question-count-box">
-        <h2>Question {{roundStatus.currentRound}}/{{roundStatus.maxRounds}}</h2>
+        <h2>Question {{ roundStatus.currentRound }}/{{ roundStatus.maxRounds }}</h2>
       </div>
     </div>
 
-    <!-- Question Box -->
+    <!-- Question Display -->
     <div class="question-box mt-2">
       <h4 v-if="!isInReadyState">{{ currentQuestion.Category }}</h4>
-      <h2 class="flex-grow-1 align-center align-content-center">{{
-          isInReadyState ? 'Ready' : currentQuestion.Title
-        }}</h2>
+      <h2>{{ isInReadyState ? 'Ready' : currentQuestion.Title }}</h2>
     </div>
 
-    <!-- Timer Progress Bar -->
+    <!-- Timer & Answers -->
     <div v-if="!isInReadyState">
-
       <div class="timer-bar-wrapper mt-4">
         <div class="timer-bar" :style="{ width: timerProgress + '%' }"></div>
       </div>
 
-      <!-- Answers Grid -->
       <div class="answers-grid mt-8">
         <GameAnswerButton
             v-for="(answer, index) in currentQuestion.Answers"
             :key="index"
             class="answer-box"
+            :title="answer.Title"
             :disabled="!canAnswer"
             :selected="answer.Id === currentSelectedAnswerId"
-            :red="correctAnswerId != null && answer.Id === currentSelectedAnswerId && answer.Id !== correctAnswerId"
             :green="answer.Id === correctAnswerId"
+            :red="correctAnswerId !== null && currentSelectedAnswerId === answer.Id && answer.Id !== correctAnswerId"
+            :answered-users="getAnswerAvatars(answer.selectUsers)"
             @click="selectAnswer(index)"
-            :title="answer.Title"
-            :answered-users="answer.selectUsers?.map(userId => {
-              return {
-                avatarId: userId === currentUser.userId ? currentUser.avatarId : opponentUser.avatarId
-              }})"
         />
       </div>
-
     </div>
   </div>
 </template>
 
-<script setup>
-import {ref, onMounted, onUnmounted} from 'vue';
-import {userStore} from "~/stores/user.store";
-import {gameStore} from "~/stores/game.store";
-import GameAnswerButton from "~/components/GameAnswerButton.vue";
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue';
+import { userStore } from '~/stores/user.store';
+import { gameStore } from '~/stores/game.store';
+import GameAnswerButton from '~/components/GameAnswerButton.vue';
 
-const {$karizmaConnection} = useNuxtApp();
+const { $karizmaConnection } = useNuxtApp();
 
-const GetReadyCommand = "match/get-ready";
-const StartRoundCommand = "match/start-round";
-const RoundResultCommand = "match/round-result";
+// Commands
+const GetReadyCommand = 'match/get-ready';
+const StartRoundCommand = 'match/start-round';
+const RoundResultCommand = 'match/round-result';
 
-const currentUser = ref({
-  userId: 1,
-  displayName: 'You',
-  avatarId: 1,
-  score: 0,
-});
+// State
+const currentUser = ref({ userId: 0, displayName: '', avatarId: 0, score: 0 });
+const opponentUser = ref({ userId: 0, displayName: '', avatarId: 0, score: 0 });
 
-const opponentUser = ref({
-  userId: 2,
-  displayName: 'Opponent',
-  avatarId: 2,
-  score: 0,
-});
-
-const roundStatus = ref({
-  currentRound: 1,
-  maxRounds: 2
-});
-
-
-const currentQuestion = ref({
-  Category: 'Geography',
-  Title: 'What is the capital of France?',
-  Answers: [
-    {Id: 1, Title: 'Berlin', selectUsers: [1, 3]},
-    {Id: 2, Title: 'Madrid', selectUsers: [1, 3]},
-    {Id: 3, Title: 'Paris', selectUsers: [1, 3]},
-    {Id: 4, Title: 'Rome', selectUsers: [1, 3]}],
-});
-
+const roundStatus = ref({ currentRound: 1, maxRounds: 1 });
+const currentQuestion = ref({ Category: '', Title: '', Answers: [] as any[] });
 const isInReadyState = ref(true);
 const canAnswer = ref(true);
-const currentSelectedAnswerId = ref(null);
-const correctAnswerId = ref(null);
-
+const currentSelectedAnswerId = ref<number | null>(null);
+const correctAnswerId = ref<number | null>(null);
 const timerProgress = ref(100);
 
-let timerInterval;
+let timerInterval: NodeJS.Timer;
 
-const startTimer = () => {
-  const gameData = gameStore();
-  timerProgress.value = 100;
+// Lifecycle
+onMounted(() => {
+  initUserData();
+  initGameConfig();
+  subscribeToEvents(true);
+  sendReady();
+});
 
+onUnmounted(() => {
   clearInterval(timerInterval);
+  subscribeToEvents(false);
+});
 
-  const questionTime = gameData.questionTime.value - 500;
-  let timeLeft = questionTime;
-  timerInterval = setInterval(() => {
-    if (timerProgress.value > 0) {
-      timerProgress.value = timeLeft / questionTime * 100.0;
-      timeLeft -= 100;
-    } else {
-      clearInterval(timerInterval)
-      // Handle timeout
-    }
-  }, 100)
-}
-
-const selectAnswer = (index) => {
-  canAnswer.value = false;
-  const selectedAnswer = currentQuestion.value.Answers[index];
-  currentSelectedAnswerId.value = selectedAnswer.Id;
-  console.log('Answer selected:', selectedAnswer.Id)
-  sendAnswer(selectedAnswer.Id);
-}
-
-function subscribeServerEvents(active) {
+// Event Subscription
+function subscribeToEvents(active: boolean): void {
+  const conn = $karizmaConnection.connection;
   if (active) {
-    $karizmaConnection.connection.on(GetReadyCommand, onGetReadyCommand);
-    $karizmaConnection.connection.on(StartRoundCommand, onStartRoundCommand);
-    $karizmaConnection.connection.on(RoundResultCommand, onRoundResultCommand);
+    conn.on(GetReadyCommand, onGetReady);
+    conn.on(StartRoundCommand, onStartRound);
+    conn.on(RoundResultCommand, onRoundResult);
   } else {
-    $karizmaConnection.connection.off(GetReadyCommand);
-    $karizmaConnection.connection.off(StartRoundCommand);
-    $karizmaConnection.connection.off(RoundResultCommand);
+    conn.off(GetReadyCommand);
+    conn.off(StartRoundCommand);
+    conn.off(RoundResultCommand);
   }
 }
 
-function onGetReadyCommand(data) {
-  isInReadyState.value = true;
+// Init
+function initUserData(): void {
+  const user = userStore();
+  const game = gameStore();
+  currentUser.value = {
+    userId: user.userId,
+    displayName: user.displayName,
+    avatarId: user.avatarId,
+    score: 0,
+  };
+  opponentUser.value = {
+    userId: game.userId,
+    displayName: game.opponent.displayName,
+    avatarId: game.opponent.avatarId,
+    score: 0,
+  };
+}
 
+function initGameConfig(): void {
+  roundStatus.value.maxRounds = gameStore().maxRounds;
+}
+
+// Timer
+function startTimer(): void {
+  const game = gameStore();
+  const duration = game.questionTime.value - 500;
+  let timeLeft = duration;
+
+  clearInterval(timerInterval);
+  timerProgress.value = 100;
+
+  timerInterval = setInterval(() => {
+    timeLeft -= 100;
+    timerProgress.value = Math.max(0, (timeLeft / duration) * 100);
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+    }
+  }, 100);
+}
+
+// UI Actions
+function selectAnswer(index: number): void {
+  if (!canAnswer.value) return;
+  canAnswer.value = false;
+
+  const selected = currentQuestion.value.Answers[index];
+  currentSelectedAnswerId.value = selected.Id;
+  sendAnswer(selected.Id);
+}
+
+// WebSocket Handlers
+function onGetReady(data: any): void {
+  isInReadyState.value = true;
   roundStatus.value.currentRound = data.RoundNumber;
   sendReady();
 }
 
-function sendReady() {
-  $karizmaConnection.connection.send('game/ready');
-}
-
-function sendAnswer(answerId) {
-  $karizmaConnection.connection.send('game/answer', answerId);
-}
-
-function onStartRoundCommand(data) {
-  canAnswer.value = true;
+function onStartRound(data: any): void {
   isInReadyState.value = false;
+  canAnswer.value = true;
   currentSelectedAnswerId.value = null;
   correctAnswerId.value = null;
-
   currentQuestion.value = data.Question;
   startTimer();
 }
 
-function onRoundResultCommand(data) {
+function onRoundResult(data: any): void {
   clearInterval(timerInterval);
   canAnswer.value = false;
-
   correctAnswerId.value = data.CorrectAnswerId;
 
-
-  //Show user answers
-  for (const userData of data.UsersData) {
-    if (userData.UserId === currentUser.value.userId)
-      currentUser.value.score = userData.Score;
-    else
-      opponentUser.value.score = userData.Score;
+  for (const user of data.UsersData) {
+    const target = user.UserId === currentUser.value.userId ? currentUser : opponentUser;
+    target.value.score = user.Score;
 
     for (const answer of currentQuestion.value.Answers) {
-
-      if (!answer.selectUsers)
-        answer.selectUsers = [];
-
-      if (answer.Id === userData.AnswerId)
-        answer.selectUsers.push(userData.UserId);
-
+      answer.selectUsers ??= [];
+      if (answer.Id === user.AnswerId) {
+        answer.selectUsers.push(user.UserId);
+      }
     }
   }
 }
 
-function clearIntervals() {
-  clearInterval(timerInterval);
+// Server Senders
+function sendReady(): void {
+  $karizmaConnection.connection.send('game/ready');
 }
 
-
-function updateUserAvatars() {
-  const userData = userStore();
-  currentUser.value.userId = userData.userId;
-  currentUser.value.displayName = userData.displayName;
-  currentUser.value.avatarId = userData.avatarId;
-
-  const gameData = gameStore();
-  opponentUser.value.userId = gameData.userId;
-  opponentUser.value.avatarId = gameData.opponent.avatarId;
-  opponentUser.value.displayName = gameData.opponent.displayName;
+function sendAnswer(answerId: number): void {
+  $karizmaConnection.connection.send('game/answer', answerId);
 }
 
-function initRoundStatus() {
-  const gameData = gameStore();
-  roundStatus.value.maxRounds = gameData.maxRounds;
+// Helpers
+function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
+  return userIds.map((userId) => ({
+    avatarId: userId === currentUser.value.userId
+        ? currentUser.value.avatarId
+        : opponentUser.value.avatarId,
+  }));
 }
-
-onMounted(() => {
-  updateUserAvatars();
-  initRoundStatus();
-  subscribeServerEvents(true);
-  sendReady();
-})
-
-onUnmounted(() => {
-  subscribeServerEvents(false);
-  clearIntervals();
-})
-
-
 </script>
 
 <style scoped>
-.user-avatar {
-  scale: 0.9;
-  width: 94px;
-  height: auto;
-}
-
 .gameplay-container {
   padding: 20px;
   max-width: 800px;
@@ -277,14 +243,10 @@ onUnmounted(() => {
   justify-content: flex-end;
 }
 
-.avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-}
-
-.name {
-  font-weight: bold;
+.user-avatar {
+  scale: 0.9;
+  width: 94px;
+  height: auto;
 }
 
 .score-box {
