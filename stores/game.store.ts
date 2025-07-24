@@ -17,7 +17,6 @@ const setData = (data: {
     questionTime.value = data.QuestionTime;
     maxRounds.value = data.MaxRounds;
     setOpponentProfile(data.Opponent);
-    console.log(data)
 };
 
 const setOpponentProfile = (data: { UserId: number; UserProfile: { Avatar: string, DisplayName: string } }) => {
