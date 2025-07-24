@@ -54,33 +54,44 @@
         />
       </div>
     </div>
+
+    <!-- Dialogs -->
+    <BaseDialog ref="matchResultDialog" :close-on-background="false">
+      <MatchResultDialog :result="matchResult.MatchStateStr" :score="matchResult.Score" :oppLeft="matchResult.OpponentLeft"/>
+    </BaseDialog>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-import { userStore } from '~/stores/user.store';
-import { gameStore } from '~/stores/game.store';
+import {ref, onMounted, onUnmounted} from 'vue';
+import {userStore} from '~/stores/user.store';
+import {gameStore} from '~/stores/game.store';
 import GameAnswerButton from '~/components/GameAnswerButton.vue';
 
-const { $karizmaConnection } = useNuxtApp();
+const {$karizmaConnection} = useNuxtApp();
+
+const matchResultDialog = ref();
 
 // Commands
 const GetReadyCommand = 'match/get-ready';
 const StartRoundCommand = 'match/start-round';
 const RoundResultCommand = 'match/round-result';
+const MatchResultCommand = "match/result";
 
 // State
-const currentUser = ref({ userId: 0, displayName: '', avatarId: 0, score: 0 });
-const opponentUser = ref({ userId: 0, displayName: '', avatarId: 0, score: 0 });
+const currentUser = ref({userId: 0, displayName: '', avatarId: 0, score: 0});
+const opponentUser = ref({userId: 0, displayName: '', avatarId: 0, score: 0});
 
-const roundStatus = ref({ currentRound: 1, maxRounds: 1 });
-const currentQuestion = ref({ Category: '', Title: '', Answers: [] as any[] });
+const roundStatus = ref({currentRound: 1, maxRounds: 1});
+const currentQuestion = ref({Category: '', Title: '', Answers: [] as any[]});
 const isInReadyState = ref(true);
 const canAnswer = ref(true);
 const currentSelectedAnswerId = ref<number | null>(null);
 const correctAnswerId = ref<number | null>(null);
 const timerProgress = ref(100);
+
+const matchResult = ref({MatchStateStr: 'Win', Score: 0, OpponentLeft: false});
 
 let timerInterval: number;
 
@@ -104,10 +115,13 @@ function subscribeToEvents(active: boolean): void {
     conn.on(GetReadyCommand, onGetReady);
     conn.on(StartRoundCommand, onStartRound);
     conn.on(RoundResultCommand, onRoundResult);
+    conn.on(MatchResultCommand, onMatchResult);
+
   } else {
     conn.off(GetReadyCommand);
     conn.off(StartRoundCommand);
     conn.off(RoundResultCommand);
+    conn.off(MatchResultCommand);
   }
 }
 
@@ -193,6 +207,11 @@ function onRoundResult(data: any): void {
       }
     }
   }
+}
+
+function onMatchResult(data: any): void {
+  matchResult.value = data;
+  matchResultDialog.value.show();
 }
 
 // Server Senders
