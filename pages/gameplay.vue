@@ -4,17 +4,17 @@
     <div class="top-bar">
       <div class="player-info left">
         <UserAvatar
-            :username="currentUser.displayName"
-            :avatar-id="currentUser.avatarId"
-            class="user-avatar"
-        />
-        <div class="score-box">{{ currentUser.score }}</div>
-      </div>
-      <div class="player-info right">
-        <div class="score-box">{{ opponentUser.score }}</div>
-        <UserAvatar
             :username="opponentUser.displayName"
             :avatar-id="opponentUser.avatarId"
+            class="user-avatar"
+        />
+        <div class="score-box">{{ opponentUser.score }}</div>
+      </div>
+      <div class="player-info right">
+        <div class="score-box">{{ currentUser.score }}</div>
+        <UserAvatar
+            :username="currentUser.displayName"
+            :avatar-id="currentUser.avatarId"
             class="user-avatar"
         />
       </div>
