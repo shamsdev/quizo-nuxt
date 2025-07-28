@@ -64,7 +64,7 @@ defineExpose({ show, hide })
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 100;
 }
 
 .dialog-box {

@@ -11,6 +11,7 @@
 import {computed} from 'vue';
 import {useRouter} from 'vue-router';
 import FancyButton from './FancyButton.vue';
+import {launchConfetti} from "~/utils/confetti.js";
 
 const props = defineProps({
   result: {
@@ -32,6 +33,7 @@ const router = useRouter();
 
 const resultText = computed(() => {
   if (props.result === 'Win') {
+    launchConfetti();
     return 'You Win!';
   }
   if (props.result === 'Lose') {

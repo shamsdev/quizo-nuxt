@@ -1,5 +1,9 @@
 <template>
   <div class="loading-screen">
+    <div class="logo-anim-wrapper">
+      <LottiePlayer class="logo-anim" :animationData="quizLogoAnimation" :loop="false" :autoplay="true"/>
+      <h1>Quizo!</h1>
+    </div>
     <div class="progress-bar-wrapper">
       <div class="progress-bar" :style="{ width: `${progress}%` }"></div>
     </div>
@@ -17,6 +21,8 @@ const loadingText = ref('Loading...')
 
 const router = useRouter()
 const {$karizmaConnection} = useNuxtApp();
+
+import quizLogoAnimation from '~/assets/animations/purple-questions.json';
 
 onMounted(async () => {
   try {
@@ -53,7 +59,7 @@ async function connectToServer() {
 
   $karizmaConnection.registerCallbacks();
 
-  await $karizmaConnection.connection.connect('http://localhost:4001/Hub');
+  await $karizmaConnection.connection.connect('http://localhost:4001/Hub'); //TODO add to env
 
   if (!$karizmaConnection.connection.isConnected)
     throw new Error('Connection error');
@@ -123,7 +129,24 @@ function updateProgress(status, progressValue) {
   align-items: center;
 }
 
+.logo-anim-wrapper {
+  width: 200px;
+}
+
+.logo-anim-wrapper h1 {
+  margin-top: -20px;
+  text-align: center;
+}
+
+.logo-anim {
+  width: 100%;
+  max-width: 100%;
+  height: 150px;
+}
+
 .progress-bar-wrapper {
+  margin-top: 100px;
+
   width: 80%;
   height: 10px;
   background: rgba(68, 65, 65, 0.82);

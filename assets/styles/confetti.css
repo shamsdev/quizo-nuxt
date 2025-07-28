@@ -1,0 +1,4 @@
+#confetti-canvas {
+    position: fixed; /* Or absolute, relative, etc. z-index only works on positioned elements */
+    z-index: 9999; /* Set a high value to ensure it's on top */
+}
