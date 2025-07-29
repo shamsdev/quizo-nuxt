@@ -4,6 +4,7 @@
     <div class="top-bar">
       <div class="player-info left">
         <UserAvatar
+            :user-id="opponentUser.userId"
             :username="opponentUser.displayName"
             :avatar-id="opponentUser.avatarId"
             class="user-avatar"
@@ -13,6 +14,7 @@
       <div class="player-info right">
         <div class="score-box">{{ currentUser.score }}</div>
         <UserAvatar
+            :user-id="currentUser.userId"
             :username="currentUser.displayName"
             :avatar-id="currentUser.avatarId"
             class="user-avatar"
@@ -226,6 +228,7 @@ function sendAnswer(answerId: number): void {
 // Helpers
 function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
   return userIds.map((userId) => ({
+    userId,
     avatarId: userId === currentUser.value.userId
         ? currentUser.value.avatarId
         : opponentUser.value.avatarId,

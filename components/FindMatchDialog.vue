@@ -5,9 +5,9 @@
     <transition name="fade">
       <div class="avatar-section">
         <UserAvatar
+            :user-id="opponent.userId"
             :username="opponent.displayName"
             :avatarId="opponent.avatarId"
-            :color="'#ff793f'"
         />
       </div>
     </transition>
@@ -18,6 +18,7 @@
     <!-- Current User Avatar -->
     <div class="avatar-section">
       <UserAvatar
+          :user-id="currentUser.userId"
           :username="currentUser.displayName"
           :avatarId="currentUser.avatarId"/>
     </div>
@@ -45,12 +46,14 @@ const {$karizmaConnection} = useNuxtApp();
 const router = useRouter();
 
 const currentUser = ref({
+  userId: 1,
   displayName: 'You',
   avatarId: 1,
 })
 
 // Opponent simulation
 const opponent = ref({
+  userId: 1,
   displayName: 'Finding...',
   avatarId: getRandomAvatar(),
 })
@@ -115,6 +118,7 @@ function onMatchStart(data) {
   gameDate.setData(data);
 
   opponent.value = {
+    userId: parseInt(data.Opponent.UserProfile.UserId),
     avatarId: parseInt(data.Opponent.UserProfile.Avatar),
     displayName: data.Opponent.UserProfile.DisplayName
   }
@@ -137,6 +141,7 @@ function subscribeServerEvents(active) {
 
 function updateUserAvatar() {
   const userData = userStore();
+  currentUser.value.userId = userData.userId;
   currentUser.value.displayName = userData.displayName;
   currentUser.value.avatarId = userData.avatarId;
 }

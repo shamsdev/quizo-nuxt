@@ -1,3 +1,23 @@
+<link rel="stylesheet" href="../../../../../../Downloads/Modam SemiPro 2/01 - Standard Fonts/WebFonts/fontiran.css">
+<template>
+  <div
+      class="answer-box"
+      :class="{ disabled: props.disabled, selected: props.selected, red: props.red, green: props.green }"
+  >
+    <div>{{ title }}</div>
+    <div class="avatars-holder">
+      <UserAvatar
+          v-for="avatar in answeredUsers"
+          class="avatar"
+          :key="avatar.avatarId"
+          :show-name="false"
+          :avatar-id="avatar.avatarId"
+          :user-id="avatar.userId"
+      />
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { PropType } from 'vue'
 
@@ -7,7 +27,7 @@ const props = defineProps({
     required: true,
   },
   answeredUsers: {
-    type: Array as PropType<{ avatarId: number }[]>,
+    type: Array as PropType<{ avatarId: number, userId: number }[]>,
     required: false,
   },
   disabled: {
@@ -29,23 +49,6 @@ const props = defineProps({
 })
 </script>
 
-<template>
-  <div
-      class="answer-box"
-      :class="{ disabled: props.disabled, selected: props.selected, red: props.red, green: props.green }"
-  >
-    <div>{{ title }}</div>
-    <div class="avatars-holder">
-      <UserAvatar
-          v-for="avatar in answeredUsers"
-          class="avatar"
-          :key="avatar.avatarId"
-          :show-name="false"
-          :avatar-id="avatar.avatarId"
-      />
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .answer-box {

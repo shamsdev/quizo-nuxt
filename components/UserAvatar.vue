@@ -40,15 +40,9 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: '#34ace0',
   },
   loading: {
     type: Boolean,
-    default: false,
-  },
-  autoColor: {
-    type: Boolean,
-    required: false,
     default: false,
   },
   showName: {
@@ -58,21 +52,13 @@ const props = defineProps({
   },
 })
 
-const computedColor = ref(props.color);
+const computedColor = computed(() => {
+  return props.color ?? userStore().userId === props.userId ? '#05A8AA' : '#DC602E'
+});
 
 const avatarUrl = computed(() =>
     `/images/avatars/${props.avatarId}.png` // Replace with your actual image URL pattern
 )
-
-onMounted(() => {
-  if (props.autoColor) {
-    const userData = userStore();
-    if (userData.userId === props.userId)
-      computedColor.value = '#34ace0';
-    else
-      computedColor.value = '#e08134';
-  }
-})
 
 </script>
 
@@ -112,5 +98,8 @@ onMounted(() => {
   color: white;
   font-size: 15px;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
