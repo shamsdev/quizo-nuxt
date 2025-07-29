@@ -17,7 +17,7 @@ import {useRouter} from 'vue-router'
 import {userStore} from "~/stores/user.store";
 
 const progress = ref(0)
-const loadingText = ref('Loading...')
+const loadingText = ref('صبر کنید ...')
 
 const router = useRouter()
 const {$karizmaConnection} = useNuxtApp();
@@ -50,7 +50,7 @@ onMounted(async () => {
 })
 
 async function connectToServer() {
-  updateProgress('Connecting ...', 0);
+  updateProgress('در حال اتصال ...', 0);
 
   $karizmaConnection.unregisterCallbacks();
 
@@ -64,11 +64,11 @@ async function connectToServer() {
   if (!$karizmaConnection.connection.isConnected)
     throw new Error('Connection error');
 
-  updateProgress('Connected', 30);
+  updateProgress('متصل شد!', 30);
 }
 
 async function requestSignUp() {
-  updateProgress('Signing Up ...');
+  updateProgress('در حال ثبت نام ...');
 
   const signUpResult = await $karizmaConnection.connection.request('user/sign-up');
 
@@ -80,12 +80,12 @@ async function requestSignUp() {
 
   StorageWrapper.set(StorageKeys.AccessToken, signUpResult.Result.AccessToken);
 
-  updateProgress('Sign Up Success', 60);
+  updateProgress('ثبت نام انجام شد!', 60);
 }
 
 
 async function requestSignIn() {
-  updateProgress('Signing In ...');
+  updateProgress('در حال ورود ...');
 
   const accessToken = StorageWrapper.get(StorageKeys.AccessToken, null);
 
@@ -103,7 +103,7 @@ async function requestSignIn() {
 
   const userData = userStore();
   userData.setData(signInResult.Result.UserData);
-  updateProgress('Login data received', 100);
+  updateProgress('وارد شدید!', 100);
 
   setTimeout(() => {
     router.replace('/home');
@@ -164,5 +164,6 @@ function updateProgress(status, progressValue) {
 .loading-label {
   font-size: 18px;
   font-weight: 500;
+  direction: rtl;
 }
 </style>

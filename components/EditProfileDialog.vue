@@ -2,21 +2,22 @@
   <div class="edit-profile-dialog">
     <!-- Top Section: Username -->
     <div class="form-section">
-      <label for="username" class="input-label">Display Name</label>
+      <label for="username" class="input-label">نام شما</label>
       <input
           id="username"
           v-model="displayName"
           class="text-input"
           type="text"
+          dir="rtl"
           :disabled="isSubmitting"
-          placeholder="Enter your username"
+          placeholder="نام خود را وارد کنید"
           maxlength="20"
       />
     </div>
 
     <!-- Avatar Section Label (outside scroll) -->
-    <div class="form-section">
-      <label class="input-label">Choose Your Avatar</label>
+    <div class="form-section mt-3">
+      <label class="input-label">انتخاب آواتار</label>
     </div>
 
     <!-- Scrollable Avatar List -->
@@ -38,7 +39,7 @@
     <!-- Bottom Section: Apply Button -->
     <div class="form-section button-wrapper">
       <FancyButton
-          title="Apply"
+          title="قبول"
           :onClick="requestUpdateProfile"
           :disabled="isSubmitting"
           color="#27ae60"
@@ -146,6 +147,7 @@ defineExpose({ scrollToSelectedAvatar });
   color: #333;
   margin-bottom: 4px;
   display: block;
+  direction: rtl;
 }
 
 .text-input {

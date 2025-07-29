@@ -4,19 +4,19 @@
     <div class="top-bar">
       <div class="player-info left">
         <UserAvatar
-            :user-id="opponentUser.userId"
-            :username="opponentUser.displayName"
-            :avatar-id="opponentUser.avatarId"
-            class="user-avatar"
-        />
-        <div class="score-box">{{ opponentUser.score }}</div>
-      </div>
-      <div class="player-info right">
-        <div class="score-box">{{ currentUser.score }}</div>
-        <UserAvatar
             :user-id="currentUser.userId"
             :username="currentUser.displayName"
             :avatar-id="currentUser.avatarId"
+            class="user-avatar"
+        />
+        <div class="score-box">{{ currentUser.score }}</div>
+      </div>
+      <div class="player-info right">
+        <div class="score-box">{{ opponentUser.score }}</div>
+        <UserAvatar
+            :user-id="opponentUser.userId"
+            :username="opponentUser.displayName"
+            :avatar-id="opponentUser.avatarId"
             class="user-avatar"
         />
       </div>
@@ -25,14 +25,14 @@
     <!-- Round Info -->
     <div class="question-count-box-bg mt-4">
       <div class="question-count-box">
-        <h2>Question {{ roundStatus.currentRound }}/{{ roundStatus.maxRounds }}</h2>
+        <h2>سوال {{ roundStatus.currentRound }} از {{ roundStatus.maxRounds }}</h2>
       </div>
     </div>
 
     <!-- Question Display -->
     <div class="question-box mt-2">
       <h4 v-if="!isInReadyState">{{ currentQuestion.Category }}</h4>
-      <h2>{{ isInReadyState ? 'Ready' : currentQuestion.Title }}</h2>
+      <h2>{{ isInReadyState ? 'آماده باش!' : currentQuestion.Title }}</h2>
     </div>
 
     <!-- Timer & Answers -->
@@ -59,7 +59,8 @@
 
     <!-- Dialogs -->
     <BaseDialog ref="matchResultDialog" :close-on-background="false">
-      <MatchResultDialog :result="matchResult.MatchStateStr" :score="matchResult.Score" :oppLeft="matchResult.OpponentLeft"/>
+      <MatchResultDialog :result="matchResult.MatchStateStr" :score="matchResult.Score"
+                         :oppLeft="matchResult.OpponentLeft"/>
     </BaseDialog>
 
   </div>
@@ -238,11 +239,11 @@ function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
 
 <style scoped>
 .gameplay-container {
+  direction: rtl;
   padding: 20px;
   max-width: 800px;
   margin: auto;
   color: #fff;
-  font-family: sans-serif;
 }
 
 .top-bar {
@@ -307,6 +308,7 @@ function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
 }
 
 .timer-bar-wrapper {
+  direction: ltr;
   width: 100%;
   height: 16px;
   background: rgba(61, 54, 54, 0.84);

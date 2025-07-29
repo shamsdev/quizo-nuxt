@@ -28,6 +28,7 @@ onMounted(() => {
 
 <style scoped>
 .user-score {
+  direction: rtl;
   display: flex;
   align-items: center;
   padding: 10px 12px;
@@ -62,6 +63,10 @@ onMounted(() => {
   font-weight: 600;
   font-size: 15px;
   color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 20px;
 }
 
 .score {

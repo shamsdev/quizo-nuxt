@@ -18,7 +18,7 @@
   height: 100vh;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  background-color: #6bb7ca;
+  background-color: #94e2ff;
   background-image: url('@/assets/images/bg-pattern.png');
   background-repeat: repeat;
   background-size: 300px auto;

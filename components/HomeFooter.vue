@@ -1,11 +1,11 @@
 <template>
   <footer class="home-footer">
-    Made with
-    <span class="heart">❤️</span>
-    by
     <a href="https://shamsdev.com" target="_blank" rel="noopener" class="link">
       ShamsDev.com
     </a>
+    ساخته شده با
+    <span class="heart">❤️</span>
+    توسط
   </footer>
 </template>
 
@@ -37,3 +37,5 @@
   text-decoration: underline;
 }
 </style>
+<script setup lang="ts">
+</script>

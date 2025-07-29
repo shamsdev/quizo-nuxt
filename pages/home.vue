@@ -10,7 +10,7 @@
 
     <FancyButton
         class="start-game-btn mt-15"
-        title="Start Game"
+        title="شروع بازی"
         :icon="Gamepad2"
         color="#218c74"
         :onClick="onStartGameButtonClicked"
@@ -18,7 +18,7 @@
 
     <FancyButton
         class="leaderboard-btn mt-8"
-        title="Leaderboard"
+        title="جدول امتیازات"
         :icon="List"
         color="#227093"
         :onClick="onShowLeaderboardButtonClicked"

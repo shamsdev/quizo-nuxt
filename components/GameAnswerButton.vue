@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="../../../../../../Downloads/Modam SemiPro 2/01 - Standard Fonts/WebFonts/fontiran.css">
 <template>
   <div
       class="answer-box"

@@ -2,7 +2,7 @@
   <div class="leaderboard-dialog">
     <!-- Top Fixed Title Section -->
     <div class="dialog-header">
-      <h2>Leaderboard</h2>
+      <h2>جدول امتیازات</h2>
     </div>
 
     <!-- Scrollable Score List -->

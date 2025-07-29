@@ -54,28 +54,28 @@ const currentUser = ref({
 // Opponent simulation
 const opponent = ref({
   userId: 1,
-  displayName: 'Finding...',
+  displayName: 'در حال جستجو ...',
   avatarId: getRandomAvatar(),
 })
 
 const cancelButtonAttributes = {
   preStart: {
-    label: 'Waiting ...',
+    label: 'صبر کنید ...',
     color: '#118194'
   },
   findingMatch: {
-    label: 'Cancel find match',
+    label: 'لغو کردن',
     color: '#d3593e'
   },
   startingMatch: {
-    label: 'Match is starting ...',
+    label: 'در حال شروع بازی ...',
     color: '#118194'
   },
 }
 
 let avatarShufflingInterval = null;
 
-const titleLabel = ref('Finding Match ...');
+const titleLabel = ref('در جستجوی حریف ...');
 
 const canCancel = ref(false);
 const cancelButtonAttribute = ref(cancelButtonAttributes.preStart);
@@ -123,7 +123,7 @@ function onMatchStart(data) {
     displayName: data.Opponent.UserProfile.DisplayName
   }
 
-  titleLabel.value = 'Opponent found'
+  titleLabel.value = 'حریف پیدا شد!'
   cancelButtonAttribute.value = cancelButtonAttributes.startingMatch;
   canCancel.value = false;
 
@@ -169,6 +169,7 @@ onUnmounted(() => {
 
 <style scoped>
 .find-match-dialog {
+  direction: rtl;
   display: flex;
   flex-direction: column;
   align-items: center;

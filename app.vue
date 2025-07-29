@@ -23,6 +23,7 @@ onBeforeUnmount(() => {
 
 <style>
 html, body {
+  font-family: ModamFaNumWeb, sans-serif !important;
   margin: 0;
   padding: 0;
   height: 100%;

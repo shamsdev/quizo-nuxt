@@ -2,8 +2,8 @@
   <div class="match-result-dialog">
     <p v-if="oppLeft" class="opp-left-title mb-5">Opponent Left the match!</p>
     <p class="result-title">{{ resultText }}</p>
-    <p class="score-text">Your Score: {{ score }}</p>
-    <FancyButton class="mt-8" title="Back to Home" @click="goHome"/>
+    <p class="score-text">امتیاز شما: {{ score }}</p>
+    <FancyButton class="mt-8" title="بازگشت به خانه" @click="goHome"/>
   </div>
 </template>
 
@@ -34,12 +34,12 @@ const router = useRouter();
 const resultText = computed(() => {
   if (props.result === 'Win') {
     launchConfetti();
-    return 'You Win!';
+    return 'برنده شدی!';
   }
   if (props.result === 'Lose') {
-    return 'You Lose!';
+    return 'باختی!';
   }
-  return 'Game Draw!';
+  return 'تساوی!';
 });
 
 const goHome = () => {
@@ -49,6 +49,7 @@ const goHome = () => {
 
 <style scoped>
 .match-result-dialog {
+  direction: rtl;
   display: flex;
   flex-direction: column;
   align-items: center;
