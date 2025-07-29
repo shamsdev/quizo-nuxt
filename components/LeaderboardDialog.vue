@@ -18,6 +18,7 @@
         <UserScore
             v-for="(userScore, index) in userScores"
             :rank="index + 1"
+            :user-id="userScore.userId"
             :avatarId="userScore.avatarId"
             :username="userScore.name"
             :score="userScore.score"
@@ -46,6 +47,10 @@ const userScores = ref([
   {id: 6, name: 'Frank', score: 800, avatarId: 6},
 ]);
 
+onBeforeMount(()=>{
+  userScores.value = [];
+})
+
 onMounted(() => {
   getLeaderboard();
 })
@@ -59,6 +64,7 @@ async function getLeaderboard() {
 
   userScores.value = leaderboardData.Result.map((data) => {
     return {
+      userId: data.UserProfile.UserId,
       name: data.UserProfile.DisplayName,
       avatarId: parseInt(data.UserProfile.Avatar),
       score: data.Score,

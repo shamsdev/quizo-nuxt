@@ -1,19 +1,29 @@
 <template>
-  <div class="user-score">
+  <div class="user-score" :class="{'current-user': userId === currentUserId}">
     <div class="rank">#{{ rank }}</div>
     <img :src="`/images/avatars/${avatarId}.png`" alt="avatar" class="avatar"/>
-    <div class="name">{{ username }}</div>
+    <div class="name">{{ username ?? "Guest" }}</div>
     <div class="score">{{ score }}</div>
   </div>
 </template>
 
 <script setup>
+import {userStore} from "~/stores/user.store.js";
+
 defineProps({
   rank: Number,
+  userId: Number,
   avatarId: Number,
   username: String,
   score: Number,
 })
+
+const currentUserId = ref(null);
+
+onMounted(() => {
+  currentUserId.value = userStore().userId;
+});
+
 </script>
 
 <style scoped>
@@ -25,6 +35,11 @@ defineProps({
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
 }
+
+.user-score.current-user {
+  background: #9ce469 !important;
+}
+
 
 .rank {
   width: 32px;

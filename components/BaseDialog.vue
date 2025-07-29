@@ -72,6 +72,7 @@ defineExpose({ show, hide })
   border-radius: 16px;
   padding: 24px;
   width: 400px;
+  max-width: 85%;
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);

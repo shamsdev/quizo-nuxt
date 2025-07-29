@@ -54,8 +54,6 @@ defineExpose({show, hide})
 <style scoped>
 .message-dialog {
   padding: 8px;
-  min-width: 320px;
-  max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 28px;
