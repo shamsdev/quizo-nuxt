@@ -4,6 +4,11 @@ export default defineNuxtConfig({
     devServer: {
         port: 3001
     },
+    runtimeConfig: {
+        public: {
+            serverEndpoint: process.env.NUXT_PUBLIC_SERVER_ENDPOINT
+        }
+    },
     css: ['@/assets/styles/fonts.css', '@/assets/styles/confetti.css'],
     build: {
         transpile: ['vuetify'],

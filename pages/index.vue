@@ -59,7 +59,8 @@ async function connectToServer() {
 
   $karizmaConnection.registerCallbacks();
 
-  await $karizmaConnection.connection.connect('http://localhost:4001/Hub'); //TODO add to env
+  const serverEndpoint = useRuntimeConfig().public.serverEndpoint ?? 'https://quizo.shamsdev.com/Hub';
+  await $karizmaConnection.connection.connect(serverEndpoint);
 
   if (!$karizmaConnection.connection.isConnected)
     throw new Error('Connection error');
