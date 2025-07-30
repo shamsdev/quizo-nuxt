@@ -53,6 +53,7 @@ defineExpose({show, hide})
 
 <style scoped>
 .message-dialog {
+  direction: rtl;
   padding: 8px;
   display: flex;
   flex-direction: column;

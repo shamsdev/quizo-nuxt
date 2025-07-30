@@ -51,7 +51,7 @@ const props = defineProps({
 
 <style scoped>
 .answer-box {
-  background: #444;
+  background: #185581;
   padding: 18px;
   border-radius: 16px;
   text-align: center;
@@ -63,10 +63,7 @@ const props = defineProps({
   align-items: center;
   font-size: 16px;
   position: relative;
-}
-
-.answer-box:hover {
-  background: #666;
+  box-shadow: #0e314a 0px 6px 0px;
 }
 
 .answer-box.disabled {

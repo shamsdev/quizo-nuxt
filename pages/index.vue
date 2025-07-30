@@ -36,11 +36,11 @@ onMounted(async () => {
   } catch (ex) {
     console.error(ex);
     useMessageDialog.show({
-      title: 'Connection Error',
-      message: 'Cannot connect to game servers. Please check your internet connection and try again.',
+      title: 'خطای اتصال',
+      message: 'ارتباط شما با سرور بازی برقرار نشد. از اتصال به اینترنت مطمئن شوید و دوباره امتحان کنید.',
       buttons: [
         {
-          text: 'Retry',
+          text: 'تلاش مجدد',
           color: '#e74c3c',
           onClick: () => window.location.reload()
         }
@@ -148,17 +148,19 @@ function updateProgress(status, progressValue) {
   margin-top: 100px;
 
   width: 80%;
-  height: 10px;
+  height: 15px;
   background: rgba(68, 65, 65, 0.82);
-  border-radius: 5px;
+  border-radius: 15px;
   overflow: hidden;
   margin-bottom: 20px;
 }
 
 .progress-bar {
   height: 100%;
-  background: #4caf50;
+  background: #2de436;
+  border: #00ba07 2px solid;
   transition: width 0.1s linear;
+  border-radius: 15px;
 }
 
 .loading-label {

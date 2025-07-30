@@ -18,11 +18,11 @@ export default defineNuxtPlugin(() => {
     const handleDisconnection = () => {
         useDialogManager.closeAll();
         useMessageDialog.show({
-            title: 'Disconnected',
-            message: 'Connection lost. Please check your internet connection and retry.',
+            title: 'خطای اتصال',
+            message: 'ارتباط شما با سرور بازی برقرار نشد. از اتصال به اینترنت مطمئن شوید و دوباره امتحان کنید.',
             buttons: [
                 {
-                    text: 'Reconnect',
+                    text: 'تلاش مجدد',
                     color: '#e74c3c',
                     onClick: () => router.replace('/')
                 }

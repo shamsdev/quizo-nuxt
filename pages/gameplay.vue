@@ -31,8 +31,8 @@
 
     <!-- Question Display -->
     <div class="question-box mt-2">
-      <h4 v-if="!isInReadyState">{{ currentQuestion.Category }}</h4>
-      <h2>{{ isInReadyState ? 'آماده باش!' : currentQuestion.Title }}</h2>
+      <h5 v-if="!isInReadyState">{{ currentQuestion.Category }}</h5>
+      <h2 class="question-title">{{ isInReadyState ? 'آماده باش!' : currentQuestion.Title }}</h2>
     </div>
 
     <!-- Timer & Answers -->
@@ -87,7 +87,7 @@ const currentUser = ref({userId: 0, displayName: '', avatarId: 0, score: 0});
 const opponentUser = ref({userId: 0, displayName: '', avatarId: 0, score: 0});
 
 const roundStatus = ref({currentRound: 1, maxRounds: 1});
-const currentQuestion = ref({Category: '', Title: '', Answers: [] as any[]});
+const currentQuestion = ref({Category: 'سینما', Title: 'سوال', Answers: [''] as any[]});
 const isInReadyState = ref(true);
 const canAnswer = ref(true);
 const currentSelectedAnswerId = ref<number | null>(null);
@@ -273,7 +273,7 @@ function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
 }
 
 .score-box {
-  background: #333;
+  background: #185581;
   border-radius: 16px;
   padding: 6px 12px;
   font-weight: bold;
@@ -288,7 +288,7 @@ function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
 .question-count-box {
   text-align: center;
   font-size: 10px;
-  background: #2c2c2c;
+  background: #185581;
   padding: 12px;
   border-radius: 16px;
   width: fit-content;
@@ -297,7 +297,7 @@ function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
 .question-box {
   text-align: center;
   font-size: 16px;
-  background: #2c2c2c;
+  background: #185581;
   padding: 20px;
   border-radius: 16px;
   height: 200px;
@@ -305,6 +305,12 @@ function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border: #2c3e50 3px solid;
+  gap: 20px;
+}
+
+.question-title {
+  color: #fff6b7;
 }
 
 .timer-bar-wrapper {
@@ -318,7 +324,9 @@ function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
 
 .timer-bar {
   height: 100%;
-  background: #4caf50;
+  background: #00dd0b;
+  border: #00c80a 2px solid;
+  border-radius: 16px;
   transition: width 0.1s linear;
 }
 
