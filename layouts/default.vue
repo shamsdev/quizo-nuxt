@@ -23,6 +23,16 @@
   background-repeat: repeat;
   background-size: 300px auto;
   background-position: top left;
+  animation: animated-bg 20s linear infinite;
+}
+
+@keyframes animated-bg {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 300px 300px;
+  }
 }
 
 .app-background {
