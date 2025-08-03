@@ -26,7 +26,7 @@
         />
       </div>
       <div v-else>
-        <p class="text-center mt-12">No Scores</p>
+        <p class="text-center mt-12">موردی وجود ندارد</p>
       </div>
 
     </div>
@@ -48,7 +48,7 @@ const userScores = ref([
   {id: 6, name: 'Frank', score: 800, avatarId: 6},
 ]);
 
-onBeforeMount(()=>{
+onBeforeMount(() => {
   userScores.value = [];
 })
 
@@ -63,18 +63,14 @@ async function getLeaderboard() {
   const leaderboardData = await $karizmaConnection.connection
       .request('leaderboard/get-top-scores');
 
-  setTimeout(()=>{
-    userScores.value = leaderboardData.Result.map((data) => {
-      return {
-        userId: data.UserProfile.UserId,
-        name: data.UserProfile.DisplayName,
-        avatarId: parseInt(data.UserProfile.Avatar),
-        score: data.Score,
-      }
-    });
-
-
-  },2000);
+  userScores.value = leaderboardData.Result.map((data) => {
+    return {
+      userId: data.UserProfile.UserId,
+      name: data.UserProfile.DisplayName,
+      avatarId: parseInt(data.UserProfile.Avatar),
+      score: data.Score,
+    }
+  });
 
   isLoading.value = false;
 }
