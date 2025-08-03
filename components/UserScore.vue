@@ -32,9 +32,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   padding: 10px 12px;
-  background: #ffffff;
+  background: #ededed;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .user-score.current-user {

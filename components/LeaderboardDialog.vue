@@ -16,6 +16,7 @@
       </div>
       <div v-else-if="userScores.length > 0">
         <UserScore
+            class="mb-2"
             v-for="(userScore, index) in userScores"
             :rank="index + 1"
             :user-id="userScore.userId"
@@ -36,7 +37,7 @@
 import UserScore from './UserScore.vue'
 
 const {$karizmaConnection} = useNuxtApp();
-const isLoading = ref(false);
+const isLoading = ref(true);
 
 const userScores = ref([
   {id: 1, name: 'Alice', score: 980, avatarId: 1},
@@ -62,14 +63,18 @@ async function getLeaderboard() {
   const leaderboardData = await $karizmaConnection.connection
       .request('leaderboard/get-top-scores');
 
-  userScores.value = leaderboardData.Result.map((data) => {
-    return {
-      userId: data.UserProfile.UserId,
-      name: data.UserProfile.DisplayName,
-      avatarId: parseInt(data.UserProfile.Avatar),
-      score: data.Score,
-    }
-  });
+  setTimeout(()=>{
+    userScores.value = leaderboardData.Result.map((data) => {
+      return {
+        userId: data.UserProfile.UserId,
+        name: data.UserProfile.DisplayName,
+        avatarId: parseInt(data.UserProfile.Avatar),
+        score: data.Score,
+      }
+    });
+
+
+  },2000);
 
   isLoading.value = false;
 }
