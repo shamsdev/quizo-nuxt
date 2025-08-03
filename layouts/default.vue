@@ -31,7 +31,7 @@
     background-position: 0 0;
   }
   to {
-    background-position: 300px 300px;
+    background-position: 600px 405px;
   }
 }
 
