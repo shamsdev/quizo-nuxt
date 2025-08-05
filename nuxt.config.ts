@@ -32,15 +32,28 @@ export default defineNuxtConfig({
     },
     pwa: {
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icons/*.svg'],
         manifest: {
             name: 'Quizo!',
             short_name: 'Quizo!',
-            description: 'Awsomee Quiz Game!',
-            theme_color: '#c16f18',
-            background_color: '#c16f18',
-            display: 'standalone',
             start_url: '/',
+            display: 'fullscreen',
+            background_color: '#ec592a',
+            theme_color: '#ec592a',
+            icons: [
+                {
+                    src: '/android-chrome-192x192.png',
+                    sizes: '192x192',
+                    type: 'image/png'
+                },
+                {
+                    src: '/android-chrome-512x512.png',
+                    sizes: '512x512',
+                    type: 'image/png'
+                }
+            ]
+        },
+        workbox: {
+            // optional caching strategies
         }
     }
 })
