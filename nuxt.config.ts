@@ -14,6 +14,7 @@ export default defineNuxtConfig({
         transpile: ['vuetify'],
     },
     modules: [
+        '@vite-pwa/nuxt',
         (_options, nuxt) => {
             nuxt.hooks.hook('vite:extendConfig', (config) => {
                 // @ts-expect-error
@@ -29,4 +30,17 @@ export default defineNuxtConfig({
             },
         },
     },
+    pwa: {
+        registerType: 'autoUpdate',
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icons/*.svg'],
+        manifest: {
+            name: 'Quizo!',
+            short_name: 'Quizo!',
+            description: 'Awsomee Quiz Game!',
+            theme_color: '#c16f18',
+            background_color: '#c16f18',
+            display: 'standalone',
+            start_url: '/',
+        }
+    }
 })

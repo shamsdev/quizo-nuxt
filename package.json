@@ -12,6 +12,7 @@
   "dependencies": {
     "@karizma-studio/karizma-connection-js": "^1.6.0",
     "@mdi/font": "^7.4.47",
+    "@vite-pwa/nuxt": "^1.0.4",
     "canvas-confetti": "^1.9.3",
     "lottie-web": "^5.13.0",
     "lucide-vue-next": "^0.514.0",
