@@ -14,14 +14,13 @@ export default defineNuxtConfig({
         transpile: ['vuetify'],
     },
     modules: [
-        '@vite-pwa/nuxt',
         (_options, nuxt) => {
             nuxt.hooks.hook('vite:extendConfig', (config) => {
                 // @ts-expect-error
                 config.plugins.push(vuetify({autoImport: true}))
             })
         },
-        //...
+        '@vite-pwa/nuxt',
     ],
     vite: {
         vue: {
@@ -35,22 +34,32 @@ export default defineNuxtConfig({
         manifest: {
             name: 'Quizo!',
             short_name: 'Quizo!',
-            start_url: '/',
-            display: 'fullscreen',
-            background_color: '#ec592a',
+            description: 'Awesome Quiz Game!',
             theme_color: '#ec592a',
+            background_color: '#ffffff',
             icons: [
                 {
-                    src: '/android-chrome-192x192.png',
+                    src: '/icon-192x192.png',
                     sizes: '192x192',
-                    type: 'image/png'
+                    type: 'image/png',
                 },
                 {
-                    src: '/android-chrome-512x512.png',
+                    src: '/icon-512x512.png',
                     sizes: '512x512',
-                    type: 'image/png'
-                }
-            ]
+                    type: 'image/png',
+                },
+            ],
         },
-    }
+        workbox: {
+            navigateFallback: null,
+            skipWaiting: true,
+            clientsClaim: true,
+        },
+        devOptions: {
+            enabled: true
+        },
+        client: {
+            installPrompt: true,
+        },
+    },
 })
