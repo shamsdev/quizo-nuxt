@@ -52,8 +52,5 @@ export default defineNuxtConfig({
                 }
             ]
         },
-        workbox: {
-            // optional caching strategies
-        }
     }
 })
