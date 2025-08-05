@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            serverEndpoint: process.env.NUXT_PUBLIC_SERVER_ENDPOINT
+            serverEndpoint: process.env.SERVER_ENDPOINT
         }
     },
     css: ['@/assets/styles/fonts.css', '@/assets/styles/confetti.css'],
