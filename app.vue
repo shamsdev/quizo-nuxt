@@ -1,9 +1,6 @@
 <template>
-  <head>
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  </head>
   <NuxtLayout>
+    <VitePwaManifest/>
     <v-app>
       <NuxtPage/>
     </v-app>
