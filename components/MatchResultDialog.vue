@@ -1,6 +1,6 @@
 <template>
   <div class="match-result-dialog">
-    <p v-if="oppLeft" class="opp-left-title mb-5">Opponent Left the match!</p>
+    <p v-if="oppLeft" class="opp-left-title mb-5">حریف بازی را ترک کرد!</p>
     <p class="result-title">{{ resultText }}</p>
     <p class="score-text">امتیاز شما: {{ score }}</p>
     <FancyButton class="mt-8" title="بازگشت به خانه" @click="goHome"/>
