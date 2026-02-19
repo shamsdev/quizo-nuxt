@@ -31,7 +31,17 @@
             :class="{ selected: id === avatarId }"
             @click="avatarId = isSubmitting ? avatarId : id"
         >
-          <img :src="`/images/avatars/${id}.png`" :alt="id"/>
+          <picture>
+            <source :srcset="useAvatarUrl(id).webp" type="image/webp" width="64" height="64" />
+            <img
+              :src="useAvatarUrl(id).png"
+              :alt="'Avatar ' + id"
+              width="64"
+              height="64"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
         </div>
       </div>
     </div>
@@ -49,10 +59,10 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
-import FancyButton from './FancyButton.vue';
-import {TOTAL_AVATARS_COUNT} from "~/constants/settings.js";
-import {userStore} from "~/stores/user.store";
+import { ref } from 'vue'
+import FancyButton from './FancyButton.vue'
+import { TOTAL_AVATARS_COUNT } from '~/constants/settings.js'
+import { userStore } from '~/stores/user.store'
 
 const emit = defineEmits(['close']);
 const {$karizmaConnection} = useNuxtApp();

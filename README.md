@@ -1,6 +1,10 @@
-# Nuxt Minimal Starter
+# Quizo (Nuxt)
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+
+## Project docs
+
+- **[Avatar images](docs/AVATARS.md)** — Adding or regenerating avatar assets (optimized PNG + WebP, no duplication in git).
 
 ## Setup
 

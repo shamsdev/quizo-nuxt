@@ -7,7 +7,8 @@
         <UserAvatar
             :user-id="opponent.userId"
             :username="opponent.displayName"
-            :avatarId="opponent.avatarId"
+            :avatar-id="opponent.avatarId"
+            loading-strategy="eager"
         />
       </div>
     </transition>
@@ -20,7 +21,9 @@
       <UserAvatar
           :user-id="currentUser.userId"
           :username="currentUser.displayName"
-          :avatarId="currentUser.avatarId"/>
+          :avatar-id="currentUser.avatarId"
+          loading-strategy="eager"
+        />
     </div>
 
     <!-- Cancel Button -->
@@ -37,7 +40,7 @@
 import {ref, onMounted, onUnmounted} from 'vue'
 import UserAvatar from './UserAvatar.vue'
 import FancyButton from './FancyButton.vue'
-import {TOTAL_AVATARS_COUNT} from "~/constants/settings.js";
+import { SEARCHING_AVATAR_IDS } from '~/constants/settings.js'
 import {userStore} from "~/stores/user.store";
 import {gameStore} from "~/stores/game.store";
 
@@ -55,7 +58,7 @@ const currentUser = ref({
 const opponent = ref({
   userId: 1,
   displayName: 'در حال جستجو ...',
-  avatarId: getRandomAvatar(),
+  avatarId: getRandomSearchingAvatar(),
 })
 
 const cancelButtonAttributes = {
@@ -80,13 +83,13 @@ const titleLabel = ref('در جستجوی حریف ...');
 const canCancel = ref(false);
 const cancelButtonAttribute = ref(cancelButtonAttributes.preStart);
 
-function getRandomAvatar() {
-  return Math.floor(Math.random() * TOTAL_AVATARS_COUNT) + 1;
+function getRandomSearchingAvatar() {
+  return SEARCHING_AVATAR_IDS[Math.floor(Math.random() * SEARCHING_AVATAR_IDS.length)]
 }
 
 function startAvatarShuffling() {
   avatarShufflingInterval = setInterval(() => {
-    opponent.value.avatarId = getRandomAvatar()
+    opponent.value.avatarId = getRandomSearchingAvatar()
   }, 300)
 }
 

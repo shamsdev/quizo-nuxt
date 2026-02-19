@@ -1,11 +1,13 @@
 <template>
   <div class="home-items">
 
-    <UserAvatar class="cursor-pointer"
-                :username="userDisplayName"
-                :user-id="userId"
-                :avatarId="userAvatarId"
-                @click="onUserAvatarClicked"
+    <UserAvatar
+        class="cursor-pointer"
+        :username="userDisplayName"
+        :user-id="userId"
+        :avatar-id="userAvatarId"
+        loading-strategy="eager"
+        @click="onUserAvatarClicked"
     />
 
     <FancyButton

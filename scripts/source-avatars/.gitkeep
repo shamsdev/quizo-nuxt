@@ -1,0 +1,3 @@
+# Place original avatar PNGs here (1.png, 2.png, …) when regenerating.
+# Run: npm run optimize-avatars
+# See: docs/AVATARS.md

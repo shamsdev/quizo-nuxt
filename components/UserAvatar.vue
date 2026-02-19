@@ -1,13 +1,22 @@
 <template>
   <div v-if="!loading" class="user-avatar">
-    <img
-        :src="avatarUrl"
-        :alt="username"
-        class="avatar-img"
-        :style="{
-          borderColor: computedColor
-        }"
-    />
+    <picture>
+      <source :srcset="avatarUrls.webp" type="image/webp" :width="size" :height="size" />
+      <img
+          :src="avatarUrls.png"
+          :alt="username"
+          class="avatar-img"
+          :width="size"
+          :height="size"
+          :loading="loadingStrategy"
+          decoding="async"
+          :style="{
+            borderColor: computedColor,
+            width: size + 'px',
+            height: size + 'px'
+          }"
+      />
+    </picture>
     <div v-if="showName" class="username" :style="{
       backgroundColor: computedColor
     }">
@@ -20,45 +29,37 @@
   </div>
 </template>
 
-<script setup>
-import {computed} from 'vue'
-import {userStore} from "~/stores/user.store";
+<script setup lang="ts">
+import { computed } from 'vue'
+import { userStore } from '~/stores/user.store'
 
-const props = defineProps({
-  userId: {
-    type: Number,
-    required: false,
-  },
-  username: {
-    type: String,
-    required: false,
-    default: 'Guest'
-  },
-  avatarId: {
-    type: Number,
-    required: true,
-  },
-  color: {
-    type: String,
-  },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  showName: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    userId?: number
+    username?: string
+    avatarId: number
+    color?: string
+    loading?: boolean
+    showName?: boolean
+    /** Pixel size for the image (reduces layout shift and allows smaller requests when using thumb) */
+    size?: number
+    /** Use 'eager' for above-the-fold avatars (e.g. home), 'lazy' for lists and secondary avatars */
+    loadingStrategy?: 'lazy' | 'eager'
+  }>(),
+  {
+    username: 'Guest',
+    loading: false,
+    showName: true,
+    size: 105,
+    loadingStrategy: 'lazy',
+  }
+)
 
 const computedColor = computed(() => {
   return props.color ?? userStore().userId === props.userId ? '#05A8AA' : '#DC602E'
-});
+})
 
-const avatarUrl = computed(() =>
-    `/images/avatars/${props.avatarId}.png` // Replace with your actual image URL pattern
-)
+const avatarUrls = computed(() => useAvatarUrl(props.avatarId))
 
 </script>
 
@@ -78,11 +79,10 @@ const avatarUrl = computed(() =>
 }
 
 .avatar-img {
-  width: 105px;
-  height: 105px;
   border-radius: 50%;
   border: 4px solid;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .username {

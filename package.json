@@ -8,7 +8,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "optimize-avatars": "node scripts/optimize-avatars.mjs"
   },
   "dependencies": {
     "@karizma-studio/karizma-connection-js": "^1.6.0",
@@ -22,6 +23,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "sharp": "^0.33.5",
     "vite-plugin-vuetify": "^2.1.1",
     "vuetify": "^3.8.9"
   }

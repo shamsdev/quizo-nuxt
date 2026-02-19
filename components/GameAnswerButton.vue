@@ -12,6 +12,8 @@
           :show-name="false"
           :avatar-id="avatar.avatarId"
           :user-id="avatar.userId"
+          :size="32"
+          loading-strategy="lazy"
       />
     </div>
   </div>

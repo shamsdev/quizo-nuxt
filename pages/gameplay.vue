@@ -8,6 +8,7 @@
             :username="currentUser.displayName"
             :avatar-id="currentUser.avatarId"
             class="user-avatar"
+            loading-strategy="eager"
         />
         <div class="score-box">{{ currentUser.score }}</div>
       </div>
@@ -18,6 +19,7 @@
             :username="opponentUser.displayName"
             :avatar-id="opponentUser.avatarId"
             class="user-avatar"
+            loading-strategy="eager"
         />
       </div>
     </div>

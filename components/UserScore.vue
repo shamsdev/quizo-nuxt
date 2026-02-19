@@ -1,22 +1,37 @@
 <template>
   <div class="user-score" :class="{'current-user': userId === currentUserId}">
     <div class="rank">#{{ rank }}</div>
-    <img :src="`/images/avatars/${avatarId}.png`" alt="avatar" class="avatar"/>
+    <picture>
+      <source :srcset="avatarUrls.webp" type="image/webp" width="40" height="40" />
+      <img
+        :src="avatarUrls.png"
+        alt="avatar"
+        class="avatar"
+        width="40"
+        height="40"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
     <div class="name">{{ username ?? "Guest" }}</div>
     <div class="score">{{ score }}</div>
   </div>
 </template>
 
 <script setup>
-import {userStore} from "~/stores/user.store.js";
+import { computed } from 'vue'
+import { userStore } from '~/stores/user.store'
+import { useAvatarUrl } from '~/composables/useAvatarUrl'
 
-defineProps({
+const props = defineProps({
   rank: Number,
   userId: Number,
   avatarId: Number,
   username: String,
   score: Number,
 })
+
+const avatarUrls = computed(() => useAvatarUrl(props.avatarId))
 
 const currentUserId = ref(null);
 

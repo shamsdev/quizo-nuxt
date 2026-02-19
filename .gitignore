@@ -22,3 +22,8 @@ logs
 .env
 .env.*
 !.env.example
+
+# Original avatar sources (only optimized files in public/images/avatars/ are committed)
+# Folder is kept in repo via .gitkeep; only contents (large PNGs) are ignored
+scripts/source-avatars/*
+!scripts/source-avatars/.gitkeep
