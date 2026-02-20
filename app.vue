@@ -12,6 +12,7 @@
 const msgDialogRef = ref();
 
 onMounted(() => {
+  document.getElementById('nuxt-loading')?.remove();
   useMessageDialog.register((payload) => {
     msgDialogRef.value?.show(payload.title, payload.message, payload.buttons);
   });
