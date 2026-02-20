@@ -168,6 +168,7 @@ function startTimer(): void {
   const game = gameStore();
   const duration = game.questionTime.value - 500;
   let timeLeft = duration;
+  let lastUrgentTickHalfSec = -1;
 
   clearInterval(timerInterval);
   timerProgress.value = 100;
@@ -178,6 +179,15 @@ function startTimer(): void {
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
       sounds.playTimeUp();
+      return;
+    }
+    // Tick-tock when bar is red (urgent): alternating tick/tock every 0.5s
+    if (timerProgress.value < 25) {
+      const halfSec = Math.ceil(timeLeft / 500);
+      if (halfSec !== lastUrgentTickHalfSec && halfSec > 0) {
+        lastUrgentTickHalfSec = halfSec;
+        sounds.playTick(halfSec % 2 === 1);
+      }
     }
   }, 100);
 }

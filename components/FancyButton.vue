@@ -5,7 +5,6 @@
     :style="customStyle"
     :aria-label="iconOnly ? title : undefined"
     @click="onButtonClick"
-    @mouseenter="sounds.playHover()"
     @mousedown="isActive = true"
     @mouseup="isActive = false"
     @mouseleave="isActive = false"

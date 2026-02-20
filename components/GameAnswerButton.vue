@@ -8,7 +8,6 @@
         green: props.green,
         'answer-box--press': isPressed,
       }"
-      @mouseenter="onHover"
       @mousedown="isPressed = true"
       @mouseup="isPressed = false"
       @mouseleave="isPressed = false"
@@ -24,7 +23,7 @@
           :show-name="false"
           :avatar-id="avatar.avatarId"
           :user-id="avatar.userId"
-          :size="48"
+          :size="40"
           loading-strategy="lazy"
           :style="{ animationDelay: (i * 0.08) + 's' }"
       />
@@ -68,13 +67,6 @@ const props = defineProps({
 })
 
 const isPressed = ref(false);
-const sounds = useGameSounds();
-
-function onHover() {
-  if (!props.disabled) {
-    sounds.playHover();
-  }
-}
 </script>
 
 
@@ -168,18 +160,21 @@ function onHover() {
 
 .avatars-holder {
   position: absolute;
-  top: -32px;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1;
   display: flex;
   flex-direction: row;
-  gap: var(--space-2);
+  gap: var(--space-1);
   align-items: center;
+  justify-content: center;
 }
 
 .avatar {
   padding: 0;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   animation: avatar-in 0.35s var(--ease-out-back) backwards;
 }

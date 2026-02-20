@@ -46,9 +46,6 @@ function playTone(
 
 export function useGameSounds() {
   return {
-    playHover() {
-      playTone(400, 40, 0.08, 'sine');
-    },
     playClick() {
       playTone(600, 50, 0.12, 'sine');
     },
@@ -56,7 +53,12 @@ export function useGameSounds() {
       playTone(523, 120, 0.12, 'sine');
     },
     playTimeUp() {
-      playTone(200, 200, 0.2, 'square');
+      playTone(262, 180, 0.1, 'sine');
+    },
+    /** Optional tock: true = lower tone (tock), false/omit = higher (tick) */
+    playTick(tock = false) {
+      const freq = tock ? 220 : 280;
+      playTone(freq, 25, 0.06, 'sine');
     },
     playCorrect() {
       playTone(523, 80, 0.15, 'sine');
@@ -64,8 +66,8 @@ export function useGameSounds() {
       setTimeout(() => playTone(784, 120, 0.15, 'sine'), 160);
     },
     playWrong() {
-      playTone(200, 150, 0.2, 'sawtooth');
-      setTimeout(() => playTone(150, 200, 0.18, 'sawtooth'), 120);
+      playTone(330, 120, 0.1, 'sine');
+      setTimeout(() => playTone(262, 160, 0.1, 'sine'), 100);
     },
     playWin() {
       playTone(523, 100, 0.15, 'sine');
@@ -74,8 +76,8 @@ export function useGameSounds() {
       setTimeout(() => playTone(1047, 250, 0.18, 'sine'), 300);
     },
     playLose() {
-      playTone(300, 150, 0.18, 'sine');
-      setTimeout(() => playTone(250, 200, 0.18, 'sine'), 150);
+      playTone(294, 140, 0.1, 'sine');
+      setTimeout(() => playTone(262, 180, 0.1, 'sine'), 120);
     },
     playDraw() {
       playTone(440, 100, 0.12, 'sine');
