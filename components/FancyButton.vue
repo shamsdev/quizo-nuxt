@@ -1,22 +1,50 @@
 <template>
   <button
     class="fancy-button"
-    :class="colorClass"
+    :class="[colorClass, { 'fancy-button--icon-only': iconOnly }]"
     :style="customStyle"
+    :aria-label="iconOnly ? title : undefined"
     @click="onClick"
     @mousedown="isActive = true"
     @mouseup="isActive = false"
     @mouseleave="isActive = false"
   >
     <span v-if="icon" class="icon">
-      <component :is="icon" />
+      <component :is="icon" :size="iconSize" :stroke-width="iconOnly ? 3 : 2" />
     </span>
-    <span class="title">{{ title }}</span>
+    <span v-if="!iconOnly" class="title">{{ title }}</span>
   </button>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
+
+/** Shadow darkness: 0 = same as face, 1 = black. Change here to affect all FancyButton shadows. */
+const SHADOW_DARKEN_AMOUNT = 0.2;
+
+const TOKEN_SHADOW_HEX = {
+  primary: '#0284c7',
+  secondary: '#7c3aed',
+  success: '#16a34a',
+  error: '#dc2626',
+  play: '#0284c7',
+  leaderboard: '#7c3aed',
+};
+
+function darkenHex(hex, amount) {
+  if (!hex.startsWith('#') || (hex.length !== 7 && hex.length !== 4)) return 'rgba(0,0,0,0.3)';
+  if (hex.length === 4) hex = '#' + hex.slice(1).split('').map((x) => x + x).join('');
+  const num = parseInt(hex.slice(1), 16);
+  const r = Math.max(0, Math.min(255, (num >> 16) - 255 * amount));
+  const g = Math.max(0, Math.min(255, ((num >> 8) & 0xff) - 255 * amount));
+  const b = Math.max(0, Math.min(255, (num & 0xff) - 255 * amount));
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+function getShadowColor(color, amount = SHADOW_DARKEN_AMOUNT) {
+  const baseHex = color.startsWith('#') ? color : (TOKEN_SHADOW_HEX[color] ?? '#333333');
+  return darkenHex(baseHex, amount);
+}
 
 const props = defineProps({
   title: {
@@ -26,6 +54,16 @@ const props = defineProps({
   icon: {
     type: [Object, Function],
     default: null,
+  },
+  /** When true, shows only the icon in a round button (e.g. for dialog close). */
+  iconOnly: {
+    type: Boolean,
+    default: false,
+  },
+  /** Icon size in px (for Lucide icons). Default 24; use 20 for icon-only close. */
+  iconSize: {
+    type: Number,
+    default: 24,
   },
   color: {
     type: String,
@@ -47,23 +85,11 @@ const colorClass = computed(() => {
 })
 
 const customStyle = computed(() => {
-  if (props.color.startsWith('#'))
-    return {
-      '--btn-bg': props.color,
-      '--btn-shadow': darkenHex(props.color, 0.25),
-    }
-  return {}
+  const shadowColor = getShadowColor(props.color);
+  const style = { '--btn-shadow': shadowColor };
+  if (props.color.startsWith('#')) style['--btn-bg'] = props.color;
+  return style;
 })
-
-function darkenHex(hex, amount = 0.25) {
-  if (!hex.startsWith('#') || (hex.length !== 7 && hex.length !== 4)) return 'rgba(0,0,0,0.25)'
-  if (hex.length === 4) hex = '#' + hex.slice(1).split('').map(x => x + x).join('')
-  const num = parseInt(hex.slice(1), 16)
-  const r = Math.max(0, Math.min(255, (num >> 16) - 255 * amount))
-  const g = Math.max(0, Math.min(255, ((num >> 8) & 0xff) - 255 * amount))
-  const b = Math.max(0, Math.min(255, (num & 0xff) - 255 * amount))
-  return `rgb(${r}, ${g}, ${b})`
-}
 </script>
 
 <style scoped>
@@ -84,7 +110,7 @@ function darkenHex(hex, amount = 0.25) {
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   background: var(--btn-bg);
-  box-shadow: 0 4px 0 var(--btn-shadow);
+  box-shadow: 0 4px 0 var(--btn-shadow), 0 2px 8px rgba(0, 0, 0, 0.5);
   transition: transform 0.2s var(--ease-out-back, ease), box-shadow 0.2s ease;
   text-align: center;
   user-select: none;
@@ -96,7 +122,7 @@ function darkenHex(hex, amount = 0.25) {
 
 .fancy-button:active:not(:disabled) {
   transform: translateY(2px) scale(0.98);
-  box-shadow: 0 2px 0 var(--btn-shadow);
+  box-shadow: 0 2px 0 var(--btn-shadow), 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .fancy-button:disabled {
@@ -129,21 +155,45 @@ function darkenHex(hex, amount = 0.25) {
 .fancy-button--play {
   --btn-bg: var(--color-cta-play);
   --btn-shadow: var(--color-cta-play-dark);
-  box-shadow: 0 4px 0 var(--color-cta-play-dark), var(--shadow-glow-gold);
+  box-shadow: 0 4px 0 var(--btn-shadow), 0 2px 8px rgba(0, 0, 0, 0.5), var(--shadow-glow-gold);
 }
 
-.fancy-button--play:active {
-  box-shadow: 0 2px 0 var(--color-cta-play-dark), var(--shadow-glow-gold);
+.fancy-button--play:active:not(:disabled) {
+  box-shadow: 0 2px 0 var(--btn-shadow), 0 1px 4px rgba(0, 0, 0, 0.5), var(--shadow-glow-gold);
 }
 
 .fancy-button--leaderboard {
   --btn-bg: var(--color-cta-leaderboard);
   --btn-shadow: var(--color-cta-leaderboard-dark);
-  box-shadow: 0 4px 0 var(--color-cta-leaderboard-dark), var(--shadow-glow-gold);
+  box-shadow: 0 4px 0 var(--btn-shadow), 0 2px 8px rgba(0, 0, 0, 0.5), var(--shadow-glow-gold);
 }
 
-.fancy-button--leaderboard:active {
-  box-shadow: 0 2px 0 var(--color-cta-leaderboard-dark), var(--shadow-glow-gold);
+.fancy-button--leaderboard:active:not(:disabled) {
+  box-shadow: 0 2px 0 var(--btn-shadow), 0 1px 4px rgba(0, 0, 0, 0.5), var(--shadow-glow-gold);
+}
+
+.fancy-button--icon-only {
+  min-width: 38px;
+  max-width: 38px;
+  width: 38px;
+  min-height: 38px;
+  max-height: 38px;
+  height: 38px;
+  padding: 0;
+  gap: 0;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  overflow: hidden;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.fancy-button--icon-only .icon {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon {

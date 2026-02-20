@@ -11,15 +11,16 @@
             <div class="dialog-box scroll-styled">
               <slot/>
             </div>
-            <button
-                v-if="showCloseButton"
-                type="button"
-                class="dialog-close"
-                aria-label="بستن"
-                @click="hide"
-            >
-              <X size="20" />
-            </button>
+            <div v-if="showCloseButton" class="dialog-close-wrapper">
+              <FancyButton
+                  title="بستن"
+                  :icon="X"
+                  icon-only
+                  :icon-size="20"
+                  color="error"
+                  :on-click="hide"
+              />
+            </div>
           </div>
         </transition>
       </div>
@@ -30,6 +31,7 @@
 <script setup>
 import { ref } from 'vue'
 import { X } from 'lucide-vue-next'
+import FancyButton from '~/components/FancyButton.vue'
 
 const props = defineProps({
   closeOnBackground: {
@@ -103,31 +105,14 @@ defineExpose({ show, hide })
   border: 1px solid var(--border-default);
 }
 
-.dialog-close {
+.dialog-close-wrapper {
   position: absolute;
   top: -10px;
   right: -10px;
   z-index: 1;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: var(--radius-full);
-  background: var(--color-error);
-  color: var(--text-primary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-md);
-  transition: background var(--duration-fast, 0.2s) ease, transform var(--duration-fast, 0.2s) ease;
-}
-
-.dialog-close:hover {
-  background: var(--color-error-dark);
-}
-
-.dialog-close:active {
-  transform: scale(0.95);
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
 }
 
 .dialog-fade-enter-active,
