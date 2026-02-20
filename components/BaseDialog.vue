@@ -8,7 +8,7 @@
       >
         <transition name="dialog-zoom">
           <div class="dialog-wrapper" v-if="visible">
-            <div class="dialog-box">
+            <div class="dialog-box scroll-styled">
               <slot/>
             </div>
             <button

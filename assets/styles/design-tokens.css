@@ -116,8 +116,11 @@
   --scrollbar-thumb-hover: var(--color-orange-light);
 }
 
-/* Shared scrollbar styling – add class "scroll-styled" to any scrollable element */
+/* Shared scrollbar styling – add class "scroll-styled" to any scrollable element.
+   Padding reserves space so the scrollbar sits outside content (no overlap), works in all browsers including Safari. */
 .scroll-styled {
+  scrollbar-gutter: stable; /* reserves space where supported (Chrome, Edge) */
+  padding-inline-end: var(--scrollbar-width); /* reserve space so scrollbar never covers content */
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   scrollbar-width: thin;
 }
