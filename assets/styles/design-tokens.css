@@ -141,3 +141,70 @@
 .scroll-styled::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover);
 }
+
+/* BaseDialog: overlay + transition (global so teleported content gets styles) */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--space-4);
+  box-sizing: border-box;
+  transform-origin: center center;
+}
+
+.dialog-enter-active {
+  transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.22s ease-out;
+}
+
+.dialog-leave-active {
+  transition: transform 0.18s ease-in, opacity 0.16s ease-in;
+}
+
+.dialog-enter-from,
+.dialog-leave-to {
+  opacity: 0;
+  transform: scale(0.88);
+}
+
+.dialog-leave-from,
+.dialog-enter-to {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.dialog-wrapper {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  max-width: min(90%, calc(100vw - 2 * var(--space-4)));
+  box-sizing: border-box;
+}
+
+.dialog-box {
+  background: var(--bg-inner);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  width: var(--dialog-max-width);
+  max-width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-default);
+  box-sizing: border-box;
+}
+
+.dialog-close-wrapper {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  z-index: 1;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+}

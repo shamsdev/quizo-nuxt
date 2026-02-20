@@ -1,28 +1,26 @@
 <template>
   <Teleport to="body">
-    <transition name="dialog-fade">
+    <transition name="dialog">
       <div
           v-if="visible"
           class="dialog-overlay"
           @click.self="onBackgroundClick"
       >
-        <transition name="dialog-zoom">
-          <div class="dialog-wrapper" v-if="visible">
-            <div class="dialog-box scroll-styled">
-              <slot/>
-            </div>
-            <div v-if="showCloseButton" class="dialog-close-wrapper">
-              <FancyButton
-                  title="بستن"
-                  :icon="X"
-                  icon-only
-                  :icon-size="20"
-                  color="error"
-                  :on-click="hide"
-              />
-            </div>
+        <div class="dialog-wrapper">
+          <div class="dialog-box scroll-styled">
+            <slot/>
           </div>
-        </transition>
+          <div v-if="showCloseButton" class="dialog-close-wrapper">
+            <FancyButton
+                title="بستن"
+                :icon="X"
+                icon-only
+                :icon-size="20"
+                color="error"
+                :on-click="hide"
+            />
+          </div>
+        </div>
       </div>
     </transition>
   </Teleport>
@@ -45,7 +43,7 @@ const props = defineProps({
   }
 })
 
-const visible = ref(false)
+const visible = ref(false);
 
 const show = () => {
   visible.value = true
@@ -119,24 +117,5 @@ defineExpose({ show, hide })
   height: 38px;
   flex-shrink: 0;
 }
-
-.dialog-fade-enter-active,
-.dialog-fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-
-.dialog-fade-enter-from,
-.dialog-fade-leave-to {
-  opacity: 0;
-}
-
-.dialog-zoom-enter-active,
-.dialog-zoom-leave-active {
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.dialog-zoom-enter-from,
-.dialog-zoom-leave-to {
-  transform: scale(0.92);
-}
 </style>
+
