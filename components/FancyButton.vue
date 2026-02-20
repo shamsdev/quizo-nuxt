@@ -85,13 +85,17 @@ function darkenHex(hex, amount = 0.25) {
   cursor: pointer;
   background: var(--btn-bg);
   box-shadow: 0 4px 0 var(--btn-shadow);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 0.2s var(--ease-out-back, ease), box-shadow 0.2s ease;
   text-align: center;
   user-select: none;
 }
 
-.fancy-button:active {
-  transform: translateY(2px);
+.fancy-button:hover:not(:disabled) {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.fancy-button:active:not(:disabled) {
+  transform: translateY(2px) scale(0.98);
   box-shadow: 0 2px 0 var(--btn-shadow);
 }
 
