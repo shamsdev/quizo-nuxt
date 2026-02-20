@@ -41,7 +41,7 @@ onMounted(async () => {
       buttons: [
         {
           text: 'تلاش مجدد',
-          color: '#e74c3c',
+          color: 'error',
           onClick: () => window.location.reload()
         }
       ]
@@ -123,11 +123,13 @@ function updateProgress(status, progressValue) {
 
 <style scoped>
 .loading-screen {
-  height: 100vh;
+  height: 100%;
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: var(--space-6);
 }
 
 .logo-anim-wrapper {
@@ -135,8 +137,12 @@ function updateProgress(status, progressValue) {
 }
 
 .logo-anim-wrapper h1 {
-  margin-top: -20px;
+  margin-top: calc(-1 * var(--space-5));
   text-align: center;
+  font-size: var(--text-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 .logo-anim {
@@ -146,27 +152,29 @@ function updateProgress(status, progressValue) {
 }
 
 .progress-bar-wrapper {
-  margin-top: 100px;
-
-  width: 80%;
-  height: 15px;
-  background: rgba(68, 65, 65, 0.82);
-  border-radius: 15px;
+  margin-top: var(--space-16);
+  width: 85%;
+  max-width: 280px;
+  height: 12px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-full);
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
+  border: 1px solid var(--border-subtle);
 }
 
 .progress-bar {
   height: 100%;
-  background: #2de436;
-  border: #00ba07 2px solid;
-  transition: width 0.1s linear;
-  border-radius: 15px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-orange-light));
+  border-radius: var(--radius-full);
+  transition: width 0.15s ease-out;
+  box-shadow: var(--shadow-glow-gold);
 }
 
 .loading-label {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
   direction: rtl;
 }
 </style>

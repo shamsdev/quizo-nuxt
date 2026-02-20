@@ -25,8 +25,8 @@
             :score="userScore.score"
         />
       </div>
-      <div v-else>
-        <p class="text-center mt-12">موردی وجود ندارد</p>
+      <div v-else class="empty-state">
+        <p>موردی وجود ندارد</p>
       </div>
 
     </div>
@@ -81,7 +81,7 @@ async function getLeaderboard() {
   display: flex;
   flex-direction: column;
   max-height: 90vh;
-  padding: 16px;
+  padding: var(--space-4);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -89,13 +89,14 @@ async function getLeaderboard() {
 .dialog-header {
   flex-shrink: 0;
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 
 .dialog-header h2 {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
   margin: 0;
+  color: var(--text-primary);
 }
 
 .score-list {
@@ -103,8 +104,40 @@ async function getLeaderboard() {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
   max-height: 400px;
   min-height: 400px;
+  scrollbar-color: var(--color-primary) var(--bg-card);
+  scrollbar-width: thin;
+}
+
+/* WebKit: theme scrollbar */
+.score-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.score-list::-webkit-scrollbar-track {
+  background: var(--bg-card);
+  border-radius: var(--radius-full);
+}
+
+.score-list::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+.score-list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-orange-light);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-12);
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-base);
 }
 </style>

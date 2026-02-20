@@ -64,15 +64,15 @@ const opponent = ref({
 const cancelButtonAttributes = {
   preStart: {
     label: 'صبر کنید ...',
-    color: '#118194'
+    color: 'primary'
   },
   findingMatch: {
     label: 'لغو کردن',
-    color: '#d3593e'
+    color: 'error'
   },
   startingMatch: {
     label: 'در حال شروع بازی ...',
-    color: '#118194'
+    color: 'primary'
   },
 }
 
@@ -176,8 +176,8 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
-  padding: 24px;
+  gap: var(--space-6);
+  padding: var(--space-6);
   max-height: 90vh;
   overflow: hidden;
 }
@@ -189,16 +189,16 @@ onUnmounted(() => {
 }
 
 .find-match-label {
-  font-size: 18px;
-  font-weight: bold;
-  color: #555;
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
 }
 
 .vs-label {
-  font-size: 24px;
-  font-weight: bold;
-  color: #555;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
 }
 
 .fade-enter-active,

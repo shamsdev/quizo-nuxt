@@ -1,9 +1,9 @@
 <template>
   <div class="match-result-dialog">
-    <p v-if="oppLeft" class="opp-left-title mb-5">حریف بازی را ترک کرد!</p>
+    <p v-if="oppLeft" class="opp-left-title">حریف بازی را ترک کرد!</p>
     <p class="result-title">{{ resultText }}</p>
     <p class="score-text">امتیاز شما: {{ score }}</p>
-    <FancyButton class="mt-8" title="بازگشت به خانه" @click="goHome"/>
+    <FancyButton class="btn-home" title="بازگشت به خانه" @click="goHome"/>
   </div>
 </template>
 
@@ -54,20 +54,31 @@ const goHome = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  gap: 16px;
+  padding: var(--space-6);
+  gap: var(--space-4);
 }
 
 .opp-left-title {
-  font-size: 1.5rem;
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  margin: 0 0 var(--space-2);
 }
 
 .result-title {
-  font-size: 2.5rem;
-  font-weight: bold;
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
 }
 
 .score-text {
-  font-size: 1.5rem;
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.btn-home {
+  margin-top: var(--space-4);
 }
 </style>

@@ -52,7 +52,7 @@
           title="قبول"
           :onClick="requestUpdateProfile"
           :disabled="isSubmitting"
-          color="#27ae60"
+          color="success"
       />
     </div>
   </div>
@@ -132,68 +132,76 @@ defineExpose({ scrollToSelectedAvatar });
   display: flex;
   flex-direction: column;
   max-height: 90vh;
-  padding: 16px;
+  padding: var(--space-4);
   box-sizing: border-box;
   overflow: hidden;
 }
 
-/* Fixed Top and Bottom Sections */
 .form-section {
   flex-shrink: 0;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 
-/* Scrollable Avatar Section */
+.form-section.mt-3 {
+  margin-top: var(--space-3);
+}
+
 .avatar-scroll-section {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
   max-height: 320px;
 }
 
 .input-label {
-  font-weight: 600;
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 4px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
   display: block;
   direction: rtl;
 }
 
 .text-input {
-  padding: 10px 14px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
   width: 100%;
   box-sizing: border-box;
   outline: none;
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.text-input::placeholder {
+  color: var(--text-muted);
 }
 
 .text-input:focus {
-  border-color: #3498db;
+  border-color: var(--color-primary);
 }
 
 .avatar-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: var(--space-3);
   justify-content: center;
 }
 
 .avatar-item {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+  width: var(--avatar-size-md);
+  height: var(--avatar-size-md);
+  border-radius: var(--radius-full);
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: border 0.2s ease;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
 .avatar-item.selected {
-  border: 3px solid #3498db;
-  box-shadow: 0 0 0 5px rgba(52, 152, 219, 0.2);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.35);
 }
 
 .avatar-item img {

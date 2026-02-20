@@ -56,7 +56,9 @@ const props = withDefaults(
 )
 
 const computedColor = computed(() => {
-  return props.color ?? userStore().userId === props.userId ? '#05A8AA' : '#DC602E'
+  if (props.color) return props.color
+  /* You = electric blue, opponent = violet */
+  return userStore().userId === props.userId ? 'var(--color-primary)' : 'var(--color-secondary)'
 })
 
 const avatarUrls = computed(() => useAvatarUrl(props.avatarId))
@@ -79,25 +81,24 @@ const avatarUrls = computed(() => useAvatarUrl(props.avatarId))
 }
 
 .avatar-img {
-  border-radius: 50%;
-  border: 4px solid;
+  border-radius: var(--radius-full);
+  border: 3px solid;
   object-fit: cover;
   flex-shrink: 0;
 }
 
 .username {
-  border-radius: 20px;
-  padding: 2px 8px;
-  margin-top: -8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
+  border-radius: var(--radius-xl);
+  padding: var(--space-1) var(--space-2);
+  margin-top: calc(-1 * var(--space-2));
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
 }
 
 .username p {
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

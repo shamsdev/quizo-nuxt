@@ -46,45 +46,49 @@ onMounted(() => {
   direction: rtl;
   display: flex;
   align-items: center;
-  padding: 10px 12px;
-  background: #ededed;
-  border-radius: 10px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  gap: var(--space-2);
 }
 
 .user-score.current-user {
-  background: #9ce469 !important;
+  background: rgba(6, 182, 212, 0.2) !important;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
 }
-
 
 .rank {
   width: 32px;
   text-align: center;
-  font-weight: bold;
-  color: #555;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
-  margin: 0 10px;
-  border-radius: 50%;
+  width: var(--avatar-size-sm);
+  height: var(--avatar-size-sm);
+  border-radius: var(--radius-full);
   object-fit: cover;
-  border: 2px solid #ddd;
+  border: 2px solid var(--border-default);
 }
 
 .name {
   flex: 1;
-  font-weight: 600;
-  font-size: 15px;
-  color: #333;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-base);
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-right: 20px;
+  padding-right: var(--space-4);
 }
 
 .score {
-  font-weight: bold;
-  color: #2c3e50;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-base);
+  color: var(--color-primary);
 }
 </style>

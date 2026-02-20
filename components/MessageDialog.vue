@@ -8,7 +8,7 @@
             v-for="(btn, index) in currentButtons"
             :key="index"
             :title="btn.text"
-            :color="btn.color || '#3498db'"
+            :color="btn.color || 'primary'"
             :onClick="() => handleButtonClick(btn)"
         />
       </div>
@@ -54,30 +54,30 @@ defineExpose({show, hide})
 <style scoped>
 .message-dialog {
   direction: rtl;
-  padding: 8px;
+  padding: var(--space-2);
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--space-6);
 }
 
 .title {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
   text-align: center;
-  color: #222;
+  color: var(--text-primary);
 }
 
 .message {
-  font-size: 16px;
+  font-size: var(--text-base);
   text-align: center;
-  color: #444;
-  line-height: 1.5;
+  color: var(--text-secondary);
+  line-height: 1.6;
   word-break: break-word;
 }
 
 .buttons {
   display: flex;
-  gap: 12px;
+  gap: var(--space-3);
   justify-content: center;
   flex-wrap: wrap;
 }

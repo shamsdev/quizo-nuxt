@@ -1,0 +1,103 @@
+/**
+ * Quizo – modern sharp quiz game palette
+ * Dark base + electric blue primary + bright green/red for correct/wrong
+ */
+:root {
+  /* ----- Spacing (4px base) ----- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ----- Radius ----- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ----- Shadows ----- */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-glow-gold: 0 0 24px rgba(14, 165, 233, 0.45);
+  --shadow-glow-success: 0 0 20px rgba(34, 197, 94, 0.4);
+
+  /* ----- Backgrounds – deep dark ----- */
+  --bg-outer: #0c1222;
+  --bg-outer-end: #0f172a;
+  --bg-inner: #0f172a;
+  --bg-inner-end: #1e293b;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --bg-elevated: #334155;
+  --bg-overlay: rgba(12, 18, 34, 0.94);
+
+  /* ----- Primary – electric blue (play, main CTA) ----- */
+  --color-primary: #0ea5e9;
+  --color-primary-dark: #0284c7;
+  --color-cta-play: #0ea5e9;
+  --color-cta-play-dark: #0284c7;
+  --color-orange: #0ea5e9;
+  --color-orange-dark: #0284c7;
+  --color-orange-light: #38bdf8;
+  --color-gold: #0ea5e9;
+  --color-gold-dark: #0284c7;
+  --color-gold-light: #38bdf8;
+
+  /* ----- Secondary – vivid violet (leaderboard, opponent) ----- */
+  --color-secondary: #8b5cf6;
+  --color-secondary-dark: #7c3aed;
+  --color-cta-leaderboard: #8b5cf6;
+  --color-cta-leaderboard-dark: #7c3aed;
+  --color-green: #8b5cf6;
+  --color-green-dark: #7c3aed;
+
+  /* ----- States – sharp quiz green/red/yellow ----- */
+  --color-success: #22c55e;
+  --color-success-dark: #16a34a;
+  --color-error: #ef4444;
+  --color-error-dark: #dc2626;
+  --color-warning: #eab308;
+  --color-warning-dark: #ca8a04;
+
+  /* ----- Text – sharp white/grey ----- */
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-inverse: #0f172a;
+
+  /* ----- Borders ----- */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(148, 163, 184, 0.25);
+  --border-strong: rgba(226, 232, 240, 0.35);
+
+  /* ----- Typography ----- */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ----- Component defaults ----- */
+  --button-height: 56px;
+  --button-min-width: 200px;
+  --avatar-size-lg: 96px;
+  --avatar-size-md: 64px;
+  --avatar-size-sm: 40px;
+  --dialog-max-width: 400px;
+  --game-card-padding: var(--space-5);
+}

@@ -59,29 +59,31 @@ defineExpose({ show, hide })
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
+  background: var(--bg-overlay);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
+  padding: var(--space-4);
 }
 
 .dialog-box {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  width: 400px;
-  max-width: 85%;
-  max-height: 80vh;
+  background: var(--bg-inner);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  width: var(--dialog-max-width);
+  max-width: 90%;
+  max-height: 85vh;
   overflow-y: auto;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-default);
 }
 
-/* Transition Animations */
 .dialog-fade-enter-active,
 .dialog-fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 
 .dialog-fade-enter-from,
@@ -91,11 +93,11 @@ defineExpose({ show, hide })
 
 .dialog-zoom-enter-active,
 .dialog-zoom-leave-active {
-  transition: transform 0.3s ease;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .dialog-zoom-enter-from,
 .dialog-zoom-leave-to {
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
 </style>

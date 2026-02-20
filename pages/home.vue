@@ -1,32 +1,34 @@
 <template>
   <div class="home-items">
+    <div class="home-top">
+      <UserAvatar
+          class="cursor-pointer"
+          :username="userDisplayName"
+          :user-id="userId"
+          :avatar-id="userAvatarId"
+          loading-strategy="eager"
+          @click="onUserAvatarClicked"
+      />
+    </div>
 
-    <UserAvatar
-        class="cursor-pointer"
-        :username="userDisplayName"
-        :user-id="userId"
-        :avatar-id="userAvatarId"
-        loading-strategy="eager"
-        @click="onUserAvatarClicked"
-    />
+    <div class="home-actions">
+      <FancyButton
+          class="start-game-btn"
+          title="شروع بازی"
+          :icon="Gamepad2"
+          color="play"
+          :onClick="onStartGameButtonClicked"
+      />
+      <FancyButton
+          class="leaderboard-btn"
+          title="جدول امتیازات"
+          :icon="List"
+          color="leaderboard"
+          :onClick="onShowLeaderboardButtonClicked"
+      />
+    </div>
 
-    <FancyButton
-        class="start-game-btn mt-15"
-        title="شروع بازی"
-        :icon="Gamepad2"
-        color="#218c74"
-        :onClick="onStartGameButtonClicked"
-    />
-
-    <FancyButton
-        class="leaderboard-btn mt-8"
-        title="جدول امتیازات"
-        :icon="List"
-        color="#227093"
-        :onClick="onShowLeaderboardButtonClicked"
-    />
-
-    <HomeFooter/>
+    <HomeFooter />
 
     <!-- Base Components Finish -->
 
@@ -91,22 +93,46 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-
 .home-items {
-  padding-top: 80px;
+  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  justify-content: space-between;
+  padding-top: max(var(--space-4), env(safe-area-inset-top));
+  padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  padding-left: max(var(--space-4), env(safe-area-inset-left));
+  padding-right: max(var(--space-4), env(safe-area-inset-right));
+  overflow: hidden;
+}
+
+.home-top {
+  flex-shrink: 0;
+}
+
+.home-actions {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  min-height: 0;
 }
 
 .start-game-btn {
-  width: 220px;
-  height: 60px;
+  width: var(--button-min-width);
+  min-width: 220px;
+  height: var(--button-height);
+  flex-shrink: 0;
 }
 
 .leaderboard-btn {
-  width: 220px;
-  height: 60px;
+  width: var(--button-min-width);
+  min-width: 220px;
+  height: var(--button-height);
+  flex-shrink: 0;
 }
 </style>

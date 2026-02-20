@@ -1,6 +1,11 @@
 import vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+    app: {
+        head: {
+            viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
+        },
+    },
     devServer: {
         port: 3001
     },
@@ -9,7 +14,7 @@ export default defineNuxtConfig({
             serverEndpoint: process.env.SERVER_ENDPOINT
         }
     },
-    css: ['@/assets/styles/fonts.css', '@/assets/styles/confetti.css'],
+    css: ['@/assets/styles/fonts.css', '@/assets/styles/design-tokens.css', '@/assets/styles/confetti.css'],
     build: {
         transpile: ['vuetify'],
     },
@@ -35,8 +40,8 @@ export default defineNuxtConfig({
             name: 'Quizo!',
             short_name: 'Quizo!',
             description: 'Awesome Quiz Game!',
-            theme_color: '#ec592a',
-            background_color: '#ffffff',
+            theme_color: '#0ea5e9',
+            background_color: '#0c1222',
             icons: [
                 {
                     src: '/icon-192x192.png',

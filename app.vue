@@ -28,11 +28,15 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-
+  background: linear-gradient(165deg, var(--bg-outer) 0%, var(--bg-outer-end) 100%);
+  color: var(--text-primary);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
 </style>

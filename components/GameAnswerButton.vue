@@ -12,7 +12,7 @@
           :show-name="false"
           :avatar-id="avatar.avatarId"
           :user-id="avatar.userId"
-          :size="32"
+          :size="48"
           loading-strategy="lazy"
       />
     </div>
@@ -53,54 +53,73 @@ const props = defineProps({
 
 <style scoped>
 .answer-box {
-  background: #185581;
-  padding: 18px;
-  border-radius: 16px;
+  background: var(--bg-card);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
   text-align: center;
   cursor: pointer;
-  transition: background 0.2s ease;
-  height: 80px;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  min-height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 16px;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
   position: relative;
-  box-shadow: #0e314a 0px 6px 0px;
+  border: 2px solid var(--border-default);
+  box-shadow: 0 4px 0 var(--bg-outer);
+}
+
+.answer-box:not(.disabled):hover {
+  background: var(--bg-elevated);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 var(--bg-outer);
 }
 
 .answer-box.disabled {
   pointer-events: none;
-  background: #333 !important;
+  background: var(--bg-elevated) !important;
+  opacity: 0.85;
   cursor: not-allowed;
+  border-color: var(--border-subtle);
 }
 
 .answer-box.selected {
-  background: #c69328 !important;
+  background: var(--color-warning) !important;
+  border-color: var(--color-warning-dark);
+  color: var(--text-inverse);
+  box-shadow: 0 4px 0 var(--color-warning-dark);
 }
 
 .answer-box.red {
-  background: #c63a28 !important;
+  background: var(--color-error) !important;
+  border-color: var(--color-error-dark);
+  color: var(--text-primary);
+  box-shadow: 0 4px 0 var(--color-error-dark);
 }
-
 
 .answer-box.green {
-  background: #38c628 !important;
+  background: var(--color-success) !important;
+  border-color: var(--color-success-dark);
+  color: var(--text-primary);
+  box-shadow: 0 4px 0 var(--color-success-dark);
 }
-
 
 .avatars-holder {
   position: absolute;
-  top: -26px;
+  top: -32px;
   z-index: 1;
   display: flex;
   flex-direction: row;
-  gap: 30px;
+  gap: var(--space-2);
+  align-items: center;
 }
 
 .avatar {
   padding: 0;
-  width: 32px;
-  height: 32px;
-  scale: 0.4;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
 }
 </style>
