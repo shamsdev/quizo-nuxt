@@ -4,7 +4,8 @@
     :class="[colorClass, { 'fancy-button--icon-only': iconOnly }]"
     :style="customStyle"
     :aria-label="iconOnly ? title : undefined"
-    @click="onClick"
+    @click="onButtonClick"
+    @mouseenter="sounds.playHover()"
     @mousedown="isActive = true"
     @mouseup="isActive = false"
     @mouseleave="isActive = false"
@@ -75,7 +76,13 @@ const props = defineProps({
   },
 })
 
-const isActive = ref(false)
+const isActive = ref(false);
+const sounds = useGameSounds();
+
+function onButtonClick(e) {
+  sounds.playClick();
+  props.onClick(e);
+}
 
 const colorClass = computed(() => {
   const tokens = ['primary', 'secondary', 'success', 'error', 'play', 'leaderboard']

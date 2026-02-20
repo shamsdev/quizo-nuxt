@@ -60,7 +60,7 @@ const userAvatarId = ref(1);
 const userId = ref(1);
 
 function onUserAvatarClicked() {
-  console.log('onUserAvatarClicked');
+  useGameSounds().playClick();
   editProfileDialog.value?.show();
 }
 

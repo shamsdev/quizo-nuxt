@@ -8,6 +8,7 @@
         green: props.green,
         'answer-box--press': isPressed,
       }"
+      @mouseenter="onHover"
       @mousedown="isPressed = true"
       @mouseup="isPressed = false"
       @mouseleave="isPressed = false"
@@ -66,7 +67,14 @@ const props = defineProps({
   },
 })
 
-const isPressed = ref(false)
+const isPressed = ref(false);
+const sounds = useGameSounds();
+
+function onHover() {
+  if (!props.disabled) {
+    sounds.playHover();
+  }
+}
 </script>
 
 

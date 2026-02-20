@@ -83,6 +83,7 @@ import {gameStore} from '~/stores/game.store';
 import GameAnswerButton from '~/components/GameAnswerButton.vue';
 
 const {$karizmaConnection} = useNuxtApp();
+const sounds = useGameSounds();
 
 const matchResultDialog = ref();
 
@@ -176,6 +177,7 @@ function startTimer(): void {
     timerProgress.value = Math.max(0, (timeLeft / duration) * 100);
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
+      sounds.playTimeUp();
     }
   }, 100);
 }
@@ -184,6 +186,7 @@ function startTimer(): void {
 function selectAnswer(index: number): void {
   if (!canAnswer.value) return;
   canAnswer.value = false;
+  sounds.playClick();
 
   const selected = currentQuestion.value.Answers[index];
   currentSelectedAnswerId.value = selected.Id;
@@ -194,6 +197,7 @@ function selectAnswer(index: number): void {
 function onGetReady(data: any): void {
   isInReadyState.value = true;
   roundStatus.value.currentRound = data.RoundNumber;
+  sounds.playReady();
   sendReady();
 }
 
@@ -203,6 +207,7 @@ function onStartRound(data: any): void {
   currentSelectedAnswerId.value = null;
   correctAnswerId.value = null;
   currentQuestion.value = data.Question;
+  sounds.playQuestion();
   startTimer();
 }
 
@@ -214,7 +219,10 @@ function onRoundResult(data: any): void {
   const myAnswerId = currentSelectedAnswerId.value;
   const correctId = data.CorrectAnswerId;
   if (myAnswerId === correctId) {
+    sounds.playCorrect();
     launchConfetti();
+  } else {
+    sounds.playWrong();
   }
 
   for (const user of data.UsersData) {
@@ -242,6 +250,13 @@ function onRoundResult(data: any): void {
 
 function onMatchResult(data: any): void {
   matchResult.value = data;
+  if (data.MatchStateStr === 'Win') {
+    sounds.playWin();
+  } else if (data.MatchStateStr === 'Lose') {
+    sounds.playLose();
+  } else {
+    sounds.playDraw();
+  }
   matchResultDialog.value.show();
 }
 
