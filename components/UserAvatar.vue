@@ -1,22 +1,31 @@
 <template>
   <div v-if="!loading" class="user-avatar">
-    <picture>
-      <source :srcset="avatarUrls.webp" type="image/webp" :width="size" :height="size" />
-      <img
-          :src="avatarUrls.png"
-          :alt="username"
-          class="avatar-img"
-          :width="size"
-          :height="size"
-          :loading="loadingStrategy"
-          decoding="async"
-          :style="{
-            borderColor: computedColor,
-            width: size + 'px',
-            height: size + 'px'
-          }"
+    <div class="avatar-wrap" :style="{ width: size + 'px', height: size + 'px' }">
+      <div
+          v-show="!imageLoaded"
+          class="avatar-skeleton"
+          :style="{ width: size + 'px', height: size + 'px' }"
+          aria-hidden="true"
       />
-    </picture>
+      <picture>
+        <source :srcset="avatarUrls.webp" type="image/webp" :width="size" :height="size" />
+        <img
+            :src="avatarUrls.png"
+            :alt="username"
+            class="avatar-img"
+            :width="size"
+            :height="size"
+            :loading="loadingStrategy"
+            decoding="async"
+            :style="{
+              borderColor: computedColor,
+              width: size + 'px',
+              height: size + 'px'
+            }"
+            @load="imageLoaded = true"
+        />
+      </picture>
+    </div>
     <div v-if="showName" class="username" :style="{
       backgroundColor: computedColor
     }">
@@ -61,7 +70,9 @@ const computedColor = computed(() => {
   return userStore().userId === props.userId ? 'var(--color-primary)' : 'var(--color-secondary)'
 })
 
-const avatarUrls = computed(() => useAvatarUrl(props.avatarId))
+const avatarUrls = computed(() => useAvatarUrl(props.avatarId));
+const imageLoaded = ref(false);
+watch(() => props.avatarId, () => { imageLoaded.value = false; });
 
 </script>
 
@@ -73,6 +84,18 @@ const avatarUrls = computed(() => useAvatarUrl(props.avatarId))
   text-align: center;
 }
 
+.avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar-skeleton {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+}
+
 .avatar-loader {
   scale: 2.2;
   height: 80px;
@@ -81,6 +104,8 @@ const avatarUrls = computed(() => useAvatarUrl(props.avatarId))
 }
 
 .avatar-img {
+  position: relative;
+  z-index: 1;
   border-radius: var(--radius-full);
   border: 3px solid;
   object-fit: cover;

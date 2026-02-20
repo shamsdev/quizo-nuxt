@@ -1,27 +1,22 @@
 <template>
   <div class="user-score" :class="{'current-user': userId === currentUserId}">
     <div class="rank">#{{ rank }}</div>
-    <picture>
-      <source :srcset="avatarUrls.webp" type="image/webp" width="40" height="40" />
-      <img
-        :src="avatarUrls.png"
-        alt="avatar"
-        class="avatar"
-        width="40"
-        height="40"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
+    <UserAvatar
+      :avatar-id="avatarId"
+      :user-id="userId"
+      :username="username"
+      :show-name="false"
+      :size="40"
+      loading-strategy="lazy"
+      class="user-score-avatar"
+    />
     <div class="name">{{ username ?? "Guest" }}</div>
     <div class="score">{{ score }}</div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { userStore } from '~/stores/user.store'
-import { useAvatarUrl } from '~/composables/useAvatarUrl'
+import { userStore } from '~/stores/user.store';
 
 const props = defineProps({
   rank: Number,
@@ -29,16 +24,13 @@ const props = defineProps({
   avatarId: Number,
   username: String,
   score: Number,
-})
-
-const avatarUrls = computed(() => useAvatarUrl(props.avatarId))
+});
 
 const currentUserId = ref(null);
 
 onMounted(() => {
   currentUserId.value = userStore().userId;
 });
-
 </script>
 
 <style scoped>
@@ -67,12 +59,8 @@ onMounted(() => {
   color: var(--text-muted);
 }
 
-.avatar {
-  width: var(--avatar-size-sm);
-  height: var(--avatar-size-sm);
-  border-radius: var(--radius-full);
-  object-fit: cover;
-  border: 2px solid var(--border-default);
+.user-score-avatar {
+  flex-shrink: 0;
 }
 
 .name {

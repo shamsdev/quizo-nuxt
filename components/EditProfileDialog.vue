@@ -31,17 +31,13 @@
             :class="{ selected: id === avatarId }"
             @click="avatarId = isSubmitting ? avatarId : id"
         >
-          <picture>
-            <source :srcset="useAvatarUrl(id).webp" type="image/webp" width="64" height="64" />
-            <img
-              :src="useAvatarUrl(id).png"
-              :alt="'Avatar ' + id"
-              width="64"
-              height="64"
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
+          <UserAvatar
+            :avatar-id="id"
+            :show-name="false"
+            :size="64"
+            loading-strategy="lazy"
+            class="avatar-picker-thumb"
+          />
         </div>
       </div>
     </div>
@@ -204,10 +200,14 @@ defineExpose({ scrollToSelectedAvatar });
   box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.35);
 }
 
-.avatar-item img {
+.avatar-picker-thumb {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  overflow: hidden;
+}
+
+.avatar-picker-thumb :deep(.avatar-img) {
+  border-width: 0;
 }
 
 .button-wrapper {
