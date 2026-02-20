@@ -196,7 +196,7 @@ defineExpose({ scrollToSelectedAvatar });
 }
 
 .avatar-item.selected {
-  border-color: var(--color-primary);
+  border: 5px solid var(--color-primary);
   box-shadow: 0 0 5px 8px rgba(6, 182, 212, 0.35);
 }
 
