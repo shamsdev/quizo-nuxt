@@ -7,8 +7,19 @@
           @click.self="onBackgroundClick"
       >
         <transition name="dialog-zoom">
-          <div class="dialog-box" v-if="visible">
-            <slot/>
+          <div class="dialog-wrapper" v-if="visible">
+            <div class="dialog-box">
+              <slot/>
+            </div>
+            <button
+                v-if="showCloseButton"
+                type="button"
+                class="dialog-close"
+                aria-label="بستن"
+                @click="hide"
+            >
+              <X size="20" />
+            </button>
           </div>
         </transition>
       </div>
@@ -18,11 +29,17 @@
 
 <script setup>
 import { ref } from 'vue'
+import { X } from 'lucide-vue-next'
 
 const props = defineProps({
   closeOnBackground: {
     type: Boolean,
     default: true
+  },
+  /** When true, shows a red round close button at top-right, semi-outside the dialog (does not affect content layout) */
+  showCloseButton: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -69,16 +86,48 @@ defineExpose({ show, hide })
   padding: var(--space-4);
 }
 
+.dialog-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 90%;
+}
+
 .dialog-box {
   background: var(--bg-inner);
   border-radius: var(--radius-xl);
   padding: var(--space-6);
   width: var(--dialog-max-width);
-  max-width: 90%;
   max-height: 85vh;
   overflow-y: auto;
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-default);
+}
+
+.dialog-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-error);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition: background var(--duration-fast, 0.2s) ease, transform var(--duration-fast, 0.2s) ease;
+}
+
+.dialog-close:hover {
+  background: var(--color-error-dark);
+}
+
+.dialog-close:active {
+  transform: scale(0.95);
 }
 
 .dialog-fade-enter-active,

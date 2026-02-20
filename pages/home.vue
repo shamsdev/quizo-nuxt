@@ -32,7 +32,7 @@
 
     <!-- Base Components Finish -->
 
-    <BaseDialog ref="editProfileDialog">
+    <BaseDialog ref="editProfileDialog" show-close-button>
       <EditProfileDialog @close="onEditProfileDialogClose"/>
     </BaseDialog>
 
@@ -40,7 +40,7 @@
       <FindMatchDialog @close="findMatchDialog?.hide()"/>
     </BaseDialog>
 
-    <BaseDialog ref="leaderboardDialog">
+    <BaseDialog ref="leaderboardDialog" show-close-button>
       <LeaderboardDialog @close="leaderboardDialog?.hide()"/>
     </BaseDialog>
 
