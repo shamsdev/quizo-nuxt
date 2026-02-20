@@ -117,10 +117,8 @@
 }
 
 /* Shared scrollbar styling – add class "scroll-styled" to any scrollable element.
-   Padding reserves space so the scrollbar sits outside content (no overlap), works in all browsers including Safari. */
+   Scrollbar sits in the overflow area (outside content) so padding can be equal on both sides. */
 .scroll-styled {
-  scrollbar-gutter: stable; /* reserves space where supported (Chrome, Edge) */
-  padding-inline-end: var(--scrollbar-width); /* reserve space so scrollbar never covers content */
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   scrollbar-width: thin;
 }

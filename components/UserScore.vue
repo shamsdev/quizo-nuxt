@@ -38,11 +38,11 @@ onMounted(() => {
   direction: rtl;
   display: flex;
   align-items: center;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-1) var(--space-2);
   background: var(--bg-card);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
 .user-score.current-user {
@@ -52,7 +52,7 @@ onMounted(() => {
 }
 
 .rank {
-  width: 32px;
+  width: 28px;
   text-align: center;
   font-weight: var(--font-weight-bold);
   font-size: var(--text-sm);
@@ -71,7 +71,7 @@ onMounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-right: var(--space-4);
+  padding-right: var(--space-1);
 }
 
 .score {

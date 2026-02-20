@@ -22,7 +22,7 @@
             :data-user-id="userScore.userId"
         >
           <UserScore
-              class="mb-2"
+              class="score-row-item"
               :rank="index + 1"
               :user-id="userScore.userId"
               :avatarId="userScore.avatarId"
@@ -91,7 +91,7 @@ function scrollToCurrentUser() {
   display: flex;
   flex-direction: column;
   max-height: 90vh;
-  padding: var(--space-4);
+  padding: var(--space-2);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -99,7 +99,7 @@ function scrollToCurrentUser() {
 .dialog-header {
   flex-shrink: 0;
   text-align: center;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-1);
 }
 
 .dialog-header h2 {
@@ -113,19 +113,23 @@ function scrollToCurrentUser() {
   flex-shrink: 0;
 }
 
+.score-row-item {
+  margin-bottom: 0;
+}
+
 .score-list {
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-1);
   max-height: 400px;
   min-height: 400px;
 }
 
 .empty-state {
   text-align: center;
-  padding: var(--space-12);
+  padding: var(--space-6);
 }
 
 .empty-state p {
@@ -138,7 +142,7 @@ function scrollToCurrentUser() {
 .leaderboard-skeleton {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-1);
   direction: rtl;
 }
 
