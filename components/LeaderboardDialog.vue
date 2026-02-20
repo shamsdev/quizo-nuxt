@@ -134,11 +134,12 @@ function scrollToCurrentUser() {
   font-size: var(--text-base);
 }
 
-/* Dark-theme skeleton to match app */
+/* Dark-theme skeleton to match app (RTL like real score rows) */
 .leaderboard-skeleton {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  direction: rtl;
 }
 
 .leaderboard-skeleton :deep(.v-skeleton-loader) {
