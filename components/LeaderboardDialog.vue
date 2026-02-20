@@ -99,7 +99,7 @@ function scrollToCurrentUser() {
 .dialog-header {
   flex-shrink: 0;
   text-align: center;
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-3);
 }
 
 .dialog-header h2 {
@@ -122,7 +122,7 @@ function scrollToCurrentUser() {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   max-height: 400px;
   min-height: 400px;
 }
@@ -142,7 +142,7 @@ function scrollToCurrentUser() {
 .leaderboard-skeleton {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   direction: rtl;
 }
 

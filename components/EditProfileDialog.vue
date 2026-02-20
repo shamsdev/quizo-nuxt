@@ -18,7 +18,6 @@
     <!-- Avatar Section Label (outside scroll) -->
     <div class="form-section mt-3">
       <label class="input-label">انتخاب آواتار</label>
-    </div>
 
     <!-- Scrollable Avatar List -->
     <div class="avatar-scroll-section scroll-styled" ref="avatarScrollSection">
@@ -40,6 +39,7 @@
           />
         </div>
       </div>
+    </div>
     </div>
 
     <!-- Bottom Section: Apply Button -->
@@ -153,7 +153,7 @@ defineExpose({ scrollToSelectedAvatar });
   font-weight: var(--font-weight-semibold);
   font-size: var(--text-sm);
   color: var(--text-primary);
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-4);
   display: block;
   direction: rtl;
 }
@@ -197,7 +197,7 @@ defineExpose({ scrollToSelectedAvatar });
 
 .avatar-item.selected {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.35);
+  box-shadow: 0 0 5px 8px rgba(6, 182, 212, 0.35);
 }
 
 .avatar-picker-thumb {
