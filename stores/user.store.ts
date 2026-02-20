@@ -1,29 +1,43 @@
 const userId = ref<number | null>(null);
 const avatarId = ref<number | null>(null);
 const displayName = ref<string | null>(null);
+const coins = ref<number>(0);
+const energy = ref<number>(0);
 
-const setData = (data: { UserId: number; UserProfile: { Avatar: string, DisplayName: string } }) => {
+const setData = (data: { UserId: number; UserProfile: { Avatar: string; DisplayName: string } }) => {
     userId.value = data.UserId;
     setProfile(data.UserProfile);
 };
 
-const setProfile = (data: { Avatar: string, DisplayName: string }) => {
+const setProfile = (data: { Avatar: string; DisplayName: string }) => {
     avatarId.value = parseInt(data.Avatar);
     displayName.value = data.DisplayName;
 };
 
+const setHomeData = (data: {
+    UserResource: { Xp: number; Coin: number };
+    UserEnergy: { Amount: number; NextGenerationAt?: string };
+}) => {
+    coins.value = data.UserResource.Coin;
+    energy.value = data.UserEnergy.Amount;
+};
 
 const clear = () => {
     userId.value = null;
     avatarId.value = null;
     displayName.value = null;
+    coins.value = 0;
+    energy.value = 0;
 };
 
 export const userStore = () => ({
     userId: userId.value,
     avatarId: avatarId.value,
     displayName: displayName.value,
+    coins: coins.value,
+    energy: energy.value,
     setData,
     setProfile,
+    setHomeData,
     clear
 });
