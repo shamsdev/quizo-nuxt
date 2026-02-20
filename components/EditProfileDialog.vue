@@ -21,7 +21,7 @@
     </div>
 
     <!-- Scrollable Avatar List -->
-    <div class="avatar-scroll-section" ref="avatarScrollSection">
+    <div class="avatar-scroll-section scroll-styled" ref="avatarScrollSection">
       <div class="avatar-list">
         <div
             v-for="id in avatarsIds"

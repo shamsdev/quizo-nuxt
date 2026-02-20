@@ -108,4 +108,35 @@
   --avatar-size-sm: 40px;
   --dialog-max-width: 400px;
   --game-card-padding: var(--space-5);
+
+  /* ----- Scrollbar (use .scroll-styled on any overflow container) ----- */
+  --scrollbar-width: 8px;
+  --scrollbar-track: var(--bg-card);
+  --scrollbar-thumb: var(--color-primary);
+  --scrollbar-thumb-hover: var(--color-orange-light);
+}
+
+/* Shared scrollbar styling – add class "scroll-styled" to any scrollable element */
+.scroll-styled {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+.scroll-styled::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+.scroll-styled::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: var(--radius-full);
+}
+
+.scroll-styled::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+.scroll-styled::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
 }

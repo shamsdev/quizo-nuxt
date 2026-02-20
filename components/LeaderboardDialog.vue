@@ -6,7 +6,7 @@
     </div>
 
     <!-- Scrollable Score List -->
-    <div class="score-list">
+    <div class="score-list scroll-styled">
       <div v-if="isLoading" class="h-100">
         <v-skeleton-loader type="list-item-avatar"/>
         <v-skeleton-loader type="list-item-avatar"/>
@@ -107,27 +107,6 @@ async function getLeaderboard() {
   gap: var(--space-3);
   max-height: 400px;
   min-height: 400px;
-  scrollbar-color: var(--color-primary) var(--bg-card);
-  scrollbar-width: thin;
-}
-
-/* WebKit: theme scrollbar */
-.score-list::-webkit-scrollbar {
-  width: 8px;
-}
-
-.score-list::-webkit-scrollbar-track {
-  background: var(--bg-card);
-  border-radius: var(--radius-full);
-}
-
-.score-list::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: var(--radius-full);
-}
-
-.score-list::-webkit-scrollbar-thumb:hover {
-  background: var(--color-orange-light);
 }
 
 .empty-state {
