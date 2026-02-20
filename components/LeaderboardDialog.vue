@@ -7,12 +7,12 @@
 
     <!-- Scrollable Score List -->
     <div ref="scoreListRef" class="score-list scroll-styled">
-      <div v-if="isLoading" class="h-100">
-        <v-skeleton-loader type="list-item-avatar"/>
-        <v-skeleton-loader type="list-item-avatar"/>
-        <v-skeleton-loader type="list-item-avatar"/>
-        <v-skeleton-loader type="list-item-avatar"/>
-        <v-skeleton-loader type="list-item-avatar"/>
+      <div v-if="isLoading" class="leaderboard-skeleton">
+        <v-skeleton-loader type="list-item-avatar" class="skeleton-dark"/>
+        <v-skeleton-loader type="list-item-avatar" class="skeleton-dark"/>
+        <v-skeleton-loader type="list-item-avatar" class="skeleton-dark"/>
+        <v-skeleton-loader type="list-item-avatar" class="skeleton-dark"/>
+        <v-skeleton-loader type="list-item-avatar" class="skeleton-dark"/>
       </div>
       <template v-else-if="userScores.length > 0">
         <div
@@ -132,5 +132,27 @@ function scrollToCurrentUser() {
   margin: 0;
   color: var(--text-muted);
   font-size: var(--text-base);
+}
+
+/* Dark-theme skeleton to match app */
+.leaderboard-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.leaderboard-skeleton :deep(.v-skeleton-loader) {
+  background: var(--bg-elevated) !important;
+}
+
+.leaderboard-skeleton :deep(.v-skeleton-loader__avatar),
+.leaderboard-skeleton :deep(.v-skeleton-loader__bone),
+.leaderboard-skeleton :deep(.v-skeleton-loader__text) {
+  background: var(--bg-card) !important;
+}
+
+.leaderboard-skeleton :deep(.v-skeleton-loader__avatar::after),
+.leaderboard-skeleton :deep(.v-skeleton-loader__bone::after) {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent) !important;
 }
 </style>
