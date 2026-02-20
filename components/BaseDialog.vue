@@ -86,12 +86,15 @@ defineExpose({ show, hide })
   justify-content: center;
   z-index: 100;
   padding: var(--space-4);
+  box-sizing: border-box;
 }
 
 .dialog-wrapper {
   position: relative;
   display: inline-block;
-  max-width: 90%;
+  width: fit-content;
+  max-width: min(90%, calc(100vw - 2 * var(--space-4)));
+  box-sizing: border-box;
 }
 
 .dialog-box {
@@ -99,10 +102,12 @@ defineExpose({ show, hide })
   border-radius: var(--radius-xl);
   padding: var(--space-6);
   width: var(--dialog-max-width);
+  max-width: 100%;
   max-height: 85vh;
   overflow-y: auto;
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-default);
+  box-sizing: border-box;
 }
 
 .dialog-close-wrapper {
