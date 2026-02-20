@@ -12,7 +12,10 @@
     <span v-if="icon" class="icon">
       <component :is="icon" :size="iconSize" :stroke-width="iconOnly ? 3 : 2" />
     </span>
-    <span v-if="!iconOnly" class="title">{{ title }}</span>
+    <span v-if="!iconOnly" class="button-text">
+      <span class="title">{{ title }}</span>
+      <span v-if="subtitle" class="subtitle">{{ subtitle }}</span>
+    </span>
   </button>
 </template>
 
@@ -72,6 +75,11 @@ const props = defineProps({
   onClick: {
     type: Function,
     default: () => {},
+  },
+  /** Optional line below title (e.g. "⚡ ۱" for energy cost). Shown only when not iconOnly. */
+  subtitle: {
+    type: String,
+    default: '',
   },
 })
 
@@ -209,7 +217,21 @@ const customStyle = computed(() => {
   font-size: 1.25rem;
 }
 
+.button-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  line-height: 1.2;
+}
+
 .title {
   line-height: 1;
+}
+
+.subtitle {
+  font-size: 0.75em;
+  opacity: 0.9;
+  font-weight: var(--font-weight-medium, 500);
 }
 </style>

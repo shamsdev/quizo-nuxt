@@ -3,6 +3,7 @@ const avatarId = ref<number | null>(null);
 const displayName = ref<string | null>(null);
 const coins = ref<number>(0);
 const energy = ref<number>(0);
+const energyNextAt = ref<string | null>(null);
 
 const setData = (data: { UserId: number; UserProfile: { Avatar: string; DisplayName: string } }) => {
     userId.value = data.UserId;
@@ -20,6 +21,7 @@ const setHomeData = (data: {
 }) => {
     coins.value = data.UserResource.Coin;
     energy.value = data.UserEnergy.Amount;
+    energyNextAt.value = data.UserEnergy.NextGenerationAt ?? null;
 };
 
 const clear = () => {
@@ -28,6 +30,7 @@ const clear = () => {
     displayName.value = null;
     coins.value = 0;
     energy.value = 0;
+    energyNextAt.value = null;
 };
 
 export const userStore = () => ({
@@ -36,6 +39,7 @@ export const userStore = () => ({
     displayName: displayName.value,
     coins: coins.value,
     energy: energy.value,
+    energyNextAt: energyNextAt.value,
     setData,
     setProfile,
     setHomeData,

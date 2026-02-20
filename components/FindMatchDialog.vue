@@ -94,19 +94,27 @@ function startAvatarShuffling() {
 }
 
 async function requestJoinMatchMake() {
-  await $karizmaConnection.connection
-      .send('match-make/join');
-
-  activeCancelButton();
+  try {
+    const res = await $karizmaConnection.connection.request('match-make/join');
+    if (res.HasError) {
+      cancelButtonAttribute.value = { label: 'بستن', color: 'primary' };
+      canCancel.value = true;
+      return;
+    }
+    activeCancelButton();
+  } catch (e) {
+    cancelButtonAttribute.value = { label: 'بستن', color: 'primary' };
+    canCancel.value = true;
+  }
 }
 
 async function requestLeaveMatchMake() {
   canCancel.value = false;
-
-  await $karizmaConnection.connection
-      .send('match-make/leave');
-
-  emit('close');
+  try {
+    await $karizmaConnection.connection.send('match-make/leave');
+  } finally {
+    emit('close');
+  }
 }
 
 function activeCancelButton() {
