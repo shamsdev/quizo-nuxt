@@ -31,16 +31,14 @@
     </div>
 
     <div class="home-actions">
-      <div class="play-button-block">
-        <FancyButton
-            class="start-game-btn"
-            title="شروع بازی"
-            :icon="Gamepad2"
-            color="play"
-            :onClick="onStartGameButtonClicked"
-        />
-        <div class="play-button-cost">⚡ ۱</div>
-      </div>
+      <FancyButton
+          class="play-button start-game-btn"
+          title="شروع بازی"
+          :icon="Gamepad2"
+          color="play"
+          cost="⚡ ۱"
+          :onClick="onStartGameButtonClicked"
+      />
       <FancyButton
           class="leaderboard-btn"
           title="جدول امتیازات"
@@ -58,10 +56,10 @@
       <EditProfileDialog @close="onEditProfileDialogClose"/>
     </BaseDialog>
 
-    <BaseDialog ref="noEnergyDialog" show-close-button>
+    <BaseDialog ref="noEnergyDialog">
       <div class="no-energy-content">
         <p class="no-energy-message">انرژی کافی ندارید</p>
-        <FancyButton title="متوجه شدم" color="primary" :onClick="() => noEnergyDialog?.hide()"/>
+        <FancyButton class="mt-2" title="باشه" color="primary" :onClick="() => noEnergyDialog?.hide()"/>
       </div>
     </BaseDialog>
 
@@ -104,6 +102,24 @@ function formatCountdown(seconds) {
   return `${toPersianDigits(m)}:${toPersianDigits(String(s).padStart(2, '0'))}`;
 }
 
+async function fetchEnergies() {
+  const { $karizmaConnection } = useNuxtApp();
+  const userData = userStore();
+  try {
+    const res = await $karizmaConnection.connection.request('user/get-energies');
+    if (!res.HasError && res.Result) {
+      userData.setEnergyData(res.Result);
+      userEnergy.value = res.Result.Amount;
+      energyNextAt.value = res.Result.NextGenerationAt ?? null;
+      tickEnergyCountdown();
+    }
+  } catch (_) {
+    userEnergy.value = userData.energy;
+    energyNextAt.value = userData.energyNextAt;
+    tickEnergyCountdown();
+  }
+}
+
 function tickEnergyCountdown() {
   const next = energyNextAt.value;
   const amt = userEnergy.value;
@@ -119,7 +135,10 @@ function tickEnergyCountdown() {
   const nextMs = new Date(next).getTime();
   const remaining = Math.ceil((nextMs - now) / 1000);
   if (remaining <= 0) {
-    energyCountdown.value = null;
+    if (energyCountdown.value !== null) {
+      energyCountdown.value = null;
+      fetchEnergies();
+    }
     return;
   }
   energyCountdown.value = formatCountdown(remaining);
@@ -314,50 +333,18 @@ onUnmounted(() => {
   min-height: 0;
 }
 
-.play-button-block {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  width: var(--button-min-width);
-  min-width: 240px;
+.home-actions .fancy-button {
+  width: 260px;
+  min-width: 260px;
   flex-shrink: 0;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: 0 4px 0 var(--color-cta-play-dark), 0 2px 8px rgba(0, 0, 0, 0.5), var(--shadow-glow-gold);
 }
 
-.play-button-block .start-game-btn {
-  width: 100%;
-  min-width: unset;
-  height: 64px;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.play-button-cost {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-2) var(--space-4);
-  background: rgba(0, 0, 0, 0.35);
-  color: var(--text-secondary);
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-semibold);
-  gap: 4px;
-}
-
-.start-game-btn {
-  width: var(--button-min-width);
-  min-width: 240px;
-  height: 64px;
-  flex-shrink: 0;
+.play-button.start-game-btn {
+  border-radius: var(--radius-lg);
 }
 
 .leaderboard-btn {
-  width: var(--button-min-width);
-  min-width: 240px;
   height: var(--button-height);
-  flex-shrink: 0;
 }
 
 .no-energy-content {

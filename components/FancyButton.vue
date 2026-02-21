@@ -1,7 +1,7 @@
 <template>
   <button
     class="fancy-button"
-    :class="[colorClass, { 'fancy-button--icon-only': iconOnly }]"
+    :class="[colorClass, { 'fancy-button--icon-only': iconOnly, 'fancy-button--with-cost': cost }]"
     :style="customStyle"
     :aria-label="iconOnly ? title : undefined"
     @click="onButtonClick"
@@ -9,13 +9,19 @@
     @mouseup="isActive = false"
     @mouseleave="isActive = false"
   >
-    <span v-if="icon" class="icon">
-      <component :is="icon" :size="iconSize" :stroke-width="iconOnly ? 3 : 2" />
+    <span v-if="!iconOnly" class="button-main">
+      <span v-if="icon" class="icon">
+        <component :is="icon" :size="iconSize" :stroke-width="2" />
+      </span>
+      <span class="button-text">
+        <span class="title">{{ title }}</span>
+        <span v-if="subtitle" class="subtitle">{{ subtitle }}</span>
+      </span>
     </span>
-    <span v-if="!iconOnly" class="button-text">
-      <span class="title">{{ title }}</span>
-      <span v-if="subtitle" class="subtitle">{{ subtitle }}</span>
+    <span v-if="iconOnly && icon" class="icon">
+      <component :is="icon" :size="iconSize" :stroke-width="3" />
     </span>
+    <span v-if="cost" class="button-cost">{{ cost }}</span>
   </button>
 </template>
 
@@ -76,8 +82,13 @@ const props = defineProps({
     type: Function,
     default: () => {},
   },
-  /** Optional line below title (e.g. "⚡ ۱" for energy cost). Shown only when not iconOnly. */
+  /** Optional line below title. Shown only when not iconOnly. */
   subtitle: {
+    type: String,
+    default: '',
+  },
+  /** Cost label rendered inside button (e.g. "⚡ ۱"). Shown as a strip at bottom of button. */
+  cost: {
     type: String,
     default: '',
   },
@@ -111,6 +122,7 @@ const customStyle = computed(() => {
   --btn-bg: var(--color-primary);
   --btn-shadow: var(--color-primary-dark);
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
@@ -128,6 +140,39 @@ const customStyle = computed(() => {
   transition: transform 0.2s var(--ease-out-back, ease), box-shadow 0.2s ease;
   text-align: center;
   user-select: none;
+  overflow: hidden;
+}
+
+.fancy-button .button-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.fancy-button--with-cost {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+}
+
+.fancy-button--with-cost .button-main {
+  flex: 1;
+  padding: 0 var(--space-5);
+  min-height: 56px;
+}
+
+.fancy-button--with-cost .button-cost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1) var(--space-1);
+  background: rgba(0, 0, 0, 0.22);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
 }
 
 .fancy-button:hover:not(:disabled) {

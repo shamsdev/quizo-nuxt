@@ -24,6 +24,11 @@ const setHomeData = (data: {
     energyNextAt.value = data.UserEnergy.NextGenerationAt ?? null;
 };
 
+const setEnergyData = (data: { Amount: number; NextGenerationAt?: string }) => {
+    energy.value = data.Amount;
+    energyNextAt.value = data.NextGenerationAt ?? null;
+};
+
 const clear = () => {
     userId.value = null;
     avatarId.value = null;
@@ -43,5 +48,6 @@ export const userStore = () => ({
     setData,
     setProfile,
     setHomeData,
+    setEnergyData,
     clear
 });
