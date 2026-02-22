@@ -1,7 +1,7 @@
 <template>
   <div class="home-tab-events">
     <h2 class="events-title">رویدادها</h2>
-    <div class="events-list">
+    <div class="events-list scroll-styled">
       <article
           v-for="event in events"
           :key="event.id"
@@ -72,12 +72,12 @@ function onEventAction(event) {
   align-items: center;
   min-height: 0;
   overflow: hidden;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-1) var(--space-2);
   box-sizing: border-box;
 }
 
 .events-title {
-  margin: 0 0 var(--space-5);
+  margin: 0 0 var(--space-3);
   font-size: var(--text-xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
@@ -90,9 +90,9 @@ function onEventAction(event) {
   max-width: 340px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
   overflow-y: auto;
-  padding: 0 var(--space-1) var(--space-4);
+  padding: 0 var(--space-1) var(--space-3);
 }
 
 .event-card {
@@ -100,7 +100,7 @@ function onEventAction(event) {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: var(--space-4);
+  padding: var(--space-3);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-lg);
@@ -148,7 +148,7 @@ function onEventAction(event) {
 }
 
 .event-card-desc {
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-2);
   font-size: var(--text-sm);
   color: var(--text-muted);
   line-height: 1.45;

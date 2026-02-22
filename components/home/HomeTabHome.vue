@@ -294,9 +294,9 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: center;
   min-height: 0;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-2) var(--space-3);
   box-sizing: border-box;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .home-middle-section {
@@ -309,7 +309,7 @@ onBeforeUnmount(() => {
 }
 
 .home-carousel-title {
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-2);
   font-size: var(--text-lg);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
@@ -426,8 +426,8 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 168px;
-  padding: var(--space-5);
+  min-height: 152px;
+  padding: var(--space-4);
   background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-xl);
@@ -494,10 +494,10 @@ onBeforeUnmount(() => {
   flex-shrink: 0;
   display: flex;
   align-items: stretch;
-  gap: var(--space-3);
+  gap: var(--space-2);
   width: 100%;
   max-width: 320px;
-  min-height: 88px;
+  min-height: 72px;
 }
 
 .quick-match-wrap {
@@ -517,8 +517,8 @@ onBeforeUnmount(() => {
 
 .leaderboard-cup-btn {
   flex-shrink: 0;
-  width: 56px;
-  min-height: 88px;
+  width: 52px;
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: center;

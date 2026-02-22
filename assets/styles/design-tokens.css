@@ -116,7 +116,8 @@
   --scrollbar-thumb-hover: var(--color-orange-light);
 }
 
-/* Shared scrollbar styling – add class "scroll-styled" to any scrollable element.
+/* Shared scrollbar styling – add class "scroll-styled" to any scrollable element
+   (shop list, events list, tournament lists, dialogs, etc.).
    Scrollbar sits in the overflow area (outside content) so padding can be equal on both sides. */
 .scroll-styled {
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);

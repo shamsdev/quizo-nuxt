@@ -1,7 +1,7 @@
 <template>
   <div class="home-tab-shop">
     <h2 class="shop-title">خرید سکه</h2>
-    <div class="shop-list">
+    <div class="shop-list scroll-styled">
       <article
           v-for="pkg in coinPackages"
           :key="pkg.id"
@@ -50,12 +50,12 @@ function onBuy(pkg) {
   align-items: center;
   min-height: 0;
   overflow: hidden;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-1) var(--space-2);
   box-sizing: border-box;
 }
 
 .shop-title {
-  margin: 0 0 var(--space-5);
+  margin: 0 0 var(--space-3);
   font-size: var(--text-xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
@@ -68,9 +68,9 @@ function onBuy(pkg) {
   max-width: 320px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
   overflow-y: auto;
-  padding: 0 var(--space-1) var(--space-4);
+  padding: 0 var(--space-1) var(--space-3);
 }
 
 .shop-card {
@@ -78,7 +78,7 @@ function onBuy(pkg) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-4);
+  padding: var(--space-3);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-lg);
