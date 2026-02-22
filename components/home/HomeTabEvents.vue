@@ -79,7 +79,7 @@ function onEventAction(event) {
 }
 
 .events-title {
-  margin: 0 0 var(--space-3);
+  margin-top: var(--space-2);
   font-size: var(--text-xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
@@ -100,7 +100,7 @@ function onEventAction(event) {
   flex-direction: column;
   gap: var(--space-3);
   overflow-y: auto;
-  padding: var(--space-5) var(--screen-padding-x);
+  padding: var(--space-6) var(--screen-padding-x);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   -webkit-mask-size: 100% 100%;
