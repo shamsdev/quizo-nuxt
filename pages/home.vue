@@ -6,26 +6,44 @@
           :username="userDisplayName"
           :user-id="userId"
           :avatar-id="userAvatarId"
-          :size="72"
+          :size="48"
           loading-strategy="eager"
           @click="onUserAvatarClicked"
       />
       <div class="resource-badges">
         <div class="resource-badge resource-badge-energy" aria-label="انرژی">
-          <div class="resource-badge-main">
-            <span class="resource-icon">⚡</span>
-            <span class="resource-value">{{ userEnergy }}</span>
+          <div class="resource-badge-row">
+            <img :src="energyIcon" alt="" class="resource-icon resource-icon--energy" aria-hidden="true" />
+            <span class="resource-value resource-value--energy">
+            <span v-for="(c, i) in String(userEnergy + '/۵')" :key="i" class="resource-value-char">{{ c }}</span>
+          </span>
           </div>
-          <div v-if="userEnergy >= 5" class="resource-badge-countdown resource-badge-full">
-            پر
-          </div>
-          <div v-else-if="energyCountdown !== null" class="resource-badge-countdown">
-            <span class="countdown-label">بعدی</span> {{ energyCountdown }}
+          <div class="resource-battery-wrap">
+            <div class="resource-battery">
+              <div
+                class="resource-battery-fill"
+                :class="{ 'resource-battery-fill--full': energyProgress >= 100 }"
+                :style="{ width: `${energyProgress}%` }"
+              />
+            </div>
+            <span class="resource-battery-time">
+            <span v-for="(c, i) in String(energyCountdown ?? 'full')" :key="i" class="resource-battery-time-char">{{ c }}</span>
+          </span>
           </div>
         </div>
         <div class="resource-badge resource-badge-coin" aria-label="سکه">
-          <span class="resource-icon">🪙</span>
-          <span class="resource-value">{{ userCoins }}</span>
+          <div class="resource-badge-row">
+            <img :src="coinIcon" alt="" class="resource-icon resource-icon--coin" aria-hidden="true" />
+            <span class="resource-value">{{ userCoins }}</span>
+          </div>
+          <button
+              type="button"
+              class="resource-coin-add"
+              aria-label="خرید سکه"
+              @click="useGameSounds().playClick(); setActiveTab('shop')"
+          >
+            <Plus :size="16" :stroke-width="2.5" />
+          </button>
         </div>
       </div>
     </div>
@@ -85,8 +103,9 @@
 
     <BaseDialog ref="noEnergyDialog">
       <div class="no-energy-content">
+        <img :src="energyIcon" alt="" class="no-energy-icon" aria-hidden="true" />
         <p class="no-energy-message">انرژی کافی ندارید</p>
-        <FancyButton class="mt-2" title="باشه" color="primary" :onClick="() => noEnergyDialog?.hide()"/>
+        <FancyButton class="no-energy-btn" title="باشه" color="primary" :onClick="() => noEnergyDialog?.hide()"/>
       </div>
     </BaseDialog>
 
@@ -102,10 +121,13 @@
 </template>
 
 <script setup>
+import { Plus } from 'lucide-vue-next';
 import { userStore } from "~/stores/user.store";
 import HomeTabEvents from '~/components/home/HomeTabEvents.vue';
 import HomeTabHome from '~/components/home/HomeTabHome.vue';
 import HomeTabShop from '~/components/home/HomeTabShop.vue';
+import coinIcon from '~/assets/images/coin.svg';
+import energyIcon from '~/assets/images/energy.svg';
 
 const TAB_ORDER = ['events', 'home', 'shop'];
 
@@ -135,6 +157,8 @@ const userCoins = ref(0);
 const userEnergy = ref(0);
 const energyNextAt = ref(null);
 const energyCountdown = ref(null);
+const energyProgress = ref(100); // 0-100, charge indicator for the bar
+const refillIntervalSeconds = ref(30); // from server (RegenerationIntervalSeconds)
 
 const PERSIAN_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
 function toPersianDigits(n) {
@@ -156,6 +180,8 @@ async function fetchEnergies() {
       userData.setEnergyData(res.Result);
       userEnergy.value = res.Result.Amount;
       energyNextAt.value = res.Result.NextGenerationAt ?? null;
+      const intervalSec = res.Result?.RegenerationIntervalSeconds ?? res.Result?.regenerationIntervalSeconds;
+      if (intervalSec != null && intervalSec > 0) refillIntervalSeconds.value = intervalSec;
       tickEnergyCountdown();
     }
   } catch (_) {
@@ -170,10 +196,12 @@ function tickEnergyCountdown() {
   const amt = userEnergy.value;
   if (amt >= 5) {
     energyCountdown.value = null;
+    energyProgress.value = 100;
     return;
   }
   if (!next) {
     energyCountdown.value = null;
+    energyProgress.value = 0;
     return;
   }
   const now = Date.now();
@@ -184,9 +212,13 @@ function tickEnergyCountdown() {
       energyCountdown.value = null;
       fetchEnergies();
     }
+    energyProgress.value = 100;
     return;
   }
   energyCountdown.value = formatCountdown(remaining);
+  const interval = refillIntervalSeconds.value;
+  const elapsed = Math.max(0, interval - remaining);
+  energyProgress.value = Math.min(100, interval > 0 ? (elapsed / interval) * 100 : 0);
 }
 
 async function fetchHomeData() {
@@ -199,6 +231,8 @@ async function fetchHomeData() {
       userCoins.value = res.Result.UserResource.Coin;
       userEnergy.value = res.Result.UserEnergy.Amount;
       energyNextAt.value = res.Result.UserEnergy.NextGenerationAt ?? null;
+      const intervalSec = res.Result?.UserEnergy?.RegenerationIntervalSeconds ?? res.Result?.UserEnergy?.regenerationIntervalSeconds;
+      if (intervalSec != null && intervalSec > 0) refillIntervalSeconds.value = intervalSec;
       tickEnergyCountdown();
     }
   } catch (_) {
@@ -378,11 +412,10 @@ onUnmounted(() => {
 .home-top {
   flex-shrink: 0;
   display: flex;
-  align-items: stretch;
-  justify-content: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-  min-height: 72px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
   padding-bottom: var(--space-1);
 }
 
@@ -395,21 +428,25 @@ onUnmounted(() => {
 .resource-badges {
   display: flex;
   align-items: stretch;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .resource-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
-  border-radius: var(--radius-lg);
-  font-size: var(--text-base);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
-  min-height: 56px;
+  height: 48px;
+  min-height: 48px;
+  width: 108px;
+  min-width: 108px;
+  max-width: 108px;
   box-sizing: border-box;
 }
 
@@ -417,49 +454,162 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-1);
-  min-width: 64px;
+  gap: 0;
+  padding: var(--space-1) var(--space-2);
   background: linear-gradient(135deg, var(--bg-card) 0%, rgba(234, 179, 8, 0.08) 100%);
   border-color: rgba(234, 179, 8, 0.35);
 }
 
+.resource-badge-energy .resource-badge-row {
+  transform: translateX(-3px);
+}
+
+.resource-value--energy {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.resource-value-char {
+  display: inline-block;
+}
+
 .resource-badge-coin {
+  flex-direction: row;
+  align-items: center;
   background: linear-gradient(135deg, var(--bg-card) 0%, rgba(14, 165, 233, 0.08) 100%);
   border-color: rgba(14, 165, 233, 0.3);
 }
 
-.resource-badge-main {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
+.resource-badge-coin .resource-value {
+  font-size: 1.12em;
 }
 
-.resource-badge-countdown {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--text-muted);
+.resource-badge-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.resource-battery-wrap {
+  position: relative;
+  width: 100%;
+  min-width: 32px;
+  min-height: 18px;
+  margin-top: -2px;
+  display: flex;
+  align-items: center;
+}
+
+.resource-battery {
+  height: 8px;
+  min-height: 8px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.resource-battery-fill {
+  position: relative;
+  height: 100%;
+  min-width: 2px;
+  background: linear-gradient(90deg, var(--color-warning), var(--color-success));
+  border-radius: inherit;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.resource-battery-fill--full::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 32%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 68%,
+    transparent 100%
+  );
+  animation: resource-battery-shine 2.2s ease-in-out infinite;
+}
+
+@keyframes resource-battery-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.resource-battery-time {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 0.65rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
   font-variant-numeric: tabular-nums;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  line-height: 1;
+  pointer-events: none;
 }
 
-.countdown-label {
-  font-size: 0.95em;
-  opacity: 0.95;
-}
-
-.resource-badge-full {
-  color: var(--color-success);
+.resource-battery-time-char {
+  display: inline-block;
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.9),
+     1px -1px 0 rgba(0, 0, 0, 0.9),
+    -1px  1px 0 rgba(0, 0, 0, 0.9),
+     1px  1px 0 rgba(0, 0, 0, 0.9),
+     0 0 2px rgba(0, 0, 0, 0.9);
 }
 
 .resource-icon {
-  font-size: 1.35em;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.resource-icon--coin,
+.resource-icon--energy {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  object-fit: contain;
 }
 
 .resource-value {
   min-width: 2ch;
-  font-size: 1.05em;
+  font-size: 0.95em;
+  letter-spacing: 0;
+}
+
+.resource-coin-add {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-success);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.resource-coin-add:hover {
+  background: var(--color-success-dark);
+  transform: scale(1.05);
+}
+
+.resource-coin-add:active {
+  transform: scale(0.98);
 }
 
 .no-energy-content {
@@ -470,10 +620,21 @@ onUnmounted(() => {
   padding: var(--space-4);
 }
 
+.no-energy-icon {
+  width: 3rem;
+  height: 3rem;
+  display: block;
+  object-fit: contain;
+}
+
 .no-energy-message {
   margin: 0;
   font-size: var(--text-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
+}
+
+.no-energy-btn {
+  margin-top: var(--space-5);
 }
 </style>

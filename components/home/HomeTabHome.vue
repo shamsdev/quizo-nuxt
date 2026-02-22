@@ -72,7 +72,8 @@
           title="بازی سریع"
           :icon="Gamepad2"
           color="play"
-          cost="⚡ ۱"
+          cost="۱"
+          :cost-icon="energyIcon"
           :onClick="onClickPlay"
         />
       </div>
@@ -92,6 +93,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { Gamepad2, Trophy } from 'lucide-vue-next'
 import FancyButton from '~/components/FancyButton.vue'
+import energyIcon from '~/assets/images/energy.svg'
 
 defineProps({
   onClickPlay: { type: Function, required: true },

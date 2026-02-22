@@ -8,7 +8,7 @@
           class="shop-card"
       >
         <div class="shop-card-coins">
-          <span class="shop-card-icon" aria-hidden="true">🪙</span>
+          <img :src="coinIcon" alt="" class="shop-card-icon" aria-hidden="true" />
           <span class="shop-card-amount">{{ pkg.coins }}</span>
           <span class="shop-card-label">سکه</span>
         </div>
@@ -27,6 +27,7 @@
 
 <script setup>
 import FancyButton from '~/components/FancyButton.vue';
+import coinIcon from '~/assets/images/coin.svg';
 
 const coinPackages = [
   { id: 'small', coins: '۱۰۰', price: '۱,۲۰۰ تومان', buttonText: 'خرید', badge: null },
@@ -93,7 +94,10 @@ function onBuy(pkg) {
 }
 
 .shop-card-icon {
-  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
+  object-fit: contain;
 }
 
 .shop-card-amount {

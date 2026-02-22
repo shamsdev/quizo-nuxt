@@ -21,7 +21,10 @@
     <span v-if="iconOnly && icon" class="icon">
       <component :is="icon" :size="iconSize" :stroke-width="3" />
     </span>
-    <span v-if="cost" class="button-cost">{{ cost }}</span>
+    <span v-if="cost" class="button-cost">
+      <img v-if="costIcon" :src="costIcon" alt="" class="button-cost-icon" aria-hidden="true" />
+      {{ cost }}
+    </span>
   </button>
 </template>
 
@@ -87,8 +90,13 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  /** Cost label rendered inside button (e.g. "⚡ ۱"). Shown as a strip at bottom of button. */
+  /** Cost label rendered inside button (e.g. "۱"). Shown as a strip at bottom of button. */
   cost: {
+    type: String,
+    default: '',
+  },
+  /** Optional icon for cost strip (e.g. energy SVG). Rendered before cost text. */
+  costIcon: {
     type: String,
     default: '',
   },
@@ -168,11 +176,19 @@ const customStyle = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--space-1);
   padding: var(--space-1) var(--space-1);
   background: rgba(0, 0, 0, 0.22);
   color: rgba(255, 255, 255, 0.95);
   font-size: var(--text-base);
   font-weight: var(--font-weight-bold);
+}
+
+.button-cost-icon {
+  width: 1em;
+  height: 1em;
+  display: block;
+  object-fit: contain;
 }
 
 .fancy-button:hover:not(:disabled) {
