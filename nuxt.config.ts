@@ -26,6 +26,7 @@ export default defineNuxtConfig({
             })
         },
         '@vite-pwa/nuxt',
+        '@nuxt/ui',
     ],
     vite: {
         vue: {

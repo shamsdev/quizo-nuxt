@@ -30,25 +30,52 @@
       </div>
     </div>
 
-    <div class="home-actions">
-      <FancyButton
-          class="play-button start-game-btn"
-          title="شروع بازی"
-          :icon="Gamepad2"
-          color="play"
-          cost="⚡ ۱"
-          :onClick="onStartGameButtonClicked"
-      />
-      <FancyButton
-          class="leaderboard-btn"
-          title="جدول امتیازات"
-          :icon="List"
-          color="leaderboard"
-          :onClick="onShowLeaderboardButtonClicked"
-      />
+    <div class="home-tab-panels">
+      <Transition :name="tabTransitionName" mode="out-in">
+        <div :key="activeTab" class="tab-panel" role="tabpanel">
+          <HomeTabEvents v-if="activeTab === 'events'" />
+          <HomeTabHome
+              v-else-if="activeTab === 'home'"
+              :on-click-play="onStartGameButtonClicked"
+              :on-click-leaderboard="onShowLeaderboardButtonClicked"
+          />
+          <HomeTabShop v-else />
+        </div>
+      </Transition>
     </div>
 
-    <HomeFooter />
+    <nav class="home-tabs" role="tablist" aria-label="منوی اصلی">
+      <button
+          type="button"
+          class="home-tab"
+          :class="{ 'home-tab--active': activeTab === 'events' }"
+          role="tab"
+          aria-selected="activeTab === 'events'"
+          @click="useGameSounds().playClick(); setActiveTab('events')"
+      >
+        رویدادها
+      </button>
+      <button
+          type="button"
+          class="home-tab home-tab--center"
+          :class="{ 'home-tab--active': activeTab === 'home' }"
+          role="tab"
+          aria-selected="activeTab === 'home'"
+          @click="useGameSounds().playClick(); setActiveTab('home')"
+      >
+        خانه
+      </button>
+      <button
+          type="button"
+          class="home-tab"
+          :class="{ 'home-tab--active': activeTab === 'shop' }"
+          role="tab"
+          aria-selected="activeTab === 'shop'"
+          @click="useGameSounds().playClick(); setActiveTab('shop')"
+      >
+        فروشگاه
+      </button>
+    </nav>
 
     <!-- Base Components Finish -->
 
@@ -75,8 +102,26 @@
 </template>
 
 <script setup>
-import {Gamepad2, List} from 'lucide-vue-next'
-import {userStore} from "~/stores/user.store";
+import { userStore } from "~/stores/user.store";
+import HomeTabEvents from '~/components/home/HomeTabEvents.vue';
+import HomeTabHome from '~/components/home/HomeTabHome.vue';
+import HomeTabShop from '~/components/home/HomeTabShop.vue';
+
+const TAB_ORDER = ['events', 'home', 'shop'];
+
+const activeTab = ref('home');
+const tabDirection = ref('forward');
+
+function setActiveTab(tab) {
+  const oldIndex = TAB_ORDER.indexOf(activeTab.value);
+  const newIndex = TAB_ORDER.indexOf(tab);
+  tabDirection.value = newIndex > oldIndex ? 'forward' : 'back';
+  activeTab.value = tab;
+}
+
+const tabTransitionName = computed(() =>
+  tabDirection.value === 'forward' ? 'tab-forward' : 'tab-back'
+);
 
 const editProfileDialog = ref();
 const noEnergyDialog = ref();
@@ -230,11 +275,104 @@ onUnmounted(() => {
   align-items: center;
   text-align: center;
   justify-content: space-between;
-  padding-top: max(var(--space-4), env(safe-area-inset-top));
-  padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
-  padding-left: max(var(--space-4), env(safe-area-inset-left));
-  padding-right: max(var(--space-4), env(safe-area-inset-right));
+  padding-top: max(var(--space-6), env(safe-area-inset-top));
+  padding-bottom: max(var(--space-5), env(safe-area-inset-bottom));
+  padding-left: max(var(--space-5), env(safe-area-inset-left));
+  padding-right: max(var(--space-5), env(safe-area-inset-right));
   overflow: hidden;
+  gap: var(--space-4);
+}
+
+/* Tab bar */
+.home-tabs {
+  flex-shrink: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  max-width: 320px;
+  margin-top: var(--space-2);
+  background: var(--bg-card);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1);
+  padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.home-tab {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.home-tab:hover {
+  color: var(--text-primary);
+}
+
+.home-tab--active {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.home-tab-panels {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) 0;
+}
+
+.tab-panel {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+/* Direction-aware tab transition: right tab = content from right, left tab = from left */
+.tab-forward-enter-active,
+.tab-forward-leave-active,
+.tab-back-enter-active,
+.tab-back-leave-active {
+  transition: opacity 0.18s cubic-bezier(0.33, 1, 0.68, 1),
+    transform 0.18s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Going to right tab (e.g. Home → Shop): new slides in from right, old slides out to left */
+.tab-forward-enter-from {
+  opacity: 0;
+  transform: translateX(22%);
+}
+.tab-forward-leave-to {
+  opacity: 0;
+  transform: translateX(-22%);
+}
+
+/* Going to left tab (e.g. Shop → Home): new slides in from left, old slides out to right */
+.tab-back-enter-from {
+  opacity: 0;
+  transform: translateX(-22%);
+}
+.tab-back-leave-to {
+  opacity: 0;
+  transform: translateX(22%);
 }
 
 .home-top {
@@ -245,6 +383,7 @@ onUnmounted(() => {
   gap: var(--space-4);
   flex-wrap: wrap;
   min-height: 88px;
+  padding-bottom: var(--space-2);
 }
 
 .home-avatar {
@@ -321,30 +460,6 @@ onUnmounted(() => {
 .resource-value {
   min-width: 2ch;
   font-size: 1.05em;
-}
-
-.home-actions {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-6);
-  min-height: 0;
-}
-
-.home-actions .fancy-button {
-  width: 260px;
-  min-width: 260px;
-  flex-shrink: 0;
-}
-
-.play-button.start-game-btn {
-  border-radius: var(--radius-lg);
-}
-
-.leaderboard-btn {
-  height: var(--button-height);
 }
 
 .no-energy-content {
