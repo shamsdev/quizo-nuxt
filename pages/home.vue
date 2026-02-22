@@ -73,7 +73,8 @@
           aria-selected="activeTab === 'events'"
           @click="useGameSounds().playClick(); setActiveTab('events')"
       >
-        رویدادها
+        <CalendarDays :size="20" :stroke-width="2" class="home-tab-icon" aria-hidden="true" />
+        <span class="home-tab-label">رویدادها</span>
       </button>
       <button
           type="button"
@@ -83,7 +84,8 @@
           aria-selected="activeTab === 'home'"
           @click="useGameSounds().playClick(); setActiveTab('home')"
       >
-        خانه
+        <Home :size="20" :stroke-width="2" class="home-tab-icon" aria-hidden="true" />
+        <span class="home-tab-label">خانه</span>
       </button>
       <button
           type="button"
@@ -93,7 +95,8 @@
           aria-selected="activeTab === 'shop'"
           @click="useGameSounds().playClick(); setActiveTab('shop')"
       >
-        فروشگاه
+        <ShoppingBag :size="20" :stroke-width="2" class="home-tab-icon" aria-hidden="true" />
+        <span class="home-tab-label">فروشگاه</span>
       </button>
     </nav>
 
@@ -123,7 +126,7 @@
 </template>
 
 <script setup>
-import { Plus } from 'lucide-vue-next';
+import { Plus, CalendarDays, Home, ShoppingBag } from 'lucide-vue-next';
 import { userStore } from "~/stores/user.store";
 import HomeTabEvents from '~/components/home/HomeTabEvents.vue';
 import HomeTabHome from '~/components/home/HomeTabHome.vue';
@@ -316,7 +319,7 @@ onUnmounted(() => {
   padding-left: max(var(--space-3), env(safe-area-inset-left));
   padding-right: max(var(--space-3), env(safe-area-inset-right));
   overflow: hidden;
-  gap: var(--space-2);
+  gap: 0;
 }
 
 /* Tab bar */
@@ -325,20 +328,25 @@ onUnmounted(() => {
   display: flex;
   align-items: stretch;
   justify-content: center;
-  gap: 0;
+  gap: var(--space-2);
   width: 100%;
   max-width: 320px;
-  margin-top: var(--space-1);
+  margin-top: var(--space-3);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-lg);
-  padding: var(--space-1);
+  padding: var(--space-2);
   padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
 .home-tab {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
   padding: var(--space-2) var(--space-3);
   border: none;
   border-radius: var(--radius-md);
@@ -348,6 +356,14 @@ onUnmounted(() => {
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition: color 0.2s ease, background 0.2s ease;
+}
+
+.home-tab-icon {
+  flex-shrink: 0;
+}
+
+.home-tab-label {
+  line-height: 1.2;
 }
 
 .home-tab:hover {
@@ -418,6 +434,7 @@ onUnmounted(() => {
   justify-content: space-between;
   gap: var(--space-2);
   width: 100%;
+  margin-bottom: var(--space-2);
   padding-bottom: var(--space-1);
 }
 

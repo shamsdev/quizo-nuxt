@@ -230,7 +230,57 @@ const customStyle = computed(() => {
 .fancy-button--play {
   --btn-bg: var(--color-cta-play);
   --btn-shadow: var(--color-cta-play-dark);
+  position: relative;
   box-shadow: 0 4px 0 var(--btn-shadow), 0 2px 8px rgba(0, 0, 0, 0.5), var(--shadow-glow-gold);
+}
+
+/* Light stroke for play button labels and icon */
+.fancy-button--play .title,
+.fancy-button--play .subtitle,
+.fancy-button--play .button-cost {
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.2),
+     1px -1px 0 rgba(0, 0, 0, 0.2),
+    -1px  1px 0 rgba(0, 0, 0, 0.2),
+     1px  1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.fancy-button--play .icon,
+.fancy-button--play .button-cost-icon {
+  filter:
+    drop-shadow(-1px 0 0 rgba(0, 0, 0, 0.25))
+    drop-shadow(1px 0 0 rgba(0, 0, 0, 0.25))
+    drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.25))
+    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.25));
+}
+
+/* Shine band slides across full button width – wider band, more rotation */
+.fancy-button--play::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 65%;
+  background: linear-gradient(
+    108deg,
+    transparent 0%,
+    transparent 20%,
+    rgba(255, 255, 255, 0.04) 38%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.04) 62%,
+    transparent 80%,
+    transparent 100%
+  );
+  transform-origin: left center;
+  animation: fancy-button-shine 2.8s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+@keyframes fancy-button-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
 }
 
 .fancy-button--play:active:not(:disabled) {
