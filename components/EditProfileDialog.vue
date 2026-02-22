@@ -147,6 +147,12 @@ defineExpose({ scrollToSelectedAvatar });
   overflow-y: auto;
   margin-bottom: var(--space-4);
   max-height: 320px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 .input-label {
@@ -183,6 +189,7 @@ defineExpose({ scrollToSelectedAvatar });
   flex-wrap: wrap;
   gap: var(--space-3);
   justify-content: center;
+  padding: var(--space-3) var(--space-1);
 }
 
 .avatar-item {

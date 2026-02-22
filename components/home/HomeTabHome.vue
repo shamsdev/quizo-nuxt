@@ -355,6 +355,12 @@ onBeforeUnmount(() => {
 }
 
 .home-carousel-viewport {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   flex: 1;
   min-width: 0;
   width: 100%;

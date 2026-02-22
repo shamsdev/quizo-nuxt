@@ -6,7 +6,8 @@
     </div>
 
     <!-- Scrollable Score List -->
-    <div ref="scoreListRef" class="score-list scroll-styled">
+    <div class="score-list-wrap">
+      <div ref="scoreListRef" class="score-list scroll-styled">
       <div v-if="isLoading" class="leaderboard-skeleton">
         <v-skeleton-loader type="list-item-avatar" class="skeleton-dark"/>
         <v-skeleton-loader type="list-item-avatar" class="skeleton-dark"/>
@@ -33,6 +34,7 @@
       </template>
       <div v-else class="empty-state">
         <p>موردی وجود ندارد</p>
+      </div>
       </div>
     </div>
   </div>
@@ -117,14 +119,29 @@ function scrollToCurrentUser() {
   margin-bottom: 0;
 }
 
+.score-list-wrap {
+  flex: 1;
+  min-height: 0;
+  max-height: 400px;
+  min-height: 400px;
+}
+
 .score-list {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   max-height: 400px;
   min-height: 400px;
+  padding: var(--space-5) 0;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 .empty-state {

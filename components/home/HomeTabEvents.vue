@@ -1,7 +1,8 @@
 <template>
   <div class="home-tab-events">
     <h2 class="events-title">رویدادها</h2>
-    <div class="events-list scroll-styled">
+    <div class="events-list-wrap">
+      <div class="events-list scroll-styled">
       <article
           v-for="event in events"
           :key="event.id"
@@ -20,6 +21,7 @@
             :onClick="() => onEventAction(event)"
         />
       </article>
+      </div>
     </div>
   </div>
 </template>
@@ -85,14 +87,27 @@ function onEventAction(event) {
   letter-spacing: -0.02em;
 }
 
-.events-list {
+.events-list-wrap {
+  flex: 1;
+  min-height: 0;
   width: 100%;
   max-width: 340px;
+}
+
+.events-list {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
   overflow-y: auto;
-  padding: 0 var(--space-1) var(--space-3);
+  padding: var(--space-5) var(--space-1);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 .event-card {

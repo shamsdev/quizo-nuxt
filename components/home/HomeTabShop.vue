@@ -1,7 +1,8 @@
 <template>
   <div class="home-tab-shop">
     <h2 class="shop-title">خرید سکه</h2>
-    <div class="shop-list scroll-styled">
+    <div class="shop-list-wrap">
+      <div class="shop-list scroll-styled">
       <article
           v-for="pkg in coinPackages"
           :key="pkg.id"
@@ -21,6 +22,7 @@
             :onClick="() => onBuy(pkg)"
         />
       </article>
+      </div>
     </div>
   </div>
 </template>
@@ -64,14 +66,27 @@ function onBuy(pkg) {
   letter-spacing: -0.02em;
 }
 
-.shop-list {
+.shop-list-wrap {
+  flex: 1;
+  min-height: 0;
   width: 100%;
   max-width: 320px;
+}
+
+.shop-list {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   overflow-y: auto;
-  padding: 0 var(--space-1) var(--space-3);
+  padding: var(--space-5) var(--space-1);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 .shop-card {
