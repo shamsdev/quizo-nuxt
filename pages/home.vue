@@ -275,12 +275,12 @@ onUnmounted(() => {
   align-items: center;
   text-align: center;
   justify-content: space-between;
-  padding-top: max(var(--space-6), env(safe-area-inset-top));
-  padding-bottom: max(var(--space-5), env(safe-area-inset-bottom));
-  padding-left: max(var(--space-5), env(safe-area-inset-left));
-  padding-right: max(var(--space-5), env(safe-area-inset-right));
+  padding-top: max(var(--space-3), env(safe-area-inset-top));
+  padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
+  padding-left: max(var(--space-3), env(safe-area-inset-left));
+  padding-right: max(var(--space-3), env(safe-area-inset-right));
   overflow: hidden;
-  gap: var(--space-4);
+  gap: var(--space-2);
 }
 
 /* Tab bar */
@@ -292,12 +292,12 @@ onUnmounted(() => {
   gap: 0;
   width: 100%;
   max-width: 320px;
-  margin-top: var(--space-2);
+  margin-top: var(--space-1);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-lg);
   padding: var(--space-1);
-  padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
+  padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
@@ -333,7 +333,7 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-2) 0;
+  padding: var(--space-1) 0;
 }
 
 .tab-panel {
@@ -380,10 +380,10 @@ onUnmounted(() => {
   display: flex;
   align-items: stretch;
   justify-content: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   flex-wrap: wrap;
-  min-height: 88px;
-  padding-bottom: var(--space-2);
+  min-height: 72px;
+  padding-bottom: var(--space-1);
 }
 
 .home-avatar {
@@ -402,14 +402,14 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-2) var(--space-3);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-lg);
   font-size: var(--text-base);
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
-  min-height: 72px;
+  min-height: 56px;
   box-sizing: border-box;
 }
 
@@ -418,7 +418,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: var(--space-1);
-  min-width: 72px;
+  min-width: 64px;
   background: linear-gradient(135deg, var(--bg-card) 0%, rgba(234, 179, 8, 0.08) 100%);
   border-color: rgba(234, 179, 8, 0.35);
 }

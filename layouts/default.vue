@@ -78,4 +78,25 @@
   mask-composite: exclude;
   pointer-events: none;
 }
+
+/* Mobile: edge-to-edge, no border around screen for more space and better UX */
+@media (max-width: 768px) {
+  .app-background {
+    padding: 0;
+    padding-top: env(safe-area-inset-top);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .app-wrapper {
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .app-wrapper::before {
+    display: none;
+  }
+}
 </style>
