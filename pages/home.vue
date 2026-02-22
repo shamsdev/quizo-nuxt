@@ -34,7 +34,9 @@
         <div class="resource-badge resource-badge-coin" aria-label="سکه">
           <div class="resource-badge-row">
             <img :src="coinIcon" alt="" class="resource-icon resource-icon--coin" aria-hidden="true" />
-            <span class="resource-value">{{ userCoins }}</span>
+            <span class="resource-value resource-value--coin">
+            <span v-for="(c, i) in String(userCoins)" :key="i" class="resource-value-char">{{ c }}</span>
+          </span>
           </div>
           <button
               type="button"
@@ -464,7 +466,8 @@ onUnmounted(() => {
   transform: translateX(-3px);
 }
 
-.resource-value--energy {
+.resource-value--energy,
+.resource-value--coin {
   display: inline-flex;
   align-items: center;
   gap: 3px;

@@ -10,10 +10,16 @@
             class="user-avatar"
             loading-strategy="eager"
         />
-        <div class="score-box" :class="{ 'score-box--pop': scorePop }">{{ currentUser.score }}</div>
+        <div class="score-box" :class="{ 'score-box--pop': scorePop }">
+          <img :src="starIcon" alt="" class="score-star-icon" aria-hidden="true" />
+          <span class="score-box-value">{{ currentUser.score }}</span>
+        </div>
       </div>
       <div class="player-info right">
-        <div class="score-box" :class="{ 'score-box--pop': opponentScorePop }">{{ opponentUser.score }}</div>
+        <div class="score-box" :class="{ 'score-box--pop': opponentScorePop }">
+          <span class="score-box-value">{{ opponentUser.score }}</span>
+          <img :src="starIcon" alt="" class="score-star-icon" aria-hidden="true" />
+        </div>
         <UserAvatar
             :user-id="opponentUser.userId"
             :username="opponentUser.displayName"
@@ -81,6 +87,7 @@ import {ref, onMounted, onUnmounted} from 'vue';
 import {userStore} from '~/stores/user.store';
 import {gameStore} from '~/stores/game.store';
 import GameAnswerButton from '~/components/GameAnswerButton.vue';
+import starIcon from '~/assets/images/star.svg';
 
 const {$karizmaConnection} = useNuxtApp();
 const sounds = useGameSounds();
@@ -330,12 +337,15 @@ function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
 }
 
 .user-avatar {
-  scale: 0.9;
-  width: 94px;
+  scale: 0.8;
+  width: 82px;
   height: auto;
 }
 
 .score-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: var(--space-2) var(--space-3);
@@ -344,8 +354,20 @@ function getAnswerAvatars(userIds: number[] = []): { avatarId: number }[] {
   color: var(--text-primary);
   border: 1px solid var(--border-subtle);
   min-width: 48px;
-  text-align: center;
   transition: transform var(--duration-normal) var(--ease-out-back);
+}
+
+.score-box-value {
+  min-width: 1.5ch;
+  text-align: center;
+}
+
+.score-star-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  display: block;
+  object-fit: contain;
 }
 
 .score-box--pop {

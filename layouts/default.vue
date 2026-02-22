@@ -1,12 +1,13 @@
 <template>
   <div class="app-background">
-    <div class="app-wrapper">
+    <div class="app-wrapper" :style="{ '--bg-pattern-url': `url(${bgPattern})` }">
       <NuxtPage/>
     </div>
   </div>
 </template>
 
 <script setup>
+import bgPattern from '~/assets/images/bg-pattern.png';
 </script>
 
 <style scoped>
@@ -39,6 +40,20 @@
   z-index: 0;
 }
 
+/* Background pattern inside viewport – uses assets/images/bg-pattern.png */
+.app-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: var(--bg-pattern-url);
+  background-repeat: repeat;
+  background-size: 200px auto;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .app-wrapper {
   padding: var(--space-4);
   max-width: 480px;
@@ -63,6 +78,8 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 .app-wrapper::before {
