@@ -15,6 +15,12 @@
   --space-12: 48px;
   --space-16: 64px;
 
+  /** Horizontal padding for screen edges (content, header, bottom menu, lists) */
+  --screen-padding-x: var(--space-1);
+
+  /** Max width for home content (header, panels, bottom menu) – slightly narrower than full width */
+  --content-max-width: 94%;
+
   /* ----- Radius ----- */
   --radius-sm: 8px;
   --radius-md: 12px;

@@ -318,7 +318,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: center;
   min-height: 0;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--screen-padding-x) var(--screen-padding-x);
   box-sizing: border-box;
   gap: var(--space-3);
 }
@@ -329,7 +329,6 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 360px;
 }
 
 .home-carousel-title {
@@ -419,7 +418,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-inline: 8px;
+  padding-inline: var(--screen-padding-x);
   z-index: 1;
 }
 
@@ -476,7 +475,7 @@ onBeforeUnmount(() => {
   position: absolute;
   top: var(--space-2);
   right: var(--space-2);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--screen-padding-x);
   background: var(--color-error);
   color: white;
   font-size: 0.7rem;
@@ -526,7 +525,6 @@ onBeforeUnmount(() => {
   align-items: stretch;
   gap: var(--space-2);
   width: 100%;
-  max-width: 320px;
   min-height: 72px;
 }
 

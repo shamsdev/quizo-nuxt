@@ -53,7 +53,7 @@ function onBuy(pkg) {
   align-items: center;
   min-height: 0;
   overflow: hidden;
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--screen-padding-x);
   box-sizing: border-box;
 }
 
@@ -70,7 +70,6 @@ function onBuy(pkg) {
   flex: 1;
   min-height: 0;
   width: 100%;
-  max-width: 320px;
 }
 
 .shop-list {
@@ -80,7 +79,7 @@ function onBuy(pkg) {
   flex-direction: column;
   gap: var(--space-2);
   overflow-y: auto;
-  padding: var(--space-5) var(--space-1);
+  padding: var(--space-5) var(--screen-padding-x);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   -webkit-mask-size: 100% 100%;
@@ -131,7 +130,7 @@ function onBuy(pkg) {
   position: absolute;
   top: var(--space-2);
   left: var(--space-2);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--screen-padding-x);
   background: var(--color-primary);
   color: var(--text-inverse);
   font-size: 0.7rem;

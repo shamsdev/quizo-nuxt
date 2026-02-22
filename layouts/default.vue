@@ -21,11 +21,11 @@ import bgPattern from '~/assets/images/bg-pattern.png';
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-4);
+  padding: var(--screen-padding-x);
   padding-top: max(var(--space-4), env(safe-area-inset-top));
-  padding-right: max(var(--space-4), env(safe-area-inset-right));
+  padding-right: max(var(--screen-padding-x), env(safe-area-inset-right));
   padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
-  padding-left: max(var(--space-4), env(safe-area-inset-left));
+  padding-left: max(var(--screen-padding-x), env(safe-area-inset-left));
   position: relative;
   box-sizing: border-box;
 }
@@ -55,7 +55,9 @@ import bgPattern from '~/assets/images/bg-pattern.png';
 }
 
 .app-wrapper {
-  padding: var(--space-4);
+  padding: var(--screen-padding-x);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
   max-width: 480px;
   width: 100%;
   height: 100%;

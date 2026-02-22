@@ -74,7 +74,7 @@ function onEventAction(event) {
   align-items: center;
   min-height: 0;
   overflow: hidden;
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--screen-padding-x);
   box-sizing: border-box;
 }
 
@@ -91,7 +91,6 @@ function onEventAction(event) {
   flex: 1;
   min-height: 0;
   width: 100%;
-  max-width: 340px;
 }
 
 .events-list {
@@ -101,7 +100,7 @@ function onEventAction(event) {
   flex-direction: column;
   gap: var(--space-3);
   overflow-y: auto;
-  padding: var(--space-5) var(--space-1);
+  padding: var(--space-5) var(--screen-padding-x);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   -webkit-mask-size: 100% 100%;
@@ -129,7 +128,7 @@ function onEventAction(event) {
 }
 
 .event-card-badge {
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--screen-padding-x);
   font-size: 0.7rem;
   font-weight: var(--font-weight-semibold);
   border-radius: var(--radius-sm);

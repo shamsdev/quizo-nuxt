@@ -128,7 +128,7 @@ defineExpose({ scrollToSelectedAvatar });
   display: flex;
   flex-direction: column;
   max-height: 90vh;
-  padding: var(--space-4);
+  padding: var(--space-4) var(--screen-padding-x);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -165,7 +165,7 @@ defineExpose({ scrollToSelectedAvatar });
 }
 
 .text-input {
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--screen-padding-x);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-sm);
   font-size: var(--text-base);
@@ -189,7 +189,7 @@ defineExpose({ scrollToSelectedAvatar });
   flex-wrap: wrap;
   gap: var(--space-3);
   justify-content: center;
-  padding: var(--space-3) var(--space-1);
+  padding: var(--space-3) var(--screen-padding-x);
 }
 
 .avatar-item {

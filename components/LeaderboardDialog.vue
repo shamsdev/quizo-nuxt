@@ -93,7 +93,7 @@ function scrollToCurrentUser() {
   display: flex;
   flex-direction: column;
   max-height: 90vh;
-  padding: var(--space-2);
+  padding: var(--screen-padding-x);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -135,7 +135,7 @@ function scrollToCurrentUser() {
   gap: var(--space-2);
   max-height: 400px;
   min-height: 400px;
-  padding: var(--space-5) 0;
+  padding: var(--space-5) var(--screen-padding-x);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   -webkit-mask-size: 100% 100%;

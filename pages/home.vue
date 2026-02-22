@@ -314,12 +314,16 @@ onUnmounted(() => {
   align-items: center;
   text-align: center;
   justify-content: space-between;
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin-inline: auto;
   padding-top: max(var(--space-3), env(safe-area-inset-top));
   padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
-  padding-left: max(var(--space-3), env(safe-area-inset-left));
-  padding-right: max(var(--space-3), env(safe-area-inset-right));
+  padding-left: max(var(--screen-padding-x), env(safe-area-inset-left));
+  padding-right: max(var(--screen-padding-x), env(safe-area-inset-right));
   overflow: hidden;
   gap: 0;
+  box-sizing: border-box;
 }
 
 /* Tab bar */
@@ -330,7 +334,6 @@ onUnmounted(() => {
   justify-content: center;
   gap: var(--space-2);
   width: 100%;
-  max-width: 320px;
   margin-top: var(--space-3);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
@@ -347,7 +350,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: var(--space-1);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--screen-padding-x) var(--screen-padding-x);
   border: none;
   border-radius: var(--radius-md);
   background: transparent;
@@ -436,6 +439,9 @@ onUnmounted(() => {
   width: 100%;
   margin-bottom: var(--space-2);
   padding-bottom: var(--space-1);
+  padding-left: var(--screen-padding-x);
+  padding-right: var(--screen-padding-x);
+  box-sizing: border-box;
 }
 
 .home-avatar {
@@ -454,7 +460,7 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--screen-padding-x);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-md);
@@ -474,7 +480,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: 0;
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--screen-padding-x);
   background: linear-gradient(135deg, var(--bg-card) 0%, rgba(234, 179, 8, 0.08) 100%);
   border-color: rgba(234, 179, 8, 0.35);
 }
