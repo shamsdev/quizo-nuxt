@@ -17,8 +17,8 @@
             >
               <div class="home-carousel-container">
                 <div
-                    v-for="(item, index) in promotedTours"
-                    :key="item.id"
+                    v-for="(item, index) in carouselItems"
+                    :key="item.carouselKey"
                     class="home-carousel-item"
                     :class="{ 'home-carousel-item--active': index === scrollIndex }"
                     role="group"
@@ -110,13 +110,21 @@ const promotedTours = [
 
 const GAP = 8
 const carouselViewportRef = ref(null)
-const scrollIndex = ref(0)
+const realCount = promotedTours.length
+/** Infinite list: [clone last, ...original, clone first]. scrollIndex 1..realCount = real items; 0 and realCount+1 are clones. */
+const carouselItems = computed(() => {
+  const last = { ...promotedTours[realCount - 1], carouselKey: 'clone-last' }
+  const first = { ...promotedTours[0], carouselKey: 'clone-first' }
+  return [last, ...promotedTours.map((t) => ({ ...t, carouselKey: t.id })), first]
+})
+const totalSlides = realCount + 2
+const scrollIndex = ref(1)
 const viewportWidth = ref(0)
 let resizeObserver = null
-const itemCount = promotedTours.length
+let isJumping = false
 
-const canScrollPrev = computed(() => scrollIndex.value > 0)
-const canScrollNext = computed(() => scrollIndex.value < itemCount - 1)
+const canScrollPrev = computed(() => true)
+const canScrollNext = computed(() => true)
 
 const carouselVars = computed(() => {
   const w = viewportWidth.value
@@ -134,14 +142,14 @@ function getItemWidth(el) {
 }
 
 function scrollPrev() {
-  if (!canScrollPrev.value || !carouselViewportRef.value) return
+  if (!carouselViewportRef.value) return
   scrollIndex.value = Math.max(0, scrollIndex.value - 1)
   scrollToIndex(scrollIndex.value)
 }
 
 function scrollNext() {
-  if (!canScrollNext.value || !carouselViewportRef.value) return
-  scrollIndex.value = Math.min(itemCount - 1, scrollIndex.value + 1)
+  if (!carouselViewportRef.value) return
+  scrollIndex.value = Math.min(totalSlides - 1, scrollIndex.value + 1)
   scrollToIndex(scrollIndex.value)
 }
 
@@ -155,10 +163,22 @@ function scrollToIndex(index) {
 
 function updateScrollIndex() {
   const el = carouselViewportRef.value
-  if (!el || itemCount === 0) return
+  if (!el || totalSlides === 0 || isJumping) return
   const itemWidth = getItemWidth(el)
   const index = Math.round(el.scrollLeft / (itemWidth + GAP))
-  scrollIndex.value = Math.max(0, Math.min(itemCount - 1, index))
+  const clamped = Math.max(0, Math.min(totalSlides - 1, index))
+  scrollIndex.value = clamped
+  if (clamped === 0) {
+    isJumping = true
+    scrollIndex.value = realCount
+    el.scrollLeft = realCount * (itemWidth + GAP)
+    requestAnimationFrame(() => { isJumping = false })
+  } else if (clamped === totalSlides - 1) {
+    isJumping = true
+    scrollIndex.value = 1
+    el.scrollLeft = 1 * (itemWidth + GAP)
+    requestAnimationFrame(() => { isJumping = false })
+  }
 }
 
 function measureViewport() {
@@ -272,6 +292,8 @@ onMounted(() => {
       resizeObserver.observe(el)
       el.addEventListener('scroll', updateScrollIndex)
       el.addEventListener('pointerdown', onPointerDown)
+      const itemWidth = getItemWidth(el)
+      el.scrollLeft = 1 * (itemWidth + GAP)
       updateScrollIndex()
     }
   })
