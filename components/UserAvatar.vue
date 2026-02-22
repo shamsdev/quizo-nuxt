@@ -113,11 +113,15 @@ watch(() => props.avatarId, () => { imageLoaded.value = false; });
 }
 
 .username {
+  width: 76px;
+  min-width: 76px;
+  max-width: 76px;
   border-radius: var(--radius-xl);
   padding: var(--space-1) var(--space-2);
   margin-top: calc(-1 * var(--space-2));
   font-size: var(--text-sm);
   font-weight: var(--font-weight-medium);
+  box-sizing: border-box;
 }
 
 .username p {
@@ -127,5 +131,7 @@ watch(() => props.avatarId, () => { imageLoaded.value = false; });
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin: 0;
+  min-width: 0;
 }
 </style>
