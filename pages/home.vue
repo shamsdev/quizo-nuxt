@@ -334,7 +334,7 @@ onUnmounted(() => {
   justify-content: center;
   gap: var(--space-2);
   width: 100%;
-  margin-top: var(--space-3);
+  margin-top: var(--space-6);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-lg);

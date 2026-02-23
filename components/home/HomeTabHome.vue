@@ -108,7 +108,7 @@ const promotedTours = [
   { id: '5', title: 'سریع و دقیق', meta: '۵ سوال', prize: '۵۰۰ سکه', badge: 'سریع' },
 ]
 
-const GAP = 8
+const GAP = 4
 const carouselViewportRef = ref(null)
 const realCount = promotedTours.length
 /** Infinite list: [clone last, ...original, clone first]. scrollIndex 1..realCount = real items; 0 and realCount+1 are clones. */
@@ -129,7 +129,7 @@ const canScrollNext = computed(() => true)
 const carouselVars = computed(() => {
   const w = viewportWidth.value
   if (!w) return {}
-  const itemWidth = Math.round(w * 0.7)
+  const itemWidth = Math.round(w * 0.62)
   const padding = Math.round((w - itemWidth) / 2)
   return {
     '--carousel-item-width': `${itemWidth}px`,
@@ -138,7 +138,7 @@ const carouselVars = computed(() => {
 })
 
 function getItemWidth(el) {
-  return el ? el.offsetWidth * 0.7 : 0
+  return el ? Math.round(el.offsetWidth * 0.62) : 0
 }
 
 function scrollPrev() {
@@ -328,6 +328,7 @@ onBeforeUnmount(() => {
   min-height: 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 100%;
 }
 
@@ -362,6 +363,7 @@ onBeforeUnmount(() => {
   mask-repeat: no-repeat;
   flex: 1;
   min-width: 0;
+  min-height: var(--carousel-item-width, 200px);
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -383,7 +385,7 @@ onBeforeUnmount(() => {
 .home-carousel-container {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 4px;
   padding: 4px 0;
   padding-inline: var(--carousel-padding, 0);
   width: max-content;
@@ -392,6 +394,7 @@ onBeforeUnmount(() => {
 .home-carousel-item {
   flex: 0 0 var(--carousel-item-width, 70%);
   width: var(--carousel-item-width, 70%);
+  aspect-ratio: 1;
   scroll-snap-align: center;
   scroll-snap-stop: always;
   min-width: 0;
@@ -455,12 +458,15 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 152px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   padding: var(--space-4);
   background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-xl);
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .tour-card-glow {
