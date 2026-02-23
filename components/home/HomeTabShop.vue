@@ -11,7 +11,6 @@
         <div class="shop-card-coins">
           <img :src="coinIcon" alt="" class="shop-card-icon" aria-hidden="true" />
           <span class="shop-card-amount">{{ pkg.coins }}</span>
-          <span class="shop-card-label">سکه</span>
         </div>
         <div class="shop-card-extra" v-if="pkg.badge">{{ pkg.badge }}</div>
         <p class="shop-card-price">{{ pkg.price }}</p>
@@ -36,6 +35,10 @@ const coinPackages = [
   { id: 'medium', coins: '۵۰۰', price: '۵,۰۰۰ تومان', buttonText: 'خرید', badge: 'محبوب' },
   { id: 'large', coins: '۱,۲۰۰', price: '۱۰,۰۰۰ تومان', buttonText: 'خرید', badge: '۲۰٪ بیشتر' },
   { id: 'mega', coins: '۳,۰۰۰', price: '۲۲,۰۰۰ تومان', buttonText: 'خرید', badge: 'بهترین ارزش' },
+  { id: 'super', coins: '۵,۰۰۰', price: '۳۵,۰۰۰ تومان', buttonText: 'خرید', badge: null },
+  { id: 'ultra', coins: '۸,۰۰۰', price: '۵۲,۰۰۰ تومان', buttonText: 'خرید', badge: 'پرفروش' },
+  { id: 'max', coins: '۱۲,۰۰۰', price: '۷۵,۰۰۰ تومان', buttonText: 'خرید', badge: '۳۰٪ بیشتر' },
+  { id: 'ultimate', coins: '۲۰,۰۰۰', price: '۱۱۰,۰۰۰ تومان', buttonText: 'خرید', badge: 'ویژه' },
 ];
 
 function onBuy(pkg) {
@@ -63,7 +66,6 @@ function onBuy(pkg) {
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
   flex-shrink: 0;
-  letter-spacing: -0.02em;
 }
 
 .shop-list-wrap {
@@ -75,11 +77,12 @@ function onBuy(pkg) {
 .shop-list {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
   overflow-y: auto;
   padding: var(--space-6) var(--screen-padding-x);
+  align-content: start;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
   -webkit-mask-size: 100% 100%;
@@ -89,15 +92,16 @@ function onBuy(pkg) {
 }
 
 .shop-card {
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-3);
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  padding-top: var(--space-10);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-lg);
   position: relative;
+  min-width: 0;
 }
 
 .shop-card-coins {
@@ -130,15 +134,17 @@ function onBuy(pkg) {
   position: absolute;
   top: var(--space-2);
   left: var(--space-2);
-  padding: var(--space-1) var(--screen-padding-x);
+  padding: var(--space-1) var(--space-2);
   background: var(--color-primary);
   color: var(--text-inverse);
   font-size: 0.7rem;
   font-weight: var(--font-weight-semibold);
   border-radius: var(--radius-sm);
+  z-index: 1;
 }
 
 .shop-card-price {
+  direction: rtl;
   margin: 0 0 var(--space-3);
   font-size: var(--text-base);
   font-weight: var(--font-weight-semibold);
@@ -146,6 +152,7 @@ function onBuy(pkg) {
 }
 
 .shop-card-btn {
+  margin-top: var(--space-2);
   width: 100%;
   max-width: 160px;
 }
