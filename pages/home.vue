@@ -615,8 +615,8 @@ onUnmounted(() => {
 .resource-coin-add {
   flex-shrink: 0;
   margin-inline-start: auto;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -626,16 +626,18 @@ onUnmounted(() => {
   background: var(--color-success);
   color: white;
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease;
+  box-shadow: 0 3px 0 var(--color-success-dark), 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .resource-coin-add:hover {
-  background: var(--color-success-dark);
-  transform: scale(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--color-success-dark), 0 3px 8px rgba(0, 0, 0, 0.55);
 }
 
 .resource-coin-add:active {
-  transform: scale(0.98);
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--color-success-dark), 0 1px 4px rgba(0, 0, 0, 0.45);
 }
 
 .no-energy-content {
