@@ -17,7 +17,7 @@
         <FancyButton
             class="shop-card-btn"
             :title="pkg.buttonText"
-            color="primary"
+            color="success"
             :onClick="() => onBuy(pkg)"
         />
       </article>

@@ -71,7 +71,7 @@
           class="quick-match-btn"
           title="بازی سریع"
           :icon="Gamepad2"
-          color="play"
+          color="success"
           cost="۱"
           :cost-icon="energyIcon"
           :onClick="onClickPlay"

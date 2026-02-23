@@ -58,11 +58,12 @@
   --color-gold-dark: #0284c7;
   --color-gold-light: #38bdf8;
 
-  /* ----- Secondary – vivid violet (leaderboard, opponent) ----- */
+  /* ----- Secondary – vivid violet (opponent) ----- */
   --color-secondary: #8b5cf6;
   --color-secondary-dark: #7c3aed;
-  --color-cta-leaderboard: #8b5cf6;
-  --color-cta-leaderboard-dark: #7c3aed;
+  /* ----- Leaderboard CTA – blue ----- */
+  --color-cta-leaderboard: #0ea5e9;
+  --color-cta-leaderboard-dark: #0284c7;
   --color-green: #8b5cf6;
   --color-green-dark: #7c3aed;
 

@@ -40,7 +40,7 @@ const TOKEN_SHADOW_HEX = {
   success: '#16a34a',
   error: '#dc2626',
   play: '#0284c7',
-  leaderboard: '#7c3aed',
+  leaderboard: '#0284c7',
 };
 
 function darkenHex(hex, amount) {
