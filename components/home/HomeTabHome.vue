@@ -2,6 +2,15 @@
   <div class="home-tab-home">
     <section class="home-middle-section">
 
+      <div class="home-external-cta">
+        <FancyButton
+          class="home-external-cta-btn"
+          title="خدمت ویژه"
+          color="secondary"
+          :onClick="onExternalServiceClick"
+        />
+      </div>
+
       <div class="mt-4">
         <h2 class="home-carousel-title">مسابقات داغ</h2>
         <div class="home-carousel">
@@ -279,6 +288,12 @@ function onTouchEnd() {
   })
 }
 
+function onExternalServiceClick() {
+  if (typeof window !== 'undefined') {
+    window.open('https://example.com', '_blank')
+  }
+}
+
 function onTournamentClick(tour) {
   console.log('Tournament', tour.id)
 }
@@ -330,6 +345,20 @@ onBeforeUnmount(() => {
   flex-direction: column;
   justify-content: center;
   width: 100%;
+}
+
+.home-external-cta {
+  width: 100%;
+  margin-bottom: var(--space-4);
+}
+
+:deep(.home-external-cta-btn) {
+  width: 100%;
+  max-width: 100%;
+  min-height: 60px;
+  border-radius: var(--radius-xl);
+  font-size: var(--text-base);
+  box-shadow: 0 4px 0 var(--color-secondary-dark), 0 2px 10px rgba(0, 0, 0, 0.65);
 }
 
 .home-carousel-title {
