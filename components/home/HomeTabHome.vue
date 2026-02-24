@@ -1,17 +1,15 @@
 <template>
   <div class="home-tab-home">
-    <section class="home-middle-section">
-
-      <div class="home-external-cta">
-        <FancyButton
+    <div class="home-external-cta">
+      <FancyButton
           class="home-external-cta-btn"
           title="خدمت ویژه"
           color="secondary"
           :onClick="onExternalServiceClick"
-        />
-      </div>
-
-      <div class="mt-4">
+      />
+    </div>
+    <section class="home-middle-section">
+      <div class="home-carousel-section">
         <h2 class="home-carousel-title">مسابقات داغ</h2>
         <div class="home-carousel">
           <div class="home-carousel-viewport-wrap">
@@ -35,7 +33,7 @@
                     @click="onTournamentClick(item)"
                 >
                   <div class="tour-card">
-                    <div class="tour-card-glow" />
+                    <div class="tour-card-glow"/>
                     <span class="tour-card-badge">{{ item.badge }}</span>
                     <div class="tour-card-prize">
                       <span class="tour-card-prize-icon">🏆</span>
@@ -71,50 +69,49 @@
           </div>
         </div>
       </div>
-
     </section>
 
     <div class="home-bottom-bar">
       <div class="quick-match-wrap">
         <FancyButton
-          class="quick-match-btn"
-          title="بازی سریع"
-          :icon="Gamepad2"
-          color="success"
-          cost="۱"
-          :cost-icon="energyIcon"
-          :onClick="onClickPlay"
+            class="quick-match-btn"
+            title="بازی سریع"
+            :icon="Gamepad2"
+            color="success"
+            cost="۱"
+            :cost-icon="energyIcon"
+            :onClick="onClickPlay"
         />
       </div>
       <button
-        type="button"
-        class="leaderboard-cup-btn"
-        aria-label="جدول امتیازات"
-        @click="onClickLeaderboard"
+          type="button"
+          class="leaderboard-cup-btn"
+          aria-label="جدول امتیازات"
+          @click="onClickLeaderboard"
       >
-        <Trophy :size="26" :stroke-width="2.5" />
+        <Trophy :size="26" :stroke-width="2.5"/>
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { Gamepad2, Trophy } from 'lucide-vue-next'
+import {ref, computed, onMounted, onBeforeUnmount, nextTick} from 'vue'
+import {Gamepad2, Trophy} from 'lucide-vue-next'
 import FancyButton from '~/components/FancyButton.vue'
 import energyIcon from '~/assets/images/energy.svg'
 
 defineProps({
-  onClickPlay: { type: Function, required: true },
-  onClickLeaderboard: { type: Function, required: true },
+  onClickPlay: {type: Function, required: true},
+  onClickLeaderboard: {type: Function, required: true},
 })
 
 const promotedTours = [
-  { id: '1', title: 'چالش هفتگی', meta: '۱۰۰۰ سکه جایزه', prize: '۱٬۰۰۰ سکه', badge: 'داغ' },
-  { id: '2', title: 'تورنمنت ویژه', meta: 'تا فردا', prize: '۵٬۰۰۰ سکه', badge: 'پرومو' },
-  { id: '3', title: 'مسابقه شبانه', meta: '۲۲:۰۰', prize: '۲٬۵۰۰ سکه', badge: 'جدید' },
-  { id: '4', title: 'جام آخر هفته', meta: 'جمعه ۲۲:۰۰', prize: '۱۰٬۰۰۰ سکه', badge: 'ویژه' },
-  { id: '5', title: 'سریع و دقیق', meta: '۵ سوال', prize: '۵۰۰ سکه', badge: 'سریع' },
+  {id: '1', title: 'چالش هفتگی', meta: '۱۰۰۰ سکه جایزه', prize: '۱٬۰۰۰ سکه', badge: 'داغ'},
+  {id: '2', title: 'تورنمنت ویژه', meta: 'تا فردا', prize: '۵٬۰۰۰ سکه', badge: 'پرومو'},
+  {id: '3', title: 'مسابقه شبانه', meta: '۲۲:۰۰', prize: '۲٬۵۰۰ سکه', badge: 'جدید'},
+  {id: '4', title: 'جام آخر هفته', meta: 'جمعه ۲۲:۰۰', prize: '۱۰٬۰۰۰ سکه', badge: 'ویژه'},
+  {id: '5', title: 'سریع و دقیق', meta: '۵ سوال', prize: '۵۰۰ سکه', badge: 'سریع'},
 ]
 
 const GAP = 4
@@ -122,9 +119,9 @@ const carouselViewportRef = ref(null)
 const realCount = promotedTours.length
 /** Infinite list: [clone last, ...original, clone first]. scrollIndex 1..realCount = real items; 0 and realCount+1 are clones. */
 const carouselItems = computed(() => {
-  const last = { ...promotedTours[realCount - 1], carouselKey: 'clone-last' }
-  const first = { ...promotedTours[0], carouselKey: 'clone-first' }
-  return [last, ...promotedTours.map((t) => ({ ...t, carouselKey: t.id })), first]
+  const last = {...promotedTours[realCount - 1], carouselKey: 'clone-last'}
+  const first = {...promotedTours[0], carouselKey: 'clone-first'}
+  return [last, ...promotedTours.map((t) => ({...t, carouselKey: t.id})), first]
 })
 const totalSlides = realCount + 2
 const scrollIndex = ref(1)
@@ -167,7 +164,7 @@ function scrollToIndex(index) {
   if (!el) return
   const itemWidth = getItemWidth(el)
   const left = index * (itemWidth + GAP)
-  el.scrollTo({ left: Math.max(0, left), behavior: 'smooth' })
+  el.scrollTo({left: Math.max(0, left), behavior: 'smooth'})
 }
 
 function updateScrollIndex() {
@@ -181,12 +178,16 @@ function updateScrollIndex() {
     isJumping = true
     scrollIndex.value = realCount
     el.scrollLeft = realCount * (itemWidth + GAP)
-    requestAnimationFrame(() => { isJumping = false })
+    requestAnimationFrame(() => {
+      isJumping = false
+    })
   } else if (clamped === totalSlides - 1) {
     isJumping = true
     scrollIndex.value = 1
     el.scrollLeft = 1 * (itemWidth + GAP)
-    requestAnimationFrame(() => { isJumping = false })
+    requestAnimationFrame(() => {
+      isJumping = false
+    })
   }
 }
 
@@ -210,9 +211,9 @@ function onPointerDown(e) {
   if (e.pointerId !== undefined) {
     el.setPointerCapture(e.pointerId)
   }
-  window.addEventListener('pointermove', onPointerMove, { passive: false })
-  window.addEventListener('pointerup', onPointerUp, { once: true })
-  window.addEventListener('pointercancel', onPointerUp, { once: true })
+  window.addEventListener('pointermove', onPointerMove, {passive: false})
+  window.addEventListener('pointerup', onPointerUp, {once: true})
+  window.addEventListener('pointercancel', onPointerUp, {once: true})
 }
 
 function onPointerMove(e) {
@@ -234,19 +235,20 @@ function onPointerUp() {
   const el = carouselViewportRef.value
   try {
     if (el) el.releasePointerCapture(-1)
-  } catch (_) {}
+  } catch (_) {
+  }
   window.removeEventListener('pointermove', onPointerMove)
   if (!el) return
   requestAnimationFrame(() => {
     updateScrollIndex()
     const targetLeft = scrollIndex.value * (getItemWidth(el) + GAP)
-    el.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' })
+    el.scrollTo({left: Math.max(0, targetLeft), behavior: 'smooth'})
     const onScrollEnd = () => {
       el.removeEventListener('scrollend', onScrollEnd)
       clearTimeout(timeoutId)
       restoreSnap(el)
     }
-    el.addEventListener('scrollend', onScrollEnd, { once: true })
+    el.addEventListener('scrollend', onScrollEnd, {once: true})
     const timeoutId = setTimeout(onScrollEnd, 450)
   })
 }
@@ -277,13 +279,13 @@ function onTouchEnd() {
   requestAnimationFrame(() => {
     updateScrollIndex()
     const targetLeft = scrollIndex.value * (getItemWidth(el) + GAP)
-    el.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' })
+    el.scrollTo({left: Math.max(0, targetLeft), behavior: 'smooth'})
     const onScrollEnd = () => {
       el.removeEventListener('scrollend', onScrollEnd)
       clearTimeout(timeoutId)
       el.style.scrollSnapType = ''
     }
-    el.addEventListener('scrollend', onScrollEnd, { once: true })
+    el.addEventListener('scrollend', onScrollEnd, {once: true})
     const timeoutId = setTimeout(onScrollEnd, 400)
   })
 }
@@ -328,14 +330,14 @@ onBeforeUnmount(() => {
 <style scoped>
 .home-tab-home {
   width: 100%;
-  flex: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 0;
   padding: var(--screen-padding-x) var(--screen-padding-x);
   box-sizing: border-box;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .home-middle-section {
@@ -349,7 +351,6 @@ onBeforeUnmount(() => {
 
 .home-external-cta {
   width: 100%;
-  margin-bottom: var(--space-4);
 }
 
 :deep(.home-external-cta-btn) {
@@ -359,6 +360,11 @@ onBeforeUnmount(() => {
   border-radius: var(--radius-xl);
   font-size: var(--text-base);
   box-shadow: 0 4px 0 var(--color-secondary-dark), 0 2px 10px rgba(0, 0, 0, 0.65);
+}
+
+.home-carousel-section {
+  flex-direction: column;
+  min-height: 0;
 }
 
 .home-carousel-title {
@@ -372,14 +378,10 @@ onBeforeUnmount(() => {
 .home-carousel {
   position: relative;
   width: 100%;
-  flex-direction: column;
 }
 
 .home-carousel-viewport-wrap {
   position: relative;
-  flex: 1;
-  min-height: 0;
-  display: flex;
   width: 100%;
 }
 
@@ -390,9 +392,7 @@ onBeforeUnmount(() => {
   mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  flex: 1;
   min-width: 0;
-  min-height: var(--carousel-item-width, 200px);
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -421,7 +421,6 @@ onBeforeUnmount(() => {
 }
 
 .home-carousel-item {
-  flex: 0 0 var(--carousel-item-width, 70%);
   width: var(--carousel-item-width, 70%);
   aspect-ratio: 1;
   scroll-snap-align: center;
