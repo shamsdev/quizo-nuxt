@@ -102,7 +102,9 @@ defineExpose({ show, hide })
   width: var(--dialog-max-width);
   max-width: 100%;
   max-height: 85vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-default);
   box-sizing: border-box;

@@ -16,7 +16,7 @@
     </div>
 
     <!-- Avatar Section Label (outside scroll) -->
-    <div class="form-section mt-3">
+    <div class="form-section mt-3 avatar-section">
       <label class="input-label">انتخاب آواتار</label>
 
     <!-- Scrollable Avatar List -->
@@ -127,7 +127,8 @@ defineExpose({ scrollToSelectedAvatar });
 .edit-profile-dialog {
   display: flex;
   flex-direction: column;
-  max-height: 90vh;
+  height: 100%;
+  max-height: 100%;
   padding: var(--space-4) var(--screen-padding-x);
   box-sizing: border-box;
   overflow: hidden;
@@ -140,6 +141,13 @@ defineExpose({ scrollToSelectedAvatar });
 
 .form-section.mt-3 {
   margin-top: var(--space-3);
+}
+
+.avatar-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .avatar-scroll-section {
@@ -220,5 +228,6 @@ defineExpose({ scrollToSelectedAvatar });
 .button-wrapper {
   display: flex;
   justify-content: center;
+  margin-top: auto;
 }
 </style>
