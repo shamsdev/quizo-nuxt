@@ -17,10 +17,6 @@
                 ref="carouselViewportRef"
                 class="home-carousel-viewport"
                 :style="carouselVars"
-                @touchstart="onTouchStart"
-                @touchmove.prevent="onTouchMove"
-                @touchend="onTouchEnd"
-                @touchcancel="onTouchEnd"
             >
               <div class="home-carousel-container">
                 <div
@@ -144,7 +140,11 @@ const carouselVars = computed(() => {
 })
 
 function getItemWidth(el) {
-  return el ? Math.round(el.offsetWidth * 0.62) : 0
+  if (!el) return 0
+  const style = getComputedStyle(el)
+  const varWidth = parseFloat(style.getPropertyValue('--carousel-item-width') || '')
+  if (!Number.isNaN(varWidth) && varWidth > 0) return varWidth
+  return Math.round(el.offsetWidth * 0.62)
 }
 
 function scrollPrev() {
@@ -196,100 +196,6 @@ function measureViewport() {
   if (el && el.offsetWidth > 0) viewportWidth.value = el.offsetWidth
 }
 
-let dragStartX = 0
-let scrollStartLeft = 0
-let isDragging = false
-let touchStarted = false
-
-function onPointerDown(e) {
-  const el = carouselViewportRef.value
-  if (!el) return
-  isDragging = true
-  dragStartX = e.clientX ?? e.touches?.[0]?.clientX ?? 0
-  scrollStartLeft = el.scrollLeft
-  el.style.scrollSnapType = 'none'
-  if (e.pointerId !== undefined) {
-    el.setPointerCapture(e.pointerId)
-  }
-  window.addEventListener('pointermove', onPointerMove, {passive: false})
-  window.addEventListener('pointerup', onPointerUp, {once: true})
-  window.addEventListener('pointercancel', onPointerUp, {once: true})
-}
-
-function onPointerMove(e) {
-  if (!isDragging) return
-  e.preventDefault()
-  const el = carouselViewportRef.value
-  if (!el) return
-  const x = e.clientX ?? e.touches?.[0]?.clientX ?? 0
-  const delta = dragStartX - x
-  el.scrollLeft = scrollStartLeft + delta
-}
-
-function restoreSnap(el) {
-  if (el) el.style.scrollSnapType = ''
-}
-
-function onPointerUp() {
-  isDragging = false
-  const el = carouselViewportRef.value
-  try {
-    if (el) el.releasePointerCapture(-1)
-  } catch (_) {
-  }
-  window.removeEventListener('pointermove', onPointerMove)
-  if (!el) return
-  requestAnimationFrame(() => {
-    updateScrollIndex()
-    const targetLeft = scrollIndex.value * (getItemWidth(el) + GAP)
-    el.scrollTo({left: Math.max(0, targetLeft), behavior: 'smooth'})
-    const onScrollEnd = () => {
-      el.removeEventListener('scrollend', onScrollEnd)
-      clearTimeout(timeoutId)
-      restoreSnap(el)
-    }
-    el.addEventListener('scrollend', onScrollEnd, {once: true})
-    const timeoutId = setTimeout(onScrollEnd, 450)
-  })
-}
-
-function onTouchStart(e) {
-  touchStarted = true
-  dragStartX = e.touches[0].clientX
-  const el = carouselViewportRef.value
-  if (el) {
-    scrollStartLeft = el.scrollLeft
-    el.style.scrollSnapType = 'none'
-  }
-}
-
-function onTouchMove(e) {
-  if (!touchStarted || !carouselViewportRef.value) return
-  e.preventDefault()
-  const el = carouselViewportRef.value
-  const x = e.touches[0].clientX
-  const delta = dragStartX - x
-  el.scrollLeft = scrollStartLeft + delta
-}
-
-function onTouchEnd() {
-  touchStarted = false
-  const el = carouselViewportRef.value
-  if (!el) return
-  requestAnimationFrame(() => {
-    updateScrollIndex()
-    const targetLeft = scrollIndex.value * (getItemWidth(el) + GAP)
-    el.scrollTo({left: Math.max(0, targetLeft), behavior: 'smooth'})
-    const onScrollEnd = () => {
-      el.removeEventListener('scrollend', onScrollEnd)
-      clearTimeout(timeoutId)
-      el.style.scrollSnapType = ''
-    }
-    el.addEventListener('scrollend', onScrollEnd, {once: true})
-    const timeoutId = setTimeout(onScrollEnd, 400)
-  })
-}
-
 function onExternalServiceClick() {
   if (typeof window !== 'undefined') {
     window.open('https://example.com', '_blank')
@@ -308,7 +214,6 @@ onMounted(() => {
       resizeObserver = new ResizeObserver(measureViewport)
       resizeObserver.observe(el)
       el.addEventListener('scroll', updateScrollIndex)
-      el.addEventListener('pointerdown', onPointerDown)
       const itemWidth = getItemWidth(el)
       el.scrollLeft = 1 * (itemWidth + GAP)
       updateScrollIndex()
@@ -321,9 +226,7 @@ onBeforeUnmount(() => {
   if (resizeObserver && el) resizeObserver.unobserve(el)
   if (el) {
     el.removeEventListener('scroll', updateScrollIndex)
-    el.removeEventListener('pointerdown', onPointerDown)
   }
-  window.removeEventListener('pointermove', onPointerMove)
 })
 </script>
 
@@ -400,7 +303,7 @@ onBeforeUnmount(() => {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   cursor: grab;
-  touch-action: pan-y;
+  touch-action: pan-x;
 }
 
 .home-carousel-viewport:active {
